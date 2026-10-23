@@ -1,0 +1,8 @@
+{
+  "name": "neptune-maquette",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Maquette Neptune : site clippers + espaces, toutes les pages cliquables",
+  "scripts": { "start": "node server.js" },
+  "engines": { "node": ">=18" }
+}

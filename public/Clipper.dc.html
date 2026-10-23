@@ -1,0 +1,932 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Espace clippers Neptune</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#07111F}
+.clp *{box-sizing:border-box}
+.clp button{font-family:inherit;cursor:pointer}
+.clp .go:hover{background:#7BE6D6}
+.clp .gh:hover{border-color:#2FD4C0}
+.clp .lnk:hover{color:#EFE6D2}
+.clp .fq:hover{color:#7BE6D6}
+.clp .gob{min-height:52px;padding:0 32px;border:0;border-radius:10px;background:#2FD4C0;color:#07111F;font-size:17px;font-weight:600}
+.clp .gob:hover{background:#7BE6D6}
+.clp .gob:disabled,.clp .gob:disabled:hover{background:#1F3A5A;color:#8FA6BE;cursor:not-allowed}
+.clp .inp::placeholder{color:#8FA6BE}
+.clp .back{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 14px 0 10px;border:1px solid #1F3A5A;border-radius:10px;background:#0C1D33;color:#EFE6D2;font:500 15px 'Instrument Sans',sans-serif}
+.clp .back:hover{border-color:#2FD4C0}
+.clp .conn{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;min-height:60px;padding:0 20px;border:1px solid #2A4565;border-radius:12px;background:#0C1D33;color:#EFE6D2;font-size:17px;font-weight:600;text-align:left}
+.clp .conn:hover{border-color:#2FD4C0}
+.clp .dock{position:fixed;left:16px;bottom:20px;z-index:50;display:inline-flex;align-items:center;gap:10px;min-height:48px;padding:0 18px;border:1px solid #2FD4C0;border-radius:999px;background:#0C1D33;color:#EFE6D2;font:600 15px 'Instrument Sans',sans-serif;cursor:pointer;box-shadow:0 6px 20px rgba(0,0,0,.45)}
+.clp .dock:hover{background:#12304A}
+.clp .dock:focus-visible{outline:2px solid #7BE6D6;outline-offset:2px}
+.clp .qm{position:relative;display:inline-flex;align-items:center;justify-content:center;width:14px;height:16px;margin:0 0 0 1px;padding:0;border:0;background:transparent;color:#2FD4C0;font:600 15px 'Instrument Sans',sans-serif;line-height:1;vertical-align:top}
+.clp .qm::after{content:"";position:absolute;top:-14px;right:-15px;bottom:-14px;left:-15px}
+.clp .qm:hover{color:#7BE6D6}
+.clp .dcw1{animation:dcwv 14s linear infinite}.clp .dcw2{animation:dcwv 20s linear infinite reverse}@keyframes dcwv{from{transform:translateX(0)}to{transform:translateX(200px)}}
+.clp .wband{overflow:hidden;line-height:0;background:#07111F}.clp .wband svg{display:block;width:200%;height:130px;animation:dcb 40s linear infinite}@keyframes dcb{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion:reduce){.clp .dcw1,.clp .dcw2,.clp .wband svg{animation:none}}
+.clp .inp:focus-visible{outline:2px solid #7BE6D6;outline-offset:2px}
+.clp button:focus-visible,.clp a:focus-visible{outline:2px solid #7BE6D6;outline-offset:2px}
+.sfx-tog{position:fixed;right:16px;bottom:20px;z-index:80;width:44px;height:44px;padding:0;border-radius:50%;border:1px solid rgba(255,255,255,.2);background:rgba(8,20,34,.85);color:#cfe3ee;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.sfx-tog:hover{background:rgba(20,44,66,.95)}
+.sfx-tog:focus-visible{outline:2px solid #7BE6D6;outline-offset:2px}
+.sfx-tog[aria-pressed=false]{color:#7d93a3}
+.sfx-tog[aria-pressed=false] .sfx-on{display:none}
+.sfx-tog[aria-pressed=true] .sfx-off{display:none}
+.mus-tog{right:68px}
+.mus-tog[aria-pressed=false] .m-on{display:none}
+.mus-tog[aria-pressed=true] .m-off{display:none}
+.mus-tog[data-level="1"] .m-d2{display:none}
+</style>
+</helmet>
+<div class="clp" style="min-height: 900px; background: #07111F; color: #EFE6D2; font-family: 'Instrument Sans', system-ui, sans-serif; line-height: 1.5">
+
+<!-- ============ ENTETE ============ -->
+<sc-if value="{{ showHeader }}" hint-placeholder-val="{{ true }}">
+<header style="border-bottom: 1px solid #12304A; background: #07111F">
+<div style="max-width: 1080px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 76px">
+<button type="button" aria-label="Accueil de l'espace clippers" onClick="{{ showHome }}" style="display: flex; align-items: center; gap: 14px; padding: 0; background: transparent; border: 0; color: #EFE6D2">
+<svg width="48" height="48" viewBox="0 0 400 400" aria-hidden="true">
+<defs><clipPath id="cgh"><circle cx="200" cy="200" r="180"></circle></clipPath></defs>
+<circle cx="200" cy="200" r="180" fill="#0C2038"></circle>
+<g clip-path="url(#cgh)"><path class="dcw1" d="M-400 268 q50 -16 100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 V420 H-400 Z" fill="#2FD4C0" fill-opacity="0.45"></path><path class="dcw2" d="M-400 294 q50 -14 100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 V420 H-400 Z" fill="#2FD4C0" fill-opacity="0.75"></path><path class="dcw1" d="M-400 326 q50 -12 100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 V420 H-400 Z" fill="#1A9C8C" fill-opacity="1"></path></g>
+<circle cx="200" cy="200" r="180" fill="none" stroke="#2FD4C0" stroke-width="12"></circle>
+<path d="M146 246 V132 L254 246 V132" fill="none" stroke="#EFE6D2" stroke-width="30" stroke-linejoin="round" stroke-linecap="round"></path>
+</svg>
+<span style="font-family: 'Fraunces', Georgia, serif; font-weight: 700; font-size: 22px; letter-spacing: 0.18em">NEPTUNE</span>
+</button>
+<div style="display: flex; align-items: center; gap: 8px">
+<sc-if value="{{ showCreator }}" hint-placeholder-val="{{ true }}">
+<button type="button" class="lnk" onClick="{{ goHome }}" style="min-height: 44px; padding: 0 12px; border: 0; background: transparent; color: #9DB2C8; font-size: 15px; font-weight: 500; text-decoration: underline; text-underline-offset: 4px">Tu es créateur&nbsp;?</button>
+</sc-if>
+</div>
+</div>
+</header>
+</sc-if>
+
+<sc-if value="{{ showDock }}" hint-placeholder-val="{{ true }}">
+<button type="button" class="dock" onClick="{{ openLogin }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2FD4C0" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c0-4 4-6 8-6s8 2 8 6"></path></svg>Se connecter</button>
+</sc-if>
+
+<sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+<!-- ============ ACCUEIL CLIPPER ============ -->
+<section style="padding: 88px 0 72px; background: radial-gradient(900px 420px at 80% 10%, rgba(47,212,192,.10) 0%, transparent 70%)">
+<div style="max-width: 1080px; margin: 0 auto; padding: 0 24px; display: flex; flex-wrap: wrap; align-items: center; gap: 56px">
+<div style="flex: 1 1 440px; display: flex; flex-direction: column; gap: 24px">
+<sc-if value="{{ hasInviter }}" hint-placeholder-val="{{ false }}">
+<span style="color: #2FD4C0; font-weight: 600; font-size: 16px">Invitation de {{ inviter }}</span>
+</sc-if>
+<h1 style="margin: 0; font-family: 'Fraunces', Georgia, serif; font-weight: 700; font-size: 58px; line-height: 1.12; letter-spacing: -0.01em">Sois payé pour percer.</h1>
+<sc-if value="{{ noInviter }}" hint-placeholder-val="{{ true }}">
+<p style="margin: 0; font-size: 20px; color: #C9D7E6; max-width: 520px">Fais exploser tes créateurs préférés grâce au <span style="white-space: nowrap">clipping<button type="button" class="qm" aria-label="C'est quoi le clipping ?" onClick="{{ openClippingFaq }}">?</button></span></p>
+</sc-if>
+<sc-if value="{{ hasInviter }}" hint-placeholder-val="{{ false }}">
+<p style="margin: 0; font-size: 20px; color: #C9D7E6; max-width: 520px">Fais exploser {{ inviter }} grâce au <span style="white-space: nowrap">clipping<button type="button" class="qm" aria-label="C'est quoi le clipping ?" onClick="{{ openClippingFaq }}">?</button></span></p>
+</sc-if>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 16px">
+<sc-if value="{{ noInviter }}" hint-placeholder-val="{{ true }}">
+<button type="button" class="go" onClick="{{ connectHero }}" style="min-height: 48px; padding: 0 28px; border: 0; border-radius: 10px; background: #2FD4C0; color: #07111F; font-size: 16px; font-weight: 600">Devenir clipper</button>
+</sc-if>
+<sc-if value="{{ hasInviter }}" hint-placeholder-val="{{ false }}">
+<button type="button" class="go" onClick="{{ connectHero }}" style="min-height: 48px; padding: 0 28px; border: 0; border-radius: 10px; background: #2FD4C0; color: #07111F; font-size: 16px; font-weight: 600">Rejoindre {{ inviter }}</button>
+</sc-if>
+<a class="gh" href="#comment" style="display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 24px; border: 1px solid #3A587B; border-radius: 10px; color: #EFE6D2; font-size: 16px; font-weight: 500; text-decoration: none">Comment ça marche</a>
+</div>
+</div>
+<div style="flex: 1 1 320px; display: flex; justify-content: center">
+<svg width="100%" style="max-width: 400px" viewBox="0 0 400 400" role="img" aria-label="Logo Neptune">
+<defs><clipPath id="cg"><circle cx="200" cy="200" r="180"></circle></clipPath></defs>
+<circle cx="200" cy="200" r="180" fill="#0C2038"></circle>
+<g clip-path="url(#cg)"><path class="dcw1" d="M-400 268 q50 -16 100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 V420 H-400 Z" fill="#2FD4C0" fill-opacity="0.45"></path><path class="dcw2" d="M-400 294 q50 -14 100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 V420 H-400 Z" fill="#2FD4C0" fill-opacity="0.75"></path><path class="dcw1" d="M-400 326 q50 -12 100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 V420 H-400 Z" fill="#1A9C8C" fill-opacity="1"></path></g>
+<circle cx="200" cy="200" r="180" fill="none" stroke="#2FD4C0" stroke-width="12"></circle>
+<path d="M146 246 V132 L254 246 V132" fill="none" stroke="#EFE6D2" stroke-width="30" stroke-linejoin="round" stroke-linecap="round"></path>
+</svg>
+</div>
+</div>
+</section>
+<div class="wband"><svg viewBox="0 0 2400 130" preserveAspectRatio="none" aria-hidden="true"><path d="M0 76 q50 -22 100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 V130 H0 Z" fill="#126C68" fill-opacity="1"></path></svg></div>
+
+<div style="background: linear-gradient(180deg, #126C68 0, #0F5560 260px, #0A3350 900px, #06182C 1700px, #030B16 100%)">
+
+<!-- ============ COMMENT CA MARCHE ============ -->
+<section id="comment" style="padding: 72px 0">
+<div style="max-width: 1080px; margin: 0 auto; padding: 0 24px; display: flex; flex-direction: column; gap: 36px">
+<h2 style="margin: 0; font-family: 'Fraunces', Georgia, serif; font-weight: 700; font-size: 38px; line-height: 1.12">Comment ça marche</h2>
+<div style="display: flex; flex-wrap: wrap; align-items: stretch; gap: 20px">
+<div style="flex: 1 1 280px; display: flex; flex-direction: column; gap: 12px; padding: 28px; border: 1px solid #2FD4C0; border-radius: 16px; background: rgba(7,17,31,.55)">
+<span style="display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; border: 1px solid #2FD4C0; border-radius: 50%; color: #2FD4C0; font-weight: 600">1</span>
+<h3 style="margin: 0; font-family: 'Fraunces', Georgia, serif; font-weight: 700; font-size: 22px; line-height: 1.12">Connecte-toi sur le site</h3>
+<p style="margin: 0; color: #9DB2C8">Avec ton e-mail, ça prend une minute.</p>
+</div>
+<div style="flex: 1 1 280px; display: flex; flex-direction: column; gap: 12px; padding: 28px; border: 1px solid #2FD4C0; border-radius: 16px; background: rgba(7,17,31,.55)">
+<span style="display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; border: 1px solid #2FD4C0; border-radius: 50%; color: #2FD4C0; font-weight: 600">2</span>
+<h3 style="margin: 0; font-family: 'Fraunces', Georgia, serif; font-weight: 700; font-size: 22px; line-height: 1.12">Choisis ta première mission</h3>
+<p style="margin: 0; color: #9DB2C8">Des créateurs recrutent des clippers : tu prends celle qui te plaît.</p>
+</div>
+<div style="flex: 1 1 280px; display: flex; flex-direction: column; gap: 12px; padding: 28px; border: 1px solid #2FD4C0; border-radius: 16px; background: rgba(7,17,31,.55)">
+<span style="display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; border: 1px solid #2FD4C0; border-radius: 50%; color: #2FD4C0; font-weight: 600">3</span>
+<h3 style="margin: 0; font-family: 'Fraunces', Georgia, serif; font-weight: 700; font-size: 22px; line-height: 1.12">Clippe et gagne de l'argent</h3>
+<p style="margin: 0; color: #9DB2C8">Tu postes tes clips et tu es rémunéré.</p>
+</div>
+</div>
+</div>
+</section>
+
+<!-- ============ TEMOIGNAGES ============ -->
+<section style="padding: 24px 0 72px">
+<div style="max-width: 1080px; margin: 0 auto; padding: 0 24px; display: flex; flex-direction: column; gap: 36px">
+<h2 style="margin: 0; font-family: 'Fraunces', Georgia, serif; font-weight: 700; font-size: 38px; line-height: 1.12">Des clippers témoignent</h2>
+<div style="display: flex; flex-wrap: wrap; gap: 20px">
+<div style="flex: 1 1 220px; max-width: 320px; aspect-ratio: 9 / 14; display: flex; align-items: center; justify-content: center; text-align: center; padding: 20px; border: 1px dashed #3A587B; border-radius: 16px; background: rgba(7,17,31,.45); color: #9DB2C8; font-size: 15px">Témoignage de clipper à venir</div>
+<div style="flex: 1 1 220px; max-width: 320px; aspect-ratio: 9 / 14; display: flex; align-items: center; justify-content: center; text-align: center; padding: 20px; border: 1px dashed #3A587B; border-radius: 16px; background: rgba(7,17,31,.45); color: #9DB2C8; font-size: 15px">Témoignage de clipper à venir</div>
+<div style="flex: 1 1 220px; max-width: 320px; aspect-ratio: 9 / 14; display: flex; align-items: center; justify-content: center; text-align: center; padding: 20px; border: 1px dashed #3A587B; border-radius: 16px; background: rgba(7,17,31,.45); color: #9DB2C8; font-size: 15px">Témoignage de clipper à venir</div>
+</div>
+</div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section id="faq-clipping" style="padding: 24px 0 72px">
+<div style="max-width: 720px; margin: 0 auto; padding: 0 24px; display: flex; flex-direction: column; gap: 24px">
+<h2 style="margin: 0; font-family: 'Fraunces', Georgia, serif; font-weight: 700; font-size: 38px; line-height: 1.12">Questions fréquentes</h2>
+<div style="display: flex; flex-direction: column">
+<sc-for list="{{ faq }}" as="f" hint-placeholder-count="4">
+<div style="border-top: 1px solid #1F3A5A">
+<button type="button" class="fq" aria-expanded="{{ f.isOpen }}" onClick="{{ f.toggle }}" style="display: flex; align-items: center; justify-content: space-between; gap: 16px; width: 100%; min-height: 64px; padding: 0; background: transparent; border: 0; color: #EFE6D2; text-align: left; font-size: 18px; font-weight: 600">{{ f.q }}<svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true" style="flex-shrink: 0; transform: {{ f.rot }}"><path d="M5 8l5 5 5-5" fill="none" stroke="#2FD4C0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg></button>
+<sc-if value="{{ f.isOpen }}" hint-placeholder-val="{{ false }}">
+<p style="margin: 0; padding: 0 0 22px; font-size: 17px; color: {{ f.aColor }}">{{ f.a }}</p>
+</sc-if>
+</div>
+</sc-for>
+</div>
+</div>
+</section>
+
+<!-- ============ APPEL FINAL ============ -->
+<section style="padding: 40px 0 40px; text-align: center">
+<div style="max-width: 640px; margin: 0 auto; padding: 0 24px; display: flex; flex-direction: column; align-items: center; gap: 24px">
+<sc-if value="{{ noInviter }}" hint-placeholder-val="{{ true }}">
+<h2 style="margin: 0; font-family: 'Fraunces', Georgia, serif; font-weight: 700; font-size: 40px; line-height: 1.12">Prêt à faire percer tes créateurs préférés&nbsp;?</h2>
+</sc-if>
+<sc-if value="{{ hasInviter }}" hint-placeholder-val="{{ false }}">
+<h2 style="margin: 0; font-family: 'Fraunces', Georgia, serif; font-weight: 700; font-size: 40px; line-height: 1.12">Prêt à faire percer {{ inviter }}&nbsp;?</h2>
+</sc-if>
+<sc-if value="{{ noInviter }}" hint-placeholder-val="{{ true }}">
+<button type="button" class="go" onClick="{{ connectFinal }}" style="min-height: 48px; padding: 0 28px; border: 0; border-radius: 10px; background: #2FD4C0; color: #07111F; font-size: 16px; font-weight: 600">Devenir clipper</button>
+</sc-if>
+<sc-if value="{{ hasInviter }}" hint-placeholder-val="{{ false }}">
+<button type="button" class="go" onClick="{{ connectFinal }}" style="min-height: 48px; padding: 0 28px; border: 0; border-radius: 10px; background: #2FD4C0; color: #07111F; font-size: 16px; font-weight: 600">Rejoindre {{ inviter }}</button>
+</sc-if>
+</div>
+</section>
+
+<sc-if value="{{ hasHome }}" hint-placeholder-val="{{ true }}">
+<footer style="padding: 8px 0 56px; text-align: center">
+<button type="button" class="lnk" onClick="{{ goHome }}" style="min-height: 44px; padding: 0 12px; border: 0; background: transparent; color: #9DB2C8; font-size: 15px; font-weight: 500; text-decoration: underline; text-underline-offset: 4px">Tu es créateur&nbsp;? Découvre Neptune</button>
+</footer>
+</sc-if>
+
+</div>
+</sc-if>
+
+<!-- ============ CONNEXION CLIPPER ============ -->
+<sc-if value="{{ isLogin }}" hint-placeholder-val="{{ false }}">
+<section style="padding: 64px 0 96px; min-height: 700px">
+<div style="max-width: 640px; margin: 0 auto; padding: 0 24px; display: flex; flex-direction: column; gap: 24px">
+<h2 style="margin: 0; font-family: 'Fraunces', Georgia, serif; font-weight: 700; font-size: 34px; line-height: 1.12">Connecte-toi à ton espace clipper</h2>
+<p style="margin: 0; font-size: 18px; color: #9DB2C8">On t'envoie un code par e-mail. Pas de mot de passe à créer.</p>
+<sc-if value="{{ step1 }}" hint-placeholder-val="{{ true }}">
+<div style="display: flex; flex-direction: column; gap: 20px">
+<div>
+<label for="cem" style="display: block; margin: 0 0 8px; font-size: 15px; font-weight: 500; color: #C9D7E6">Ton e-mail</label>
+<input id="cem" class="inp" type="email" placeholder="toi@exemple.com" value="{{ email }}" onInput="{{ onEmail }}" style="width: 100%; min-height: 52px; padding: 0 16px; border: 1px solid #2A4565; border-radius: 10px; background: #07111F; color: #EFE6D2; font: 400 17px 'Instrument Sans', system-ui, sans-serif">
+</div>
+<div style="display: flex; justify-content: flex-end"><button type="button" class="gob" disabled="{{ noSend }}" onClick="{{ sendCode }}">Recevoir mon code</button></div>
+</div>
+</sc-if>
+<sc-if value="{{ step2 }}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; gap: 20px">
+<div>
+<label for="ccd" style="display: block; margin: 0 0 8px; font-size: 15px; font-weight: 500; color: #C9D7E6">Code reçu par e-mail</label>
+<input id="ccd" class="inp" type="text" inputmode="numeric" maxlength="6" placeholder="6 chiffres" value="{{ code }}" onInput="{{ onCode }}" style="width: 100%; min-height: 52px; padding: 0 16px; border: 1px solid #2A4565; border-radius: 10px; background: #07111F; color: #EFE6D2; font: 400 17px 'Instrument Sans', system-ui, sans-serif">
+<p style="margin: 8px 0 0; font-size: 14px; color: #9DB2C8">Maquette&nbsp;: n'importe quel code à 6 chiffres fonctionne.</p>
+</div>
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px">
+<button type="button" class="lnk" onClick="{{ changeEmail }}" style="min-height: 44px; padding: 0 12px; border: 0; background: transparent; color: #9DB2C8; font-size: 15px; font-weight: 500; text-decoration: underline; text-underline-offset: 4px">Changer d'e-mail</button>
+<button type="button" class="gob" disabled="{{ noVerify }}" onClick="{{ verify }}">Valider</button>
+</div>
+</div>
+</sc-if>
+</div>
+</section>
+</sc-if>
+
+<!-- ============ DEVENIR CLIPPER (questions) ============ -->
+<sc-if value="{{ isJoin }}" hint-placeholder-val="{{ false }}">
+<section style="padding: 56px 0 96px; min-height: 700px">
+<div style="max-width: 640px; margin: 0 auto; padding: 0 24px; display: flex; flex-direction: column; gap: 32px">
+<div><button type="button" class="back" onClick="{{ jBack }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#EFE6D2" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>Retour</button></div>
+<div style="height: 6px; border-radius: 999px; background: #12304A"><div style="height: 6px; border-radius: 999px; background: #2FD4C0; width: {{ jProgress }}"></div></div>
+<p style="margin: 0; font-size: 14px; color: #9DB2C8">Étape {{ jNum }} sur 6</p>
+
+<sc-if value="{{ jq0 }}" hint-placeholder-val="{{ true }}">
+<div style="display: flex; flex-direction: column; gap: 24px">
+<h2 style="margin: 0; font-family: 'Fraunces', Georgia, serif; font-weight: 700; font-size: 34px; line-height: 1.12">Comment tu t'appelles&nbsp;?</h2>
+<p style="margin: 0; font-size: 18px; color: #9DB2C8">Ton prénom ou ton pseudo.</p>
+<input class="inp" type="text" aria-label="Prénom ou pseudo" placeholder="Prénom ou pseudo" value="{{ jname }}" onInput="{{ onJName }}" style="width: 100%; min-height: 52px; padding: 0 16px; border: 1px solid #2A4565; border-radius: 10px; background: #07111F; color: #EFE6D2; font: 400 17px 'Instrument Sans', system-ui, sans-serif">
+</div>
+</sc-if>
+
+<sc-if value="{{ jq1 }}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; gap: 24px">
+<h2 style="margin: 0; font-family: 'Fraunces', Georgia, serif; font-weight: 700; font-size: 34px; line-height: 1.12">Tu as quel âge&nbsp;?</h2>
+<input class="inp" type="number" inputmode="numeric" aria-label="Ton âge" placeholder="Ton âge" value="{{ jage }}" onInput="{{ onJAge }}" style="width: 100%; min-height: 52px; padding: 0 16px; border: 1px solid #2A4565; border-radius: 10px; background: #07111F; color: #EFE6D2; font: 400 17px 'Instrument Sans', system-ui, sans-serif">
+</div>
+</sc-if>
+
+<sc-if value="{{ jq2 }}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; gap: 24px">
+<h2 style="margin: 0; font-family: 'Fraunces', Georgia, serif; font-weight: 700; font-size: 34px; line-height: 1.12">Quel est ton e-mail&nbsp;?</h2>
+<p style="margin: 0; font-size: 18px; color: #9DB2C8">On t'envoie un code pour confirmer. Pas de mot de passe à créer.</p>
+<input class="inp" type="email" aria-label="Ton e-mail" placeholder="toi@exemple.com" value="{{ email }}" onInput="{{ onEmail }}" style="width: 100%; min-height: 52px; padding: 0 16px; border: 1px solid #2A4565; border-radius: 10px; background: #07111F; color: #EFE6D2; font: 400 17px 'Instrument Sans', system-ui, sans-serif">
+</div>
+</sc-if>
+
+<sc-if value="{{ jq3 }}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; gap: 24px">
+<h2 style="margin: 0; font-family: 'Fraunces', Georgia, serif; font-weight: 700; font-size: 34px; line-height: 1.12">Entre le code reçu par e-mail</h2>
+<input class="inp" type="text" inputmode="numeric" maxlength="6" aria-label="Code reçu par e-mail" placeholder="6 chiffres" value="{{ code }}" onInput="{{ onCode }}" style="width: 100%; min-height: 52px; padding: 0 16px; border: 1px solid #2A4565; border-radius: 10px; background: #07111F; color: #EFE6D2; font: 400 17px 'Instrument Sans', system-ui, sans-serif">
+<div><button type="button" class="lnk" onClick="{{ jChangeEmail }}" style="min-height: 44px; padding: 0 12px 0 0; border: 0; background: transparent; color: #9DB2C8; font-size: 15px; font-weight: 500; text-decoration: underline; text-underline-offset: 4px">Changer d'e-mail</button></div>
+</div>
+</sc-if>
+
+<sc-if value="{{ jq4 }}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; gap: 24px">
+<h2 style="margin: 0; font-family: 'Fraunces', Georgia, serif; font-weight: 700; font-size: 34px; line-height: 1.12">Connecte ton Discord</h2>
+<p style="margin: 0; font-size: 18px; color: #9DB2C8">C'est là que vit l'équipage&nbsp;: missions, annonces et entraide. On importe aussi ta photo de profil.</p>
+<button type="button" class="conn" style="{{ dcStyle }}" onClick="{{ jDc }}"><span>{{ dcLabel }}</span><span style="color: #2FD4C0; font-size: 15px">{{ dcMark }}</span></button>
+</div>
+</sc-if>
+
+<sc-if value="{{ jq5 }}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; gap: 24px">
+<h2 style="margin: 0; font-family: 'Fraunces', Georgia, serif; font-weight: 700; font-size: 34px; line-height: 1.12">Connecte tes comptes pour que le site marche</h2>
+<p style="margin: 0; font-size: 18px; color: #9DB2C8">Neptune a besoin de voir tes clips pour compter tes vues et valider ta série tout seul. Tu te connectes directement sur la plateforme, tu n'as aucun lien à copier.</p>
+<div style="display: flex; flex-direction: column; gap: 12px">
+<button type="button" class="conn" style="{{ ytStyle }}" onClick="{{ jYt }}"><span>{{ ytLabel }}</span><span style="color: #2FD4C0; font-size: 15px">{{ ytMark }}</span></button>
+<button type="button" class="conn" style="{{ ttStyle }}" onClick="{{ jTt }}"><span>{{ ttLabel }}</span><span style="color: #2FD4C0; font-size: 15px">{{ ttMark }}</span></button>
+</div>
+<p style="margin: 0; font-size: 14px; color: #9DB2C8">Un seul compte suffit pour commencer, tu pourras en ajouter d'autres dans Paramètres.</p>
+</div>
+</sc-if>
+
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px">
+<span style="flex: 1 1 260px; font-size: 14px; color: #9DB2C8">{{ jHint }}</span>
+<button type="button" class="gob" disabled="{{ jNoNext }}" onClick="{{ jNext }}" style="margin-left: auto">{{ jNextLabel }}</button>
+</div>
+<sc-if value="{{ jq5 }}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; justify-content: center"><button type="button" class="lnk" onClick="{{ jLater }}" style="min-height: 44px; padding: 0 12px; border: 0; background: transparent; color: #9DB2C8; font-size: 15px; font-weight: 500; text-decoration: underline; text-underline-offset: 4px">Je le ferai plus tard</button></div>
+</sc-if>
+</div>
+</section>
+</sc-if>
+
+<!-- ============ ESPACE CLIPPER (prive) ============ -->
+<sc-if value="{{ isSpace }}" hint-placeholder-val="{{ false }}">
+<dc-import name="EspaceClipper" email="{{ email }}" pseudo="{{ jname }}" joined="{{ joinedStr }}" yt="{{ jytStr }}" tt="{{ jttStr }}" dc="{{ jdcStr }}" on-exit="{{ logout }}" hint-size="100%,1000px"></dc-import>
+</sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"onHome":{"editor":null},"inviter":{"editor":"text","default":""},"$preview":{"width":1280,"height":2800}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { picked: '', open: {}, view: 'home', email: '', code: '', sent: false, jq: 0, jname: '', jage: '', jdc: false, jyt: false, jtt: false, joined: false };
+  }
+  componentDidMount() { this.installSfx(); }
+  // ---------- Bruitages et musique de l'interface : sobres et doux, façon bols tibétains (partagés par toutes les maquettes) ----------
+  sfx(name) { try { if (typeof window !== 'undefined' && window.__nsfx) window.__nsfx.play(name); } catch (e) {} }
+  installSfx() {
+    if (typeof window === 'undefined' || typeof document === 'undefined') return;
+    if (window.__nsfx) { window.__nsfx.scan(); return; }
+    const W = window, D = document, mem = { off: false };
+    let ctx = null, bus = null, nbuf = null, mst = null, cv = null, unlocked = false, lastDown = 0, lastHover = null, lastMove = 0, px = -1, py = -1;
+    const born = Date.now(), last = {};
+    // gamme pentatonique de ré : toutes les notes vont bien ensemble
+    const PENTA = [293.66, 329.63, 369.99, 440, 493.88, 587.33, 659.25, 739.99, 880, 987.77, 1174.66, 1318.51, 1479.98, 1760, 1975.53];
+    const isOn = () => {
+      if (mem.off) return false;
+      try { return W.localStorage.getItem('son') !== '0'; } catch (e) { return true; }
+    };
+    const ac = () => {
+      try {
+        if (!ctx) {
+          ctx = new (W.AudioContext || W.webkitAudioContext)();
+          const master = mst = ctx.createGain(); master.gain.value = 0.5;
+          const comp = ctx.createDynamicsCompressor();
+          master.connect(comp); comp.connect(ctx.destination);
+          bus = ctx.createGain(); bus.gain.value = svGain(sfxVol()); bus.connect(master);
+          // une longue réverbération douce donne l'effet « salle calme »
+          const conv = cv = ctx.createConvolver(), len = Math.floor(ctx.sampleRate * 2.6), ir = ctx.createBuffer(2, len, ctx.sampleRate);
+          for (let ch = 0; ch < 2; ch++) { const d = ir.getChannelData(ch); for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 3); }
+          conv.buffer = ir;
+          const send = ctx.createGain(); send.gain.value = 0.35;
+          const wet = ctx.createGain(); wet.gain.value = 0.7;
+          bus.connect(send); send.connect(conv); conv.connect(wet); wet.connect(master);
+        }
+        if (ctx.state === 'suspended') ctx.resume();
+      } catch (e) { ctx = null; bus = null; mst = null; cv = null; }
+      return ctx;
+    };
+    // [rapport de fréquence, volume relatif, durée relative, attaque]
+    const PARTS = {
+      soft: [[1, 1, 1, 0.02], [2, 0.16, 0.55, 0.02]],
+      bowl: [[1, 1, 1, 0.05], [1.004, 0.7, 1, 0.05], [2.71, 0.2, 0.5, 0.04], [5.1, 0.06, 0.28, 0.03]],
+      chime: [[1, 1, 1, 0.008], [2.76, 0.26, 0.42, 0.008], [5.4, 0.09, 0.2, 0.008]]
+    };
+    const voice = (kind, f, at, dur, vol) => {
+      const c = ac(); if (!c || !bus) return;
+      const t = c.currentTime + at;
+      PARTS[kind].forEach((p) => {
+        const o = c.createOscillator(), g = c.createGain(), d = dur * p[2], pk = Math.max(vol * p[1], 0.0002);
+        o.type = 'sine'; o.frequency.setValueAtTime(f * p[0], t);
+        g.gain.setValueAtTime(0.0001, t);
+        g.gain.exponentialRampToValueAtTime(pk, t + p[3]);
+        g.gain.exponentialRampToValueAtTime(0.0001, t + d);
+        o.connect(g); g.connect(bus); o.start(t); o.stop(t + d + 0.05);
+      });
+    };
+    const air = (ft, f0, f1, at, dur, vol, q) => {
+      const c = ac(); if (!c || !bus) return;
+      const t = c.currentTime + at, src = c.createBufferSource(), f = c.createBiquadFilter(), g = c.createGain();
+      if (!nbuf) { nbuf = c.createBuffer(1, c.sampleRate, c.sampleRate); const d = nbuf.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1; }
+      src.buffer = nbuf; f.type = ft; f.Q.value = q || 1;
+      f.frequency.setValueAtTime(f0, t); f.frequency.exponentialRampToValueAtTime(Math.max(f1, 20), t + dur);
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(Math.max(vol, 0.0002), t + dur * 0.4);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      src.connect(f); f.connect(g); g.connect(bus); src.start(t); src.stop(t + dur + 0.05);
+    };
+    const rnd = (a) => a[Math.floor(Math.random() * a.length)];
+    // f = 1 : son complet ; f = 0.5 : le même son déjà entendu il y a peu, joué plus court et plus bas
+    const S = {
+      tap: (f) => voice('soft', rnd([587.33, 659.25, 739.99, 880]), 0, 0.28, 0.034 * f),
+      hover: () => voice('soft', 1174.66, 0, 0.12, 0.008),
+      key: () => voice('soft', rnd([880, 987.77, 1174.66, 1318.51]), 0, 0.09, 0.01),
+      tick: () => voice('soft', rnd(PENTA.slice(5, 10)), 0, 0.12, 0.025),
+      confirm: (f) => { voice('bowl', rnd([587.33, 659.25]), 0, 0.6, 0.04 * f); if (f > 0.9) voice('bowl', 880, 0.12, 0.8, 0.028); },
+      back: (f) => { voice('bowl', 880, 0, 0.5, 0.036 * f); if (f > 0.9) voice('bowl', 587.33, 0.11, 0.7, 0.032); },
+      tab: (f) => voice('chime', 739.99, 0, 0.4, 0.024 * f),
+      open: (f) => { voice('soft', 587.33, 0, 0.4, 0.032 * f); if (f > 0.9) voice('soft', 739.99, 0.09, 0.5, 0.032); },
+      close: (f) => { voice('soft', 739.99, 0, 0.38, 0.03 * f); if (f > 0.9) voice('soft', 587.33, 0.09, 0.5, 0.03); },
+      check: (f) => voice('chime', 880, 0, 0.7, 0.036 * f),
+      uncheck: (f) => voice('soft', 587.33, 0, 0.4, 0.028 * f),
+      success: (f) => {
+        voice('bowl', 146.83, 0, 2.4, 0.045 * f);
+        [587.33, 739.99, 880].forEach((n, i) => { if (f > 0.9 || i < 2) voice('chime', n, 0.1 + i * 0.14, 1.5, 0.036 * f); });
+      },
+      error: (f) => { voice('bowl', 293.66, 0, 0.7, 0.042 * f); if (f > 0.9) voice('bowl', 220, 0.18, 1.0, 0.036); },
+      notif: (f) => voice('chime', 880, 0, 1.1, 0.036 * f),
+      coin: (f) => { voice('chime', 880, 0, 0.9, 0.032 * f); if (f > 0.9) voice('chime', 1318.51, 0.1, 1.2, 0.028); },
+      swish: (f) => air('bandpass', 380, 1500, 0, 0.4, 0.016 * f, 0.7),
+      swishBack: (f) => air('bandpass', 1500, 380, 0, 0.36, 0.014 * f, 0.7),
+      // succès débloqué : nappe grave + trois cloches qui montent + quelques étincelles
+      unlock: () => {
+        voice('bowl', 220, 0, 3.4, 0.055);
+        [587.33, 880, 1174.66].forEach((f, i) => voice('chime', f, 0.18 + i * 0.2, 2.4, 0.05));
+        [1760, 1975.53, 2349.32].forEach((f, i) => voice('soft', f, 0.75 + i * 0.12, 0.7, 0.011));
+      },
+      unlockBig: () => {
+        voice('bowl', 146.83, 0, 4.4, 0.07);
+        voice('bowl', 220, 0.1, 4, 0.045);
+        [587.33, 739.99, 880, 1174.66, 1479.98].forEach((f, i) => voice('chime', f, 0.2 + i * 0.18, 2.8, 0.05));
+        [1760, 1975.53, 2349.32, 2637.02].forEach((f, i) => voice('soft', f, 1.0 + i * 0.1, 0.8, 0.011));
+      }
+    };
+    // le même son entendu plusieurs fois de suite devient plus court et plus discret
+    const WIN = { tap: 1200, confirm: 15000, back: 8000, tab: 3000, open: 4000, close: 4000, check: 3000, uncheck: 3000, success: 15000, error: 8000, notif: 15000, coin: 15000, swish: 6000, swishBack: 6000 };
+    const GAP = { key: 30, hover: 90, tick: 50 };
+    const play = (name) => {
+      if (!unlocked || !isOn() || !S[name]) return;
+      const now = Date.now(), prev = last[name];
+      if (prev && now - prev < (GAP[name] || 45)) return;
+      const f = prev && now - prev < (WIN[name] || 0) ? 0.5 : 1;
+      last[name] = now;
+      if (W.__nsfxLog) W.__nsfxLog.push(f < 1 ? name + '~' : name);
+      if (name !== 'hover' && name !== 'key' && name !== 'tick') mduck();
+      try { S[name](f); } catch (e) {}
+    };
+    const SEL = 'button, a[href], [role=button], [role=checkbox], [role=menuitem], [role=menuitemradio], [role=tab], summary, select, input[type=checkbox], input[type=radio]';
+    const OK = /(continuer|suivant|valider|envoyer|confirmer|r[ée]server|acc[eèé]d|devenir|se connecter|connexion|commencer|rejoindre|terminer|g[ée]n[ée]rer|calculer|inviter|connecter|c'est parti|\boui\b|ajouter|enregistrer|choisir|recevoir)/;
+    const BACK = /(retour|annuler|\bnon\b|fermer|pr[ée]c[ée]dent|d[ée]connecter|‹)/;
+    const target = (e) => (e.composedPath && e.composedPath()[0]) || e.target;
+    const pick = (el) => {
+      if (!el || !el.closest) return null;
+      const b = el.closest(SEL);
+      if (b) return b;
+      const lab = el.closest('label');
+      return lab && lab.control && lab.control.matches(SEL) ? lab.control : null;
+    };
+    const muted = (b) => { const f = b.closest('[data-sfx]'); return !!f && f.getAttribute('data-sfx') === 'none'; };
+    const kindOf = (b, viaClick) => {
+      const f = b.closest('[data-sfx]');
+      if (f) { const v = f.getAttribute('data-sfx'); if (v === 'none') return null; if (v) return v; }
+      if (b.disabled || b.getAttribute('aria-disabled') === 'true') return null;
+      const role = b.getAttribute('role');
+      if (b.tagName === 'SELECT') return null;
+      if (b.type === 'checkbox') return (b.checked !== !!viaClick) ? 'uncheck' : 'check';
+      if (b.type === 'radio') return 'check';
+      if (role === 'checkbox') return b.getAttribute('aria-checked') === 'true' ? 'uncheck' : 'check';
+      if (b.tagName === 'SUMMARY') return b.parentElement && b.parentElement.open ? 'close' : 'open';
+      const txt = ((b.getAttribute('aria-label') || '') + ' ' + (b.textContent || '')).trim().toLowerCase().slice(0, 90);
+      if (/acheter|retirer mon argent/.test(txt)) return 'coin';
+      if (b.closest('nav') || role === 'tab' || b.closest('[role=tablist]')) return 'tab';
+      if (b.getAttribute('aria-label') && /menu/.test(txt)) return 'open';
+      if (BACK.test(txt)) return 'back';
+      if (OK.test(txt)) return 'confirm';
+      return 'tap';
+    };
+    const unlock = (e) => { unlocked = true; musicGesture(e); };
+    const toggler = (e) => { const t = target(e); const b = t && t.closest ? t.closest('[data-sfx-toggle],[data-music-toggle]') : null; return b; };
+    const sync = () => {
+      const on = isOn(), lv = musicLevel(), mo = lv > 0;
+      D.querySelectorAll('[data-sfx-toggle]').forEach((b) => {
+        const v = on ? 'true' : 'false';
+        if (b.getAttribute('aria-pressed') !== v) b.setAttribute('aria-pressed', v);
+        const ti = on ? 'Couper les bruitages' : 'Activer les bruitages';
+        if (b.getAttribute('title') !== ti) b.setAttribute('title', ti);
+        if (b.getAttribute('aria-label') !== ti) b.setAttribute('aria-label', ti);
+      });
+      D.querySelectorAll('[data-music-toggle]').forEach((b) => {
+        const v = mo ? 'true' : 'false';
+        if (b.getAttribute('aria-pressed') !== v) b.setAttribute('aria-pressed', v);
+        const ti = lv === 0 ? 'Musique coupée (cliquer pour l’activer)' : lv === 1 ? 'Musique douce (cliquer pour l’augmenter un peu)' : 'Musique plus présente (cliquer pour la couper)';
+        if (b.getAttribute('data-level') !== String(lv)) b.setAttribute('data-level', String(lv));
+        if (b.getAttribute('title') !== ti) b.setAttribute('title', ti);
+        if (b.getAttribute('aria-label') !== ti) b.setAttribute('aria-label', ti);
+      });
+    };
+    const setOn = (v, silent) => {
+      mem.off = !v;
+      try { W.localStorage.setItem('son', v ? '1' : '0'); } catch (e) {}
+      sync();
+      announce();
+      if (v && !silent) play('tap');
+    };
+    D.addEventListener('pointerdown', (e) => {
+      unlock(e);
+      if (e.pointerType !== 'mouse' || e.button !== 0) return;
+      lastDown = Date.now();
+      if (toggler(e)) return;
+      const b = pick(target(e)); if (!b) return;
+      const k = kindOf(b, false); if (k) play(k);
+    }, true);
+    D.addEventListener('click', (e) => {
+      unlock(e);
+      const tg = toggler(e);
+      if (tg) { if (tg.hasAttribute('data-music-toggle')) setMusic((musicLevel() + 1) % 3); else setOn(!isOn(), false); return; }
+      if (e.detail > 0 && Date.now() - lastDown < 700) return;
+      const b = pick(target(e)); if (!b) return;
+      const k = kindOf(b, true); if (k) play(k);
+    }, true);
+    D.addEventListener('keydown', (e) => unlock(e), true);
+    D.addEventListener('touchend', (e) => unlock(e), true);
+    D.addEventListener('pointermove', (e) => {
+      if (e.screenX !== px || e.screenY !== py) { px = e.screenX; py = e.screenY; lastMove = Date.now(); }
+    }, true);
+    D.addEventListener('pointerover', (e) => {
+      if (e.pointerType !== 'mouse') return;
+      const b = pick(target(e));
+      if (!b || b === lastHover) return;
+      lastHover = b;
+      if (Date.now() - lastMove > 400) return;
+      if (b.disabled || muted(b) || b.hasAttribute('data-sfx-toggle')) return;
+      play('hover');
+    }, true);
+    D.addEventListener('pointerout', (e) => {
+      if (!lastHover) return;
+      const rel = e.relatedTarget;
+      if (!rel || !lastHover.contains(rel)) lastHover = null;
+    }, true);
+    D.addEventListener('input', (e) => {
+      const t = target(e);
+      if (!t || !t.tagName || (t.closest && t.closest('[data-sfx=none]'))) return;
+      if (t.tagName === 'TEXTAREA' || (t.tagName === 'INPUT' && /^(text|email|url|tel|search|number|password)$/.test(t.type || 'text'))) play('key');
+      else if (t.type === 'range') play('tick');
+    }, true);
+    D.addEventListener('change', (e) => {
+      const t = target(e);
+      if (t && t.tagName === 'SELECT' && !(t.closest && t.closest('[data-sfx=none]'))) play('tap');
+    }, true);
+    try {
+      new MutationObserver((muts) => {
+        sync();
+        if (Date.now() - born < 1200) return;
+        const txt = (n) => ((n.textContent || '').trim());
+        const gone = {};
+        for (let i = 0; i < muts.length; i++) {
+          const rem = muts[i].removedNodes;
+          for (let j = 0; j < rem.length; j++) {
+            const n = rem[j];
+            if (n.nodeType !== 1) continue;
+            if (n.matches && n.matches('[role=alert],[role=status]')) gone[txt(n)] = 1;
+            if (n.querySelectorAll) n.querySelectorAll('[role=alert],[role=status]').forEach((x) => { gone[txt(x)] = 1; });
+          }
+        }
+        for (let i = 0; i < muts.length; i++) {
+          const add = muts[i].addedNodes;
+          for (let j = 0; j < add.length; j++) {
+            const n = add[j];
+            if (n.nodeType !== 1) continue;
+            const list = [];
+            if (n.matches && n.matches('[role=alert],[role=status]')) list.push(n);
+            if (n.querySelectorAll) n.querySelectorAll('[role=alert],[role=status]').forEach((x) => list.push(x));
+            for (let k = 0; k < list.length; k++) {
+              if (gone[txt(list[k])]) continue;
+              play(list[k].getAttribute('role') === 'alert' ? 'error' : 'notif');
+              return;
+            }
+          }
+        }
+      }).observe(D.body || D.documentElement, { childList: true, subtree: true });
+    } catch (e) {}
+    // ---------- Musique d'ambiance : générée en direct par le navigateur (aucun fichier, aucun droit d'auteur) ----------
+    // Style « corporate inspirant » : piano qui égrène l'accord en croches, cordes qui se gonflent, basse ronde, kick doux,
+    // claquements sur 2 et 4, shaker, 112 pulsations/min, en ré majeur (ré · la · si mineur · sol). Dans la deuxième moitié
+    // de chaque cycle de 8 mesures, une petite ligne de piano s'élève au-dessus ; une vague de mer porte le passage au cycle suivant.
+    // Même arrangement du début à la fin. Tout se calcule depuis l'horloge murale : deux maquettes ouvertes ensemble
+    // jouent la même mesure (relais sans coupure).
+    const MU = { id: Math.random().toString(36).slice(2), yielded: false, paused: false, G: null, timer: 0, hideT: 0, hideMs: 45000, bar: 0, barT: 0, first: false, sea: null, bc: null };
+    const BEAT = 60 / 112, S16 = BEAT / 4, BAR = BEAT * 4, EP = 1700000000, FADE = 2.2;
+    const MVOLS = [0, 0.042, 0.089];
+    const LV = { pad: 0.08, sea: 0.1, foam: 0.03, kick: 0.1, clap: 0.2, hat: 0.12, bass: 0.06, keys: 0.22, lead: 0.2 };
+    // 0 = coupée, 1 = douce (par défaut), 2 = un peu plus présente
+    const musicLevel = () => {
+      let v = mem.mlv;
+      try { const x = W.localStorage.getItem('musique'); if (x !== null) v = +x; } catch (e) {}
+      return v === 0 || v === 1 || v === 2 ? v : 1;
+    };
+    const musicOn = () => musicLevel() > 0;
+    // volume des bruitages : 0 à 100, 50 = niveau d'origine
+    const sfxVol = () => {
+      let v = mem.sv;
+      try { const x = W.localStorage.getItem('sfxvol'); if (x !== null) v = +x; } catch (e) {}
+      return v >= 0 && v <= 100 ? v : 50;
+    };
+    const svGain = (v) => (v <= 0 ? 0 : Math.pow(v / 50, 1.6));
+    const rng = (a) => () => { let t = (a += 0x6D2B79F5); t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+    // accords (2 mesures chacun) : ré · la · si mineur · sol. r = racine de la basse, pad = cordes, pn = notes du piano (grave vers aigu)
+    const CH = [
+      { r: 73.42, pad: [146.83, 220, 293.66, 369.99], pn: [220, 293.66, 369.99, 440, 587.33, 739.99] },
+      { r: 55, pad: [110, 164.81, 220, 277.18, 329.63], pn: [164.81, 220, 277.18, 329.63, 440, 554.37] },
+      { r: 61.74, pad: [123.47, 185, 246.94, 293.66], pn: [185, 246.94, 293.66, 369.99, 493.88, 587.33] },
+      { r: 49, pad: [98, 146.83, 196, 246.94, 293.66], pn: [146.83, 196, 246.94, 293.66, 392, 493.88] }
+    ];
+    // croches du piano (indices dans pn) et leur force ; ligne qui s'élève sur les mesures 5 à 8 : [temps en double-croches, note, durée en temps]
+    const PAT = [1, 2, 3, 2, 4, 2, 3, 2], VEL = [1, 0.55, 0.72, 0.55, 0.88, 0.55, 0.72, 0.55];
+    const LEAD = [
+      [[0, 739.99, 3], [12, 659.25, 1]],
+      [[0, 587.33, 2], [8, 739.99, 2]],
+      [[0, 587.33, 3], [12, 493.88, 1]],
+      [[0, 493.88, 2], [8, 440, 2]]
+    ];
+    const bellCurve = (n, pk, amp) => {
+      const a = new Float32Array(n);
+      for (let i = 0; i < n; i++) { const x = i / (n - 1); a[i] = amp * Math.pow(Math.sin((x < pk ? x / pk : 1 - (x - pk) / (1 - pk)) * Math.PI / 2), 2); }
+      return a;
+    };
+    // fondus en puissance égale : deux maquettes qui se relaient se croisent sans trou ni bosse
+    const mcurve = (n, to, up) => {
+      const a = new Float32Array(n);
+      for (let i = 0; i < n; i++) { const x = i / (n - 1); a[i] = Math.max(to * (up ? Math.sin(x * Math.PI / 2) : Math.cos(x * Math.PI / 2)), 0.0001); }
+      return a;
+    };
+    const mhold = (g, t) => { if (g.cancelAndHoldAtTime) g.cancelAndHoldAtTime(t); else { g.cancelScheduledValues(t); g.setValueAtTime(g.value, t); } };
+    const seaBuffer = (c) => {
+      if (MU.sea && MU.sea.sampleRate === c.sampleRate) return MU.sea;
+      const b = c.createBuffer(1, Math.floor(c.sampleRate * 10), c.sampleRate), d = b.getChannelData(0);
+      let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
+      for (let i = 0; i < d.length; i++) {
+        const w = Math.random() * 2 - 1;
+        b0 = 0.99886 * b0 + w * 0.0555179; b1 = 0.99332 * b1 + w * 0.0750759; b2 = 0.969 * b2 + w * 0.153852;
+        b3 = 0.8665 * b3 + w * 0.3104856; b4 = 0.55 * b4 + w * 0.5329522; b5 = -0.7616 * b5 - w * 0.016898;
+        d[i] = (b0 + b1 + b2 + b3 + b4 + b5 + b6 + w * 0.5362) * 0.11; b6 = w * 0.115926;
+      }
+      MU.sea = b; return b;
+    };
+    const noiseSrc = (c) => {
+      if (!nbuf) { nbuf = c.createBuffer(1, c.sampleRate, c.sampleRate); const d = nbuf.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1; }
+      const s = c.createBufferSource(); s.buffer = nbuf; return s;
+    };
+    const mbuild = (c) => {
+      const G = { c: c, sends: [] };
+      G.out = c.createGain(); G.out.gain.value = 0.0001; G.duck = c.createGain(); G.mix = c.createGain(); G.pump = c.createGain();
+      G.mix.connect(G.duck); G.duck.connect(G.out); G.out.connect(mst); G.pump.connect(G.mix);
+      // réverbération propre à la musique : elle passe par le même fondu et le même réglage de volume que le reste
+      G.rv = c.createConvolver(); G.rv.buffer = cv.buffer;
+      const wet = c.createGain(); wet.gain.value = 0.7; G.rv.connect(wet); wet.connect(G.duck);
+      const bus = (to, amount) => {
+        const b = c.createGain(); b.connect(to);
+        if (amount > 0) { const s = c.createGain(); s.gain.value = amount; b.connect(s); s.connect(G.rv); G.sends.push(s); }
+        return b;
+      };
+      G.padB = bus(G.pump, 0.5); G.seaB = bus(G.pump, 0.06);
+      G.lowB = bus(G.mix, 0); G.drmB = bus(G.mix, 0.15); G.keyB = bus(G.mix, 0.45);
+      return G;
+    };
+    // cordes : quatre ou cinq notes tenues, deux dents de scie désaccordées par note, filtre qui s'ouvre puis se referme, attaque lente
+    const mpad = (G, t, dur, ch) => {
+      const c = G.c, f = c.createBiquadFilter(), A = 1.1, R = 1.6, v = LV.pad / Math.sqrt(ch.pad.length);
+      f.type = 'lowpass'; f.Q.value = 0.4;
+      f.frequency.setValueAtTime(500, t); f.frequency.linearRampToValueAtTime(1400, t + dur * 0.8); f.frequency.linearRampToValueAtTime(650, t + dur + R);
+      f.connect(G.padB);
+      ch.pad.forEach((hz, i) => {
+        const g = c.createGain(), pn = c.createStereoPanner();
+        pn.pan.value = ((i % 4) - 1.5) * 0.3;
+        g.gain.setValueAtTime(0.0001, t); g.gain.linearRampToValueAtTime(v, t + A); g.gain.setValueAtTime(v, t + dur); g.gain.linearRampToValueAtTime(0.0001, t + dur + R);
+        [-6, 6].forEach((dt) => { const o = c.createOscillator(); o.type = 'sawtooth'; o.frequency.value = hz; o.detune.value = dt; o.connect(g); o.start(t); o.stop(t + dur + R + 0.05); });
+        g.connect(pn); pn.connect(f);
+      });
+    };
+    // vague : souffle grave qui monte puis retombe, écume plus aiguë, d'une oreille à l'autre
+    const mwave = (G, t, side, amp, D2, pk) => {
+      const c = G.c, buf = seaBuffer(c), off = Math.random() * 1.5;
+      const s1 = c.createBufferSource(), lp = c.createBiquadFilter(), g1 = c.createGain(), pn = c.createStereoPanner();
+      s1.buffer = buf; lp.type = 'lowpass'; lp.Q.value = 0.5;
+      lp.frequency.setValueAtTime(240, t); lp.frequency.exponentialRampToValueAtTime(900, t + D2 * pk); lp.frequency.exponentialRampToValueAtTime(260, t + D2);
+      g1.gain.setValueCurveAtTime(bellCurve(96, pk, LV.sea * amp), t, D2);
+      pn.pan.setValueAtTime(side ? 0.5 : -0.5, t); pn.pan.linearRampToValueAtTime(side ? -0.35 : 0.35, t + D2);
+      s1.connect(lp); lp.connect(g1); g1.connect(pn); pn.connect(G.seaB); s1.start(t, off); s1.stop(t + D2 + 0.1);
+      const s2 = c.createBufferSource(), bp = c.createBiquadFilter(), g2 = c.createGain(), p2 = c.createStereoPanner();
+      s2.buffer = buf; bp.type = 'bandpass'; bp.frequency.value = 2600; bp.Q.value = 0.7;
+      g2.gain.setValueCurveAtTime(bellCurve(96, Math.min(0.9, pk + 0.03), LV.foam * amp), t + 0.8, D2 - 1.6);
+      p2.pan.value = side ? 0.3 : -0.3;
+      s2.connect(bp); bp.connect(g2); g2.connect(p2); p2.connect(G.seaB); s2.start(t + 0.8, off + 1.5); s2.stop(t + D2 - 0.7);
+    };
+    const mkick = (G, t, v) => {
+      const c = G.c, o = c.createOscillator(), g = c.createGain();
+      o.type = 'sine'; o.frequency.setValueAtTime(130, t); o.frequency.exponentialRampToValueAtTime(50, t + 0.1);
+      g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(v, t + 0.005); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.3);
+      o.connect(g); g.connect(G.lowB); o.start(t); o.stop(t + 0.34);
+    };
+    const mclap = (G, t, v) => {
+      [0, 0.011, 0.023].forEach((dt, k) => {
+        const c = G.c, s = noiseSrc(c), bp = c.createBiquadFilter(), g = c.createGain();
+        bp.type = 'bandpass'; bp.frequency.value = 1500; bp.Q.value = 0.8;
+        g.gain.setValueAtTime(0.0001, t + dt); g.gain.exponentialRampToValueAtTime(v * (k === 2 ? 1 : 0.6), t + dt + 0.002); g.gain.exponentialRampToValueAtTime(0.0001, t + dt + (k === 2 ? 0.16 : 0.05));
+        s.connect(bp); bp.connect(g); g.connect(G.drmB); s.start(t + dt, Math.random() * 0.8); s.stop(t + dt + 0.2);
+      });
+    };
+    // shaker : bruit filtré très court, en croches régulières
+    const mhat = (G, t, v, len) => {
+      const c = G.c, s = noiseSrc(c), bp = c.createBiquadFilter(), g = c.createGain();
+      bp.type = 'bandpass'; bp.frequency.value = 6200; bp.Q.value = 0.7;
+      g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(v, t + 0.006); g.gain.exponentialRampToValueAtTime(0.0001, t + len);
+      s.connect(bp); bp.connect(g); g.connect(G.drmB); s.start(t, Math.random() * 0.8); s.stop(t + len + 0.03);
+    };
+    // basse ronde : triangle + sinus, sans mordant
+    const mbass = (G, t, hz, dur, v) => {
+      const c = G.c, o = c.createOscillator(), o2 = c.createOscillator(), lp = c.createBiquadFilter(), g = c.createGain(), g2 = c.createGain();
+      o.type = 'triangle'; o.frequency.value = hz; o2.type = 'sine'; o2.frequency.value = hz; g2.gain.value = 0.7;
+      lp.type = 'lowpass'; lp.Q.value = 0.5; lp.frequency.value = 520;
+      g.gain.setValueAtTime(0.0001, t); g.gain.linearRampToValueAtTime(v, t + 0.02); g.gain.setValueAtTime(v, t + Math.max(dur - 0.12, 0.03)); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      o.connect(lp); lp.connect(g); o2.connect(g2); g2.connect(g); g.connect(G.lowB); o.start(t); o2.start(t); o.stop(t + dur + 0.05); o2.stop(t + dur + 0.05);
+    };
+    // piano : partiels sinus à décroissance rapide, attaque marteau, filtre qui se ferme ; assez sourd pour rester un instrument d'ambiance
+    const mpiano = (G, t, hz, dur, v, pan) => {
+      const c = G.c, g = c.createGain(), lp = c.createBiquadFilter(), pn = c.createStereoPanner();
+      lp.type = 'lowpass'; lp.Q.value = 0.3;
+      lp.frequency.setValueAtTime(Math.min(7000, hz * 8), t); lp.frequency.exponentialRampToValueAtTime(Math.max(1000, hz * 2.4), t + Math.min(dur, 1) * 0.7);
+      g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(v, t + 0.005); g.gain.exponentialRampToValueAtTime(v * 0.3, t + 0.25); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      pn.pan.value = Math.max(-1, Math.min(1, pan || 0));
+      [[1, 1, 0], [2, 0.38, 3], [3, 0.16, -4], [4, 0.07, 5]].forEach((p) => {
+        const o = c.createOscillator(), og = c.createGain();
+        o.type = 'sine'; o.frequency.value = hz * p[0]; o.detune.value = p[2]; og.gain.value = p[1];
+        o.connect(og); og.connect(g); o.start(t); o.stop(t + dur + 0.05);
+      });
+      const s = noiseSrc(c), bp = c.createBiquadFilter(), hg = c.createGain();
+      bp.type = 'bandpass'; bp.frequency.value = Math.min(4500, hz * 5); bp.Q.value = 1.1;
+      hg.gain.setValueAtTime(v * 0.5, t); hg.gain.exponentialRampToValueAtTime(0.0001, t + 0.035);
+      s.connect(bp); bp.connect(hg); hg.connect(g); s.start(t, Math.random() * 0.8); s.stop(t + 0.06);
+      g.connect(lp); lp.connect(pn); pn.connect(G.keyB);
+    };
+    // une mesure entière (2,1 s) : tout ce qui joue pendant cette mesure est planifié d'avance
+    const mbar = (G, b, T, first) => {
+      const c = G.c, now = c.currentTime + 0.03, bi = b % 8, ch = CH[bi >> 1], last = bi === 7;
+      const at = (sb) => T + sb * S16, ok = (t) => t >= now;
+      if (bi % 2 === 0) { const t0 = Math.max(at(0), now); mpad(G, t0, 2 * BAR - (t0 - T), ch); }
+      else if (first && T + BAR - now > 0.8) mpad(G, now, T + BAR - now, ch);
+      // vagues : une petite au milieu du cycle, une grande qui culmine sur le temps 1 du cycle suivant
+      if (bi === 2 && ok(at(0))) mwave(G, at(0), 0, 0.55, 2 * BAR + 3.2, (2 * BAR) / (2 * BAR + 3.2));
+      if (bi === 6 && ok(at(0))) mwave(G, at(0), 1, 1, 2 * BAR + 3.6, (2 * BAR) / (2 * BAR + 3.6));
+      // rythme : kick sur 1 et 3, claquement sur 2 et 4, shaker en croches ; la dernière mesure se resserre avant la vague
+      [0, 8].forEach((sb) => { if (ok(at(sb))) mkick(G, at(sb), LV.kick * (sb === 0 ? 1 : 0.8)); });
+      if (last) [4, 10, 12, 14, 15].forEach((sb, k) => { if (ok(at(sb))) mclap(G, at(sb), LV.clap * (k === 0 ? 1 : 0.55 + k * 0.1)); });
+      else [4, 12].forEach((sb) => { if (ok(at(sb))) mclap(G, at(sb), LV.clap); });
+      const Rh = rng(77 + b * 13);
+      for (let sb = 0; sb < 16; sb += 2) { const t = at(sb) + (Rh() - 0.5) * 0.006; if (ok(t)) mhat(G, t, LV.hat * (sb % 4 ? 0.95 : 0.7) * (0.85 + Rh() * 0.3), 0.06); }
+      // basse : la racine puis la quinte, en blanches (volume corrigé selon la hauteur : les notes très graves paraissent plus faibles)
+      const bv = LV.bass * Math.pow(73.42 / ch.r, 0.7);
+      [[0, 1], [8, 1.5]].forEach((n) => { if (ok(at(n[0]))) mbass(G, at(n[0]), ch.r * n[1], BEAT * 1.9, bv * (n[0] ? 0.85 : 1)); });
+      // piano : la basse de l'accord une octave plus haut (mesures paires), puis le motif en croches
+      if (bi % 2 === 0 && ok(at(0))) mpiano(G, at(0), ch.r * 2, BAR * 1.8, LV.keys * 0.9, -0.15);
+      const Rp = rng(4242 + b * 7);
+      PAT.forEach((ix, k) => {
+        const t = at(k * 2) + (Rp() - 0.5) * 0.008;
+        if (ok(t)) mpiano(G, t, ch.pn[ix], 1.15, LV.keys * VEL[k] * (0.92 + Rp() * 0.16), (k % 2 ? 0.14 : -0.14) + (ix - 3) * 0.04);
+      });
+      // la ligne qui s'élève (deuxième moitié du cycle)
+      if (bi >= 4) LEAD[bi - 4].forEach((n) => { if (ok(at(n[0]))) mpiano(G, at(n[0]), n[1], n[2] * BEAT + 0.8, LV.lead, 0.1); });
+    };
+    const mtick = (ahead) => {
+      const G = MU.G; if (!G) return;
+      const c = G.c, lim = c.currentTime + (ahead || 3);
+      if (c.state === 'suspended') { try { const p = c.resume(); if (p && p.catch) p.catch(() => {}); } catch (e) {} }
+      // le planificateur a pris trop de retard (onglet figé) : on se recale sur l'horloge murale
+      if (MU.barT < c.currentTime - 4) { const k = (Date.now() / 1000 - EP) / BAR; MU.bar = Math.floor(k); MU.barT = c.currentTime - (k - MU.bar) * BAR; MU.first = true; }
+      while (MU.barT < lim) {
+        try { mbar(G, MU.bar, MU.barT, MU.first); } catch (e) { if (W.__nsfxLog) W.__nsfxLog.push('music-error: ' + (e && e.message)); }
+        MU.first = false; MU.bar++; MU.barT += BAR;
+      }
+    };
+    const mannounce = () => {
+      try { W.localStorage.setItem('nmusic-owner', MU.id + '|' + Date.now()); } catch (e) {}
+      try { if (MU.bc) MU.bc.postMessage({ take: MU.id }); } catch (e) {}
+    };
+    const mstart = () => {
+      const c = ac(); if (!c || !mst || !cv) return;
+      const G = mbuild(c), k = (Date.now() / 1000 - EP) / BAR, b = Math.floor(k), t = c.currentTime;
+      MU.G = G; MU.bar = b; MU.barT = t - (k - b) * BAR; MU.first = true;
+      G.out.gain.setValueCurveAtTime(mcurve(48, MVOLS[musicLevel()], true), t, FADE);
+      mtick();
+      MU.timer = setInterval(() => mtick(), 250);
+      mannounce();
+    };
+    const mstop = () => {
+      const G = MU.G; if (!G) return;
+      MU.G = null; clearInterval(MU.timer); MU.timer = 0;
+      try { const g = G.out.gain, t = G.c.currentTime; mhold(g, t); g.setValueCurveAtTime(mcurve(48, Math.max(+g.value || 0, 0.0001), false), t, FADE); } catch (e) {}
+      setTimeout(() => { try { G.out.disconnect(); G.sends.forEach((s) => s.disconnect()); } catch (e) {} }, FADE * 1000 + 400);
+    };
+    const musicSync = () => {
+      const should = musicOn() && unlocked && !MU.yielded && !MU.paused;
+      if (should && !MU.G) mstart(); else if (!should && MU.G) mstop();
+    };
+    // sous un bruitage la musique s'efface un instant pour laisser passer le son
+    const mduck = () => {
+      const G = MU.G; if (!G) return;
+      try {
+        const g = G.duck.gain, t = G.c.currentTime;
+        mhold(g, t);
+        g.setTargetAtTime(0.62, t, 0.03); g.setTargetAtTime(1, t + 0.45, 0.35);
+      } catch (e) {}
+    };
+    // premier geste dans cette maquette : la musique démarre (les navigateurs interdisent le son avant)
+    const musicGesture = (e) => {
+      const t = e && target(e);
+      if (t && t.closest && t.closest('[data-music-toggle],[data-sfx-toggle]')) return;
+      MU.yielded = false; musicSync();
+    };
+    // le volume suit le réglage tout de suite (fondu de 0,8 s) quand la musique joue déjà
+    const mlevel = () => {
+      const G = MU.G; if (!G) return;
+      try {
+        const g = G.out.gain, t = G.c.currentTime;
+        mhold(g, t);
+        g.linearRampToValueAtTime(Math.max(MVOLS[musicLevel()], 0.0001), t + 0.8);
+      } catch (e) {}
+    };
+    const announce = () => { try { W.dispatchEvent(new CustomEvent('nsfx-change', { detail: { on: isOn(), music: musicOn(), level: musicLevel(), vol: sfxVol() } })); } catch (e) {} };
+    const setMusic = (v) => {
+      const lv = v === true ? 1 : v === false ? 0 : (+v || 0);
+      mem.mlv = lv;
+      try { W.localStorage.setItem('musique', String(lv)); } catch (e) {}
+      if (lv > 0) MU.yielded = false;
+      sync(); musicSync(); mlevel(); announce();
+    };
+    const setSfxVol = (v, preview) => {
+      const n = Math.max(0, Math.min(100, Math.round(+v || 0)));
+      mem.sv = n;
+      try { W.localStorage.setItem('sfxvol', String(n)); } catch (e) {}
+      if (bus && ctx) { try { bus.gain.setTargetAtTime(svGain(n), ctx.currentTime, 0.03); } catch (e) {} }
+      announce();
+      if (preview) play('tap');
+    };
+    // une seule maquette joue à la fois : la dernière touchée reprend la même mesure, l'autre s'éteint en fondu enchaîné
+    try {
+      if (W.BroadcastChannel) {
+        MU.bc = new W.BroadcastChannel('neptune-musique');
+        MU.bc.onmessage = (e) => { if (e.data && e.data.take && e.data.take !== MU.id) { MU.yielded = true; musicSync(); } };
+      }
+    } catch (e) {}
+    W.addEventListener('storage', (e) => {
+      if (e.key === 'nmusic-owner' && e.newValue && e.newValue.split('|')[0] !== MU.id) { MU.yielded = true; musicSync(); }
+      else if (e.key === 'musique' || e.key === 'son' || e.key === 'sfxvol') {
+        sync(); musicSync(); mlevel();
+        if (e.key === 'sfxvol' && bus && ctx) { try { bus.gain.setTargetAtTime(svGain(sfxVol()), ctx.currentTime, 0.03); } catch (x) {} }
+        announce();
+      }
+    });
+    // onglet masqué : la musique continue un moment (aller-retour rapide = aucun blanc), puis se met en pause en fondu
+    D.addEventListener('visibilitychange', () => {
+      clearTimeout(MU.hideT);
+      if (D.hidden) MU.hideT = setTimeout(() => { if (D.hidden) { MU.paused = true; musicSync(); } }, MU.hideMs);
+      else if (MU.paused) { MU.paused = false; musicSync(); }
+    });
+    W.addEventListener('pagehide', mstop);
+    W.__nsfx = { play: play, setOn: setOn, isOn: isOn, scan: sync, voice: voice, air: air, ac: ac, PENTA: PENTA, musicOn: musicOn, musicLevel: musicLevel, setMusic: setMusic, sfxVol: sfxVol, setSfxVol: setSfxVol, music: { state: MU, tick: mtick, start: mstart, stop: mstop, LV: LV } };
+    sync();
+  }
+
+  renderVals() {
+    const s = this.state;
+    const inv = (this.props.inviter || '').trim();
+    const emailOk = /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(s.email.trim());
+    const faqDefs = [
+      { id: 'clipping', q: "C'est quoi le clipping ?", a: "Le clipping, c'est découper les meilleurs moments d'une vidéo longue pour en faire de courtes vidéos, puis les poster sur TikTok, Reels ou Shorts." },
+      { id: 'debuter', q: "Je ne sais pas clipper, c'est un problème ?", a: "Pas du tout. Tu peux partir de zéro : on t'apprend tout de A à Z et on t'accompagne personnellement, pas à pas, jusqu'à ce que tu sois à l'aise." },
+      { id: 'revenus', q: "Comment je récupère de l'argent ?", a: "Une fois tes missions terminées, tu accumules de l'argent sur ton compte Neptune. Tu peux le récupérer quand tu veux, via [à définir]." },
+      { id: 'gratuit', q: "C'est gratuit ?", a: "Oui, c'est 100 % gratuit : tu n'as rien à payer pour t'inscrire et commencer à clipper." }
+    ];
+    const faq = faqDefs.map((f) => {
+      const on = !!s.open[f.id];
+      return {
+        q: f.q, a: f.a || '[Réponse à définir]', aColor: f.a ? '#C9D7E6' : '#9DB2C8',
+        isOpen: on, rot: on ? 'rotate(180deg)' : 'rotate(0deg)',
+        toggle: () => this.setState({ open: Object.assign({}, this.state.open, { [f.id]: !this.state.open[f.id] }) })
+      };
+    });
+    // ----- parcours « Devenir clipper » -----
+    const jq = s.jq || 0, ageN = parseInt(s.jage, 10);
+    const jOk = [s.jname.trim().length >= 2, ageN >= 1 && ageN <= 99, emailOk, s.code.length === 6, !!s.jdc, !!(s.jyt || s.jtt)][jq];
+    const connOn = 'border-color: #2FD4C0; background: #0F2A40;';
+    const nm = s.jname.trim();
+    const finish = () => { this.sfx('success'); this.setState({ view: 'space', joined: true }); };
+    const join = {
+      jq0: jq === 0, jq1: jq === 1, jq2: jq === 2, jq3: jq === 3, jq4: jq === 4, jq5: jq === 5,
+      jNum: jq + 1, jProgress: ((jq + 1) / 6 * 100) + '%',
+      jNoNext: !jOk, jNextLabel: jq === 5 ? 'Terminer' : 'Continuer',
+      jHint: ['', '', 'Tu recevras un code à 6 chiffres.', 'Maquette : n\u2019importe quel code à 6 chiffres fonctionne.', 'Maquette : la fenêtre officielle de Discord sera branchée plus tard.', 'Maquette : les fenêtres officielles de YouTube et TikTok seront branchées avec leurs API.'][jq],
+      jname: s.jname, jage: s.jage,
+      onJName: (e) => this.setState({ jname: e.target.value }),
+      onJAge: (e) => this.setState({ jage: e.target.value.replace(/\D/g, '').slice(0, 2) }),
+      jBack: () => { if (jq === 0) this.setState({ view: 'home' }); else this.setState({ jq: jq - 1 }); },
+      jNext: () => {
+        if (!jOk) return;
+        if (jq === 5) { finish(); return; }
+        if (jq === 2) { this.sfx('notif'); this.setState({ jq: 3, code: '' }); return; }
+        this.setState({ jq: jq + 1 });
+      },
+      jChangeEmail: () => this.setState({ jq: 2, code: '' }),
+      jLater: () => finish(),
+      jDc: () => { if (!s.jdc) this.sfx('success'); this.setState({ jdc: !s.jdc }); },
+      jYt: () => { if (!s.jyt) this.sfx('success'); this.setState({ jyt: !s.jyt }); },
+      jTt: () => { if (!s.jtt) this.sfx('success'); this.setState({ jtt: !s.jtt }); },
+      dcLabel: s.jdc ? 'Discord connecté' : 'Se connecter avec Discord', dcMark: s.jdc ? '\u2713 ' + nm : '', dcStyle: s.jdc ? connOn : '',
+      ytLabel: s.jyt ? 'YouTube connecté' : 'Se connecter avec YouTube', ytMark: s.jyt ? '\u2713 ' + nm : '', ytStyle: s.jyt ? connOn : '',
+      ttLabel: s.jtt ? 'TikTok connecté' : 'Se connecter avec TikTok', ttMark: s.jtt ? '\u2713 ' + nm : '', ttStyle: s.jtt ? connOn : '',
+      joinedStr: s.joined ? '1' : '', jytStr: s.jyt ? '1' : '', jttStr: s.jtt ? '1' : '', jdcStr: s.jdc ? '1' : ''
+    };
+    return {
+      inviter: inv, hasInviter: !!inv, noInviter: !inv,
+      faq: faq,
+      openClippingFaq: () => {
+        this.setState({ open: Object.assign({}, this.state.open, { clipping: true }) });
+        try { const el = document.getElementById('faq-clipping'); if (el && el.scrollIntoView) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch (e) {}
+      },
+      connectHero: () => this.setState({ view: 'join', jq: 0, code: '' }),
+      connectFinal: () => this.setState({ view: 'join', jq: 0, code: '' }),
+      hasHome: !!this.props.onHome,
+      goHome: () => { if (this.props.onHome) this.props.onHome(); },
+      isHome: s.view === 'home', isLogin: s.view === 'login', isSpace: s.view === 'space', isJoin: s.view === 'join',
+      showCreator: !!this.props.onHome && s.view !== 'space',
+      showHeader: s.view !== 'space',
+      showDock: s.view !== 'space',
+      step1: !s.sent, step2: s.sent,
+      email: s.email, code: s.code,
+      onEmail: (e) => this.setState({ email: e.target.value }),
+      onCode: (e) => this.setState({ code: e.target.value.replace(/\D/g, '').slice(0, 6) }),
+      noSend: !emailOk, noVerify: s.code.length !== 6,
+      openLogin: () => this.setState(s.view === 'login' ? { view: 'login' } : { view: 'login', sent: false, code: '' }),
+      sendCode: () => { this.sfx('notif'); this.setState({ sent: true, code: '' }); },
+      changeEmail: () => this.setState({ sent: false, code: '' }),
+      verify: () => { this.sfx('success'); this.setState({ view: 'space' }); },
+      showHome: () => this.setState({ view: 'home' }),
+      logout: () => this.setState({ view: 'home', email: '', code: '', sent: false, jq: 0, jname: '', jage: '', jdc: false, jyt: false, jtt: false, joined: false }),
+      ...join
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,1616 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Espace client Neptune</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700&family=Inter:wght@400;500;600&display=swap">
+<style>
+body{margin:0}
+.esp button{font-family:inherit;cursor:pointer}
+.esp input,.esp select{font-family:inherit}
+.esp nav::-webkit-scrollbar{height:0}
+.sfx-tog{position:fixed;right:16px;bottom:20px;z-index:80;width:44px;height:44px;padding:0;border-radius:50%;border:1px solid rgba(255,255,255,.2);background:rgba(8,20,34,.85);color:#cfe3ee;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.sfx-tog:hover{background:rgba(20,44,66,.95)}
+.sfx-tog:focus-visible{outline:2px solid #7BE6D6;outline-offset:2px}
+.sfx-tog[aria-pressed=false]{color:#7d93a3}
+.sfx-tog[aria-pressed=false] .sfx-on{display:none}
+.sfx-tog[aria-pressed=true] .sfx-off{display:none}
+.mus-tog{right:68px}
+.mus-tog[aria-pressed=false] .m-on{display:none}
+.mus-tog[aria-pressed=true] .m-off{display:none}
+.mus-tog[data-level="1"] .m-d2{display:none}
+.esp input[type=range]{display:block;width:100%;height:30px;margin:0;cursor:pointer}
+.esp button:focus-visible,.esp input:focus-visible,.esp select:focus-visible{outline:2px solid #7BE6D6;outline-offset:2px}
+</style>
+</helmet>
+<div class="esp" style="min-height: 1000px; background: #06182A; color: #E6F3F5; font-family: 'Inter', system-ui, sans-serif; font-size: 14px; line-height: 1.5; box-sizing: border-box; position: relative">
+
+<!-- ============ CONNEXION ============ -->
+<sc-if value="{{ flagLogin }}" hint-placeholder-val="{{ true }}">
+<div style="min-height: 1000px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; padding: 32px; box-sizing: border-box">
+<sc-if value="{{ hasExit }}" hint-placeholder-val="{{ false }}">
+<button onClick="{{ exitSite }}" style="min-height: 44px; padding: 0 12px; background: transparent; border: 0; color: #8FB0BF; font-size: 14px">← Retour au site</button>
+</sc-if>
+<div style="width: 100%; max-width: 420px; background: #0B2338; border-radius: 16px; padding: 36px; box-sizing: border-box; display: flex; flex-direction: column; gap: 22px">
+<div style="display: flex; align-items: center; gap: 12px">
+<svg width="36" height="36" viewBox="0 0 36 36" aria-hidden="true"><circle cx="18" cy="18" r="17" style="fill: #0F2C46; stroke: #35D6C8; stroke-width: 1.5"></circle><path d="M11 25V11l14 14V11" style="fill: none; stroke: #35D6C8; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round"></path></svg>
+<span style="font-family: 'Sora', system-ui, sans-serif; font-weight: 700; letter-spacing: 0.22em; font-size: 14px">NEPTUNE</span>
+</div>
+<h1 style="margin: 0; font-family: 'Sora', system-ui, sans-serif; font-size: 24px; font-weight: 600">Connexion</h1>
+
+<sc-if value="{{ stepEmail }}" hint-placeholder-val="{{ true }}">
+<div style="display: flex; flex-direction: column; gap: 8px">
+<label for="mail" style="color: #8FB0BF">Ton adresse mail</label>
+<input id="mail" type="email" value="{{ email }}" onChange="{{ setEmail }}" placeholder="prenom@exemple.fr" style="min-height: 48px; box-sizing: border-box; padding: 0 14px; background: #06182A; color: #E6F3F5; border: 1px solid #1F4666; border-radius: 10px; font-size: 15px">
+</div>
+<sc-if value="{{ hasError }}" hint-placeholder-val="{{ false }}">
+<p role="alert" style="margin: 0; color: #35D6C8">{{ loginError }}</p>
+</sc-if>
+<button onClick="{{ sendCode }}" style="min-height: 48px; background: #35D6C8; color: #06182A; border: 0; border-radius: 10px; font-size: 15px; font-weight: 600">Recevoir mon code</button>
+</sc-if>
+
+<sc-if value="{{ stepCode }}" hint-placeholder-val="{{ false }}">
+<p style="margin: 0; color: #8FB0BF">Un code à 6 chiffres a été envoyé à <strong style="display: block; color: #E6F3F5; overflow-wrap: anywhere">{{ email }}</strong>.</p>
+<input id="code" type="text" inputMode="numeric" maxLength="6" value="{{ code }}" onChange="{{ setCode }}" placeholder="000000" aria-label="Code reçu par mail" style="min-height: 52px; box-sizing: border-box; padding: 0 14px; background: #06182A; color: #E6F3F5; border: 1px solid #1F4666; border-radius: 10px; font-size: 22px; letter-spacing: 0.4em; text-align: center">
+<sc-if value="{{ hasError }}" hint-placeholder-val="{{ false }}">
+<p role="alert" style="margin: 0; color: #35D6C8">{{ loginError }}</p>
+</sc-if>
+<sc-if value="{{ hasNote }}" hint-placeholder-val="{{ false }}">
+<p role="status" style="margin: 0; color: #35D6C8">{{ loginNote }}</p>
+</sc-if>
+<button onClick="{{ verify }}" style="min-height: 48px; background: #35D6C8; color: #06182A; border: 0; border-radius: 10px; font-size: 15px; font-weight: 600">Accéder à mon espace</button>
+<div style="display: flex; flex-wrap: wrap; gap: 8px; justify-content: space-between">
+<button onClick="{{ resend }}" style="min-height: 44px; background: transparent; color: #35D6C8; border: 0; font-size: 14px">Renvoyer le code</button>
+<button onClick="{{ backToEmail }}" style="min-height: 44px; background: transparent; color: #8FB0BF; border: 0; font-size: 14px">Changer de mail</button>
+</div>
+</sc-if>
+</div>
+<span style="color: #8FB0BF; font-size: 12px">Maquette : n’importe quel code à 6 chiffres est accepté.</span>
+<sc-if value="{{ stepEmail }}" hint-placeholder-val="{{ true }}">
+<div style="display: flex; flex-direction: column; align-items: center; gap: 2px; max-width: 460px">
+<span style="color: #8FB0BF; font-size: 12px">Comptes de test</span>
+<div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 0 8px">
+<sc-for list="{{ demoAccounts }}" as="a" hint-placeholder-count="5">
+<button onClick="{{ a.pick }}" style="min-height: 44px; padding: 0 10px; background: transparent; border: 0; color: #35D6C8; font-size: 13px">{{ a.label }}</button>
+</sc-for>
+</div>
+</div>
+</sc-if>
+</div>
+</sc-if>
+
+<!-- ============ APERCU : ce que voit la communauté ============ -->
+<sc-if value="{{ flagPreview }}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column">
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 4px 16px; min-height: 64px; padding: 0 24px; box-sizing: border-box; background: #06182A; border-bottom: 1px solid #163650">
+<button onClick="{{ closePreview }}" style="min-height: 44px; padding: 0 12px 0 0; background: transparent; border: 0; color: #35D6C8; font-size: 14px; font-weight: 600">← Retour à mon espace</button>
+<span style="color: #8FB0BF; font-size: 13px">Aperçu : ce que voit ta communauté en ouvrant ton lien.</span>
+</div>
+<dc-import name="Clipper" inviter="{{ inviteName }}" hint-size="100%,2800px"></dc-import>
+</div>
+</sc-if>
+
+<!-- ============ APPLICATION ============ -->
+<sc-if value="{{ flagApp }}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; min-height: 1000px">
+
+<!-- Barre du haut : une seule ligne -->
+<header style="position: relative; z-index: 30; display: flex; align-items: stretch; gap: 28px; padding: 0 24px; height: 64px; box-sizing: border-box; background: #06182A; border-bottom: 1px solid {{ th.line }}">
+<button onClick="{{ toggleMenu }}" aria-label="Menu Neptune" style="display: flex; align-items: center; gap: 10px; min-height: 44px; align-self: center; padding: 0 8px 0 0; background: transparent; border: 0; color: #E6F3F5">
+<svg width="30" height="30" viewBox="0 0 36 36" aria-hidden="true"><circle cx="18" cy="18" r="17" style="fill: #0F2C46; stroke: #35D6C8; stroke-width: 1.5"></circle><path d="M11 25V11l14 14V11" style="fill: none; stroke: #35D6C8; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round"></path></svg>
+<span style="font-family: 'Sora', system-ui, sans-serif; font-weight: 700; letter-spacing: 0.22em; font-size: 13px">NEPTUNE</span>
+<svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5l3 3 3-3" style="fill: none; stroke: #8FB0BF; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round"></path></svg>
+</button>
+<nav aria-label="Onglets" style="display: flex; flex-wrap: nowrap; align-items: stretch; gap: 8px; flex: 1; min-width: 0; overflow-x: auto">
+<sc-for list="{{ tabs }}" as="t" hint-placeholder-count="4">
+<button onClick="{{ t.go }}" style="flex-shrink: 0; white-space: nowrap; padding: 0 14px; background: transparent; border: 0; font-size: 14px; {{ t.style }}">{{ t.label }}</button>
+</sc-for>
+</nav>
+</header>
+
+<!-- Menu du logo : se ferme en cliquant ailleurs -->
+<sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
+<button aria-label="Fermer le menu" onClick="{{ closeMenu }}" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 20; background: transparent; border: 0; cursor: default"></button>
+<div role="menu" style="position: absolute; top: 58px; left: 20px; z-index: 40; width: 270px; box-sizing: border-box; background: #0B2338; border: 1px solid #1F4666; border-radius: 14px; padding: 8px; box-shadow: 0 14px 36px rgba(0,0,0,0.5); display: flex; flex-direction: column; gap: 2px">
+<div style="padding: 8px 12px; color: #8FB0BF; font-size: 12px; word-break: break-all">{{ userEmail }}</div>
+
+<sc-if value="{{ canSwitch }}" hint-placeholder-val="{{ false }}">
+<div style="padding: 6px 12px 2px; color: #8FB0BF; font-size: 12px">Affichage</div>
+<sc-for list="{{ viewOptions }}" as="v" hint-placeholder-count="3">
+<button role="menuitemradio" onClick="{{ v.pick }}" style="display: flex; align-items: center; gap: 12px; min-height: 44px; padding: 0 12px; border: 0; border-radius: 8px; color: #E6F3F5; text-align: left; font-size: 14px; {{ v.style }}"><span style="width: 8px; height: 8px; border-radius: 50%; box-sizing: border-box; flex-shrink: 0; {{ v.dot }}"></span>{{ v.label }}</button>
+</sc-for>
+</sc-if>
+
+<sc-if value="{{ isLucasUser }}" hint-placeholder-val="{{ false }}">
+<div style="padding: 10px 12px 4px; color: #8FB0BF; font-size: 12px">Client</div>
+<div style="padding: 0 4px 6px">
+<select aria-label="Client affiché" value="{{ clientId }}" onChange="{{ setClient }}" style="width: 100%; min-height: 44px; padding: 0 10px; background: #06182A; color: #E6F3F5; border: 1px solid #1F4666; border-radius: 8px; font-size: 14px">
+<sc-for list="{{ clientOptions }}" as="o" hint-placeholder-count="5">
+<option value="{{ o.id }}">{{ o.name }}</option>
+</sc-for>
+</select>
+</div>
+</sc-if>
+
+<div style="height: 1px; background: #163650; margin: 6px 4px"></div>
+
+<sc-if value="{{ menuAsk }}" hint-placeholder-val="{{ true }}">
+<button role="menuitem" onClick="{{ askLogout }}" style="display: flex; align-items: center; min-height: 44px; padding: 0 12px; background: transparent; border: 0; border-radius: 8px; color: #E6F3F5; text-align: left; font-size: 14px">Se déconnecter</button>
+</sc-if>
+<sc-if value="{{ menuConfirm }}" hint-placeholder-val="{{ false }}">
+<div style="padding: 6px 12px 10px; display: flex; flex-direction: column; gap: 10px">
+<span>Te déconnecter ?</span>
+<div style="display: flex; gap: 8px">
+<button onClick="{{ logout }}" style="flex: 1; min-height: 44px; border-radius: 8px; font-size: 14px; font-weight: 600; {{ th.btn }}">Oui</button>
+<button onClick="{{ cancelLogout }}" style="flex: 1; min-height: 44px; background: transparent; color: #E6F3F5; border: 1px solid #1F4666; border-radius: 8px; font-size: 14px">Non</button>
+</div>
+</div>
+</sc-if>
+</div>
+</sc-if>
+
+<main style="width: 100%; max-width: 1080px; margin: 0 auto; box-sizing: border-box; padding: 44px 32px 80px; display: flex; flex-direction: column; gap: 36px">
+
+<!-- Titre de la page -->
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px">
+<div style="display: flex; flex-direction: column; gap: 6px; min-width: 0">
+<span style="font-size: 13px; {{ overStyle }}">{{ overText }}</span>
+<h1 style="margin: 0; font-family: 'Sora', system-ui, sans-serif; font-size: 28px; font-weight: 600; {{ titleStyle }}">{{ titleText }}</h1>
+<sc-if value="{{ hasSub }}" hint-placeholder-val="{{ true }}">
+<span style="color: #8FB0BF">{{ subText }}</span>
+</sc-if>
+</div>
+<sc-if value="{{ pageTracker }}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; gap: 2px; padding: 3px; background: #0B2338; border-radius: 12px">
+<sc-for list="{{ subTabs }}" as="s" hint-placeholder-count="4">
+<button onClick="{{ s.go }}" style="min-height: 40px; padding: 0 16px; border: 0; border-radius: 9px; font-size: 13px; font-weight: 500; {{ s.style }}">{{ s.label }}</button>
+</sc-for>
+</div>
+</sc-if>
+<sc-if value="{{ pageParams }}" hint-placeholder-val="{{ false }}">
+<div role="group" aria-label="Rubriques des paramètres" style="display: flex; gap: 2px; padding: 3px; background: #0B2338; border-radius: 12px">
+<sc-for list="{{ paramTabs }}" as="s" hint-placeholder-count="3">
+<button aria-pressed="{{ s.on }}" onClick="{{ s.go }}" style="min-height: 40px; padding: 0 16px; border: 0; border-radius: 9px; font-size: 13px; font-weight: 500; {{ s.style }}">{{ s.label }}</button>
+</sc-for>
+</div>
+</sc-if>
+</div>
+
+<!-- ONGLET : tous les clients (Lucas) -->
+<sc-if value="{{ pageClients }}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-wrap: wrap; gap: 20px 64px">
+<sc-for list="{{ allKpis }}" as="k" hint-placeholder-count="3">
+<div style="display: flex; flex-direction: column; gap: 2px"><span style="color: #8FB0BF; font-size: 13px">{{ k.label }}</span><span style="font-family: 'Sora', system-ui, sans-serif; font-size: 30px; font-weight: 600">{{ k.value }}</span></div>
+</sc-for>
+</div>
+<div style="display: flex; flex-direction: column">
+<div style="display: flex; align-items: center; gap: 16px; padding: 0 8px 10px; color: #8FB0BF; font-size: 13px">
+<span style="flex: 1 1 160px">Client</span>
+<span style="width: 150px">Formule</span>
+<span style="width: 90px; text-align: right">Vues 7 j</span>
+<span style="width: 90px; text-align: right">Clippers</span>
+<span style="width: 20px"></span>
+</div>
+<sc-for list="{{ clientRows }}" as="r" hint-placeholder-count="5">
+<button onClick="{{ r.open }}" style="display: flex; align-items: center; gap: 16px; width: 100%; min-height: 56px; box-sizing: border-box; padding: 0 8px; background: transparent; border: 0; border-top: 1px solid #163650; color: #E6F3F5; text-align: left; font-size: 14px">
+<span style="flex: 1 1 160px; min-width: 0; font-weight: 600">{{ r.name }}</span>
+<span style="width: 150px; {{ r.planStyle }}">{{ r.planLabel }}</span>
+<span style="width: 90px; text-align: right">{{ r.v7Label }}</span>
+<span style="width: 90px; text-align: right; color: #8FB0BF">{{ r.clippers }}</span>
+<span style="width: 20px; color: #8FB0BF">→</span>
+</button>
+</sc-for>
+</div>
+</sc-if>
+
+<!-- ONGLETS : communauté et pro -->
+<sc-if value="{{ pageReward }}" hint-placeholder-val="{{ true }}">
+<div style="display: flex; flex-direction: column; gap: 44px; {{ blk.wrapStyle }}">
+
+<div style="display: flex; flex-wrap: wrap; gap: 24px 72px">
+<sc-for list="{{ blk.stats }}" as="k" hint-placeholder-count="3">
+<div style="display: flex; flex-direction: column; gap: 2px"><span style="color: #8FB0BF; font-size: 13px">{{ k.label }}</span><span style="font-family: 'Sora', system-ui, sans-serif; font-size: 32px; font-weight: 600; color: {{ th.a }}">{{ k.value }}</span></div>
+</sc-for>
+</div>
+
+<sc-if value="{{ blk.isCagnotte }}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; gap: 10px">
+<span style="color: #8FB0BF; font-size: 13px">Distribution dans</span>
+<div style="display: flex; flex-wrap: wrap; gap: 8px 32px">
+<sc-for list="{{ blk.countdown }}" as="c" hint-placeholder-count="4">
+<div style="display: flex; align-items: baseline; gap: 6px"><span style="font-family: 'Sora', system-ui, sans-serif; font-size: 36px; font-weight: 600; font-variant-numeric: tabular-nums">{{ c.value }}</span><span style="color: #8FB0BF">{{ c.label }}</span></div>
+</sc-for>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ showInvite }}" hint-placeholder-val="{{ true }}">
+<div style="display: flex; flex-direction: column; gap: 10px">
+<span style="color: #8FB0BF; font-size: 13px">Lien d’invitation pour ta communauté</span>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px">
+<input readonly aria-label="Lien d’invitation" value="{{ inviteLink }}" style="flex: 1 1 260px; min-width: 0; min-height: 44px; box-sizing: border-box; padding: 0 14px; background: #0B2338; color: #E6F3F5; border: 1px solid #1F4666; border-radius: 10px; font-size: 14px">
+<button onClick="{{ copyInvite }}" style="min-height: 44px; padding: 0 18px; border-radius: 10px; font-size: 14px; font-weight: 600; {{ th.btn }}">Copier le lien</button>
+<button onClick="{{ openPreview }}" style="min-height: 44px; padding: 0 14px; background: transparent; color: #8FB0BF; border: 0; font-size: 14px">Voir ce que voit ta communauté</button>
+</div>
+<span style="color: #8FB0BF; font-size: 12px">Envoie ce lien à ta communauté : elle arrive sur une page qui lui explique comment clipper pour toi.</span>
+</div>
+</sc-if>
+
+<section style="display: flex; flex-direction: column">
+<span style="color: #8FB0BF; font-size: 13px; padding-bottom: 10px">{{ blk.rowsLabel }}</span>
+<div style="overflow-x: auto">
+<div style="min-width: 640px">
+<div style="display: flex; align-items: center; gap: 16px; padding: 8px 4px; color: #8FB0BF; font-size: 12px">
+<span style="flex: 1 1 160px">Pseudo</span>
+<sc-if value="{{ blk.showIdentity }}" hint-placeholder-val="{{ true }}">
+<span style="width: 130px">Nom Prénom</span>
+<span style="width: 190px">Email</span>
+<span style="width: 110px">Discord</span>
+</sc-if>
+<span style="width: 70px; text-align: right">Vues</span>
+<span style="width: 150px; text-align: right">{{ blk.resultHeader }}</span>
+</div>
+<sc-for list="{{ blk.rows }}" as="r" hint-placeholder-count="5">
+<div style="display: flex; align-items: center; gap: 16px; min-height: 52px; padding: 0 4px; border-top: 1px solid #163650">
+<span style="flex: 1 1 160px; min-width: 0; font-weight: 600; color: {{ blk.nameColor }}">{{ r.pseudo }}</span>
+<sc-if value="{{ blk.showIdentity }}" hint-placeholder-val="{{ true }}">
+<span style="width: 130px; color: #8FB0BF">{{ r.fullName }}</span>
+<span style="width: 190px; color: #8FB0BF; overflow: hidden; text-overflow: ellipsis">{{ r.email }}</span>
+<span style="width: 110px; color: #8FB0BF">{{ r.discord }}</span>
+</sc-if>
+<span style="width: 70px; text-align: right; color: #8FB0BF">{{ r.viewsLabel }}</span>
+<span style="width: 150px; text-align: right; font-weight: 600; color: {{ th.a }}">{{ r.result }}</span>
+</div>
+</sc-for>
+</div>
+</div>
+<sc-if value="{{ blk.isEmpty }}" hint-placeholder-val="{{ false }}">
+<div style="padding: 20px 4px; border-top: 1px solid #163650; color: #8FB0BF">Aucun clipper n’a encore atteint le palier.</div>
+</sc-if>
+<sc-if value="{{ blk.hasFootnote }}" hint-placeholder-val="{{ false }}">
+<span style="padding-top: 14px; color: #8FB0BF; font-size: 12px">{{ blk.footnote }}</span>
+</sc-if>
+</section>
+</div>
+</sc-if>
+
+<!-- TRACKER : vue d'ensemble -->
+<sc-if value="{{ pageOverview }}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; flex-wrap: wrap; gap: 20px 64px">
+<sc-for list="{{ kpis }}" as="k" hint-placeholder-count="3">
+<div style="display: flex; flex-direction: column; gap: 2px"><span style="color: #8FB0BF; font-size: 13px">{{ k.label }}</span><span style="font-family: 'Sora', system-ui, sans-serif; font-size: 30px; font-weight: 600">{{ k.value }}</span></div>
+</sc-for>
+</div>
+<div style="display: flex; flex-direction: column; gap: 8px; max-width: 480px">
+<div style="display: flex; height: 6px; border-radius: 3px; overflow: hidden; background: #163650">
+<div style="background: #E3B84F; width: {{ proW }}"></div>
+<div style="background: #4F8FC0; width: {{ comW }}"></div>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 4px 24px; font-size: 13px; color: #8FB0BF">
+<span><span style="color: #E3B84F">●</span> Pro {{ proPct }}</span>
+<span><span style="color: #4F8FC0">●</span> Clipper commu {{ comPct }}</span>
+</div>
+</div>
+</div>
+
+<section style="display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 12px">
+<span style="color: #8FB0BF; font-size: 13px">Vues par jour</span>
+<div style="display: flex; gap: 4px">
+<sc-for list="{{ periods }}" as="p" hint-placeholder-count="2">
+<button onClick="{{ p.pick }}" style="min-height: 40px; padding: 0 14px; border: 0; border-radius: 8px; font-size: 13px; font-weight: 500; {{ p.style }}">{{ p.label }}</button>
+</sc-for>
+</div>
+</div>
+<div style="display: flex; gap: 10px">
+<div style="display: flex; flex-direction: column; justify-content: space-between; height: 160px; color: #8FB0BF; font-size: 11px; text-align: right; min-width: 40px">
+<sc-for list="{{ yLabels }}" as="y" hint-placeholder-count="3">
+<span>{{ y.label }}</span>
+</sc-for>
+</div>
+<div style="flex: 1; min-width: 0; display: flex; align-items: flex-end; gap: 3px; height: 160px; border-bottom: 1px solid #163650">
+<sc-for list="{{ bars }}" as="b" hint-placeholder-count="30">
+<div title="{{ b.tip }}" style="flex: 1; min-width: 2px; border-radius: 3px 3px 0 0; background: {{ th.a }}; height: {{ b.h }}"></div>
+</sc-for>
+</div>
+</div>
+<div style="display: flex; justify-content: space-between; color: #8FB0BF; font-size: 11px; padding-left: 50px">
+<sc-for list="{{ xLabels }}" as="x" hint-placeholder-count="3">
+<span>{{ x.label }}</span>
+</sc-for>
+</div>
+</section>
+
+<div style="display: flex; flex-wrap: wrap; gap: 36px 48px">
+<section style="flex: 1 1 260px; min-width: 0; display: flex; flex-direction: column">
+<span style="color: #8FB0BF; font-size: 13px; padding-bottom: 8px">Meilleurs clippers</span>
+<sc-for list="{{ topClippers }}" as="c" hint-placeholder-count="3">
+<div style="display: flex; align-items: center; gap: 12px; min-height: 48px; border-top: 1px solid #163650">
+<span style="width: 18px; color: #8FB0BF">{{ c.rank }}</span>
+<span style="flex: 1; min-width: 0; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: {{ c.nameColor }}">{{ c.name }}</span>
+<span style="color: #8FB0BF">{{ c.viewsLabel }}</span>
+</div>
+</sc-for>
+</section>
+<section style="flex: 1 1 260px; min-width: 0; display: flex; flex-direction: column">
+<span style="color: #8FB0BF; font-size: 13px; padding-bottom: 8px">Meilleurs clips</span>
+<sc-for list="{{ topClips }}" as="c" hint-placeholder-count="3">
+<div style="display: flex; align-items: center; gap: 12px; min-height: 48px; border-top: 1px solid #163650">
+<span style="font-weight: 600">{{ c.viewsLabel }} vues</span>
+<span style="flex: 1; min-width: 0; text-align: right; color: #8FB0BF; font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">{{ c.plat }} · {{ c.date }}</span>
+</div>
+</sc-for>
+</section>
+<section style="flex: 1 1 260px; min-width: 0; display: flex; flex-direction: column">
+<span style="color: #8FB0BF; font-size: 13px; padding-bottom: 8px">Clippers inactifs</span>
+<sc-for list="{{ alerts }}" as="a" hint-placeholder-count="3">
+<div style="display: flex; align-items: center; gap: 12px; min-height: 48px; border-top: 1px solid #163650">
+<span style="flex: 1; min-width: 0; font-weight: 600">{{ a.name }}</span>
+<span style="color: #8FB0BF">{{ a.days }}</span>
+<sc-if value="{{ flagAdminTools }}" hint-placeholder-val="{{ false }}">
+<button onClick="{{ a.relance }}" style="min-height: 44px; padding: 0 4px; background: transparent; border: 0; font-size: 13px; font-weight: 500; color: {{ th.a }}">Relancer</button>
+</sc-if>
+</div>
+</sc-for>
+</section>
+</div>
+</sc-if>
+
+<!-- TRACKER : clippers -->
+<sc-if value="{{ pageClippers }}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; gap: 4px">
+<sc-for list="{{ typeChips }}" as="t" hint-placeholder-count="3">
+<button onClick="{{ t.pick }}" style="min-height: 40px; padding: 0 14px; border: 0; border-radius: 8px; font-size: 13px; font-weight: 500; {{ t.style }}">{{ t.label }}</button>
+</sc-for>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 32px; align-items: flex-start">
+<section style="flex: 1 1 300px; min-width: 0; display: flex; flex-direction: column">
+<sc-for list="{{ clipperRows }}" as="r" hint-placeholder-count="9">
+<button onClick="{{ r.pick }}" style="width: 100%; min-height: 56px; box-sizing: border-box; display: flex; align-items: center; gap: 12px; padding: 8px 12px; text-align: left; border: 0; border-top: 1px solid #163650; border-radius: 0; color: #E6F3F5; font-size: 14px; {{ r.rowStyle }}">
+<span style="flex: 1; min-width: 0; display: flex; flex-direction: column"><span style="font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: {{ r.nameColor }}">{{ r.name }}</span><span style="color: #8FB0BF; font-size: 12px">{{ r.viewsLabel }} vues</span></span>
+<sc-if value="{{ r.isPro }}" hint-placeholder-val="{{ false }}"><span style="border-radius: 999px; padding: 1px 10px; font-size: 12px; font-weight: 600; background: #E3B84F; color: #1A1405">Pro</span></sc-if>
+</button>
+</sc-for>
+</section>
+
+<section style="flex: 2 1 400px; min-width: 0; background: #0B2338; border-radius: 16px; padding: 28px; display: flex; flex-direction: column; gap: 28px">
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px">
+<h2 style="margin: 0; font-family: 'Sora', system-ui, sans-serif; font-size: 22px; font-weight: 600; color: {{ d.nameColor }}">{{ d.name }}</h2>
+<sc-if value="{{ d.isPro }}" hint-placeholder-val="{{ false }}"><span style="border-radius: 999px; padding: 1px 10px; font-size: 12px; font-weight: 600; background: #E3B84F; color: #1A1405">Pro</span></sc-if>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 16px 48px">
+<div style="display: flex; flex-direction: column"><span style="color: #8FB0BF; font-size: 13px">Vues (30 j)</span><span style="font-family: 'Sora', system-ui, sans-serif; font-size: 24px; font-weight: 600">{{ d.viewsLabel }}</span></div>
+<div style="display: flex; flex-direction: column"><span style="color: #8FB0BF; font-size: 13px">Posts</span><span style="font-family: 'Sora', system-ui, sans-serif; font-size: 24px; font-weight: 600">{{ d.posts }}</span></div>
+<div style="display: flex; flex-direction: column"><span style="color: #8FB0BF; font-size: 13px">Moyenne</span><span style="font-family: 'Sora', system-ui, sans-serif; font-size: 24px; font-weight: 600">{{ d.avgLabel }}</span></div>
+</div>
+<div style="display: flex; flex-direction: column">
+<span style="color: #8FB0BF; font-size: 13px; padding-bottom: 6px">Derniers clips</span>
+<sc-for list="{{ d.clips }}" as="c" hint-placeholder-count="3">
+<div style="display: flex; align-items: center; gap: 12px; min-height: 44px; border-top: 1px solid #163650">
+<span style="flex: 1; min-width: 0; color: #8FB0BF">{{ c.plat }} · {{ c.date }}</span>
+<span style="font-weight: 600">{{ c.viewsLabel }} vues</span>
+</div>
+</sc-for>
+</div>
+<sc-if value="{{ flagAdminTools }}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; align-items: baseline; justify-content: space-between; gap: 8px"><span style="color: #8FB0BF; font-size: 13px">Score</span><span style="font-family: 'Sora', system-ui, sans-serif; font-size: 22px; font-weight: 600; color: {{ d.accent }}">{{ d.scoreTotal }} / 100</span></div>
+<sc-for list="{{ d.parts }}" as="s" hint-placeholder-count="4">
+<div style="display: flex; align-items: center; gap: 12px; font-size: 13px">
+<span style="width: 90px; color: #8FB0BF">{{ s.label }}</span>
+<div style="flex: 1; height: 6px; border-radius: 3px; background: #163650"><div style="height: 6px; border-radius: 3px; background: {{ d.accent }}; width: {{ s.w }}"></div></div>
+<span style="width: 56px; text-align: right; color: #8FB0BF">{{ s.valueLabel }}</span>
+</div>
+</sc-for>
+<div style="display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-end">
+<button onClick="{{ addStrike }}" style="min-height: 44px; padding: 0 14px; background: transparent; color: #8FB0BF; border: 0; font-size: 13px">Ajouter un strike</button>
+<button onClick="{{ giveFeedback }}" style="min-height: 44px; padding: 0 18px; border-radius: 10px; font-size: 13px; font-weight: 600; background: {{ d.accent }}; color: #1A1405; border: 0">Faire un retour</button>
+</div>
+</div>
+</sc-if>
+</section>
+</div>
+</sc-if>
+
+<!-- TRACKER : classement -->
+<sc-if value="{{ pageClassement }}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; gap: 4px">
+<sc-for list="{{ typeChips }}" as="t" hint-placeholder-count="3">
+<button onClick="{{ t.pick }}" style="min-height: 40px; padding: 0 14px; border: 0; border-radius: 8px; font-size: 13px; font-weight: 500; {{ t.style }}">{{ t.label }}</button>
+</sc-for>
+</div>
+<div style="overflow-x: auto">
+<div style="min-width: 560px; display: flex; flex-direction: column">
+<div style="display: flex; align-items: center; gap: 16px; padding: 0 4px 10px; color: #8FB0BF; font-size: 13px">
+<span style="width: 28px">#</span>
+<span style="flex: 1 1 180px">Clipper</span>
+<span style="width: 90px; text-align: right">Vues 30 j</span>
+<sc-if value="{{ flagAdminTools }}" hint-placeholder-val="{{ false }}">
+<span style="width: 60px; text-align: right">Score</span>
+<span style="width: 130px"></span>
+</sc-if>
+</div>
+<sc-for list="{{ rankRows }}" as="r" hint-placeholder-count="9">
+<div style="display: flex; align-items: center; gap: 16px; min-height: 52px; padding: 0 4px; border-top: 1px solid #163650">
+<span style="width: 28px; color: #8FB0BF">{{ r.rank }}</span>
+<span style="flex: 1 1 180px; min-width: 0; display: flex; align-items: center; gap: 10px"><span style="font-weight: 600; color: {{ r.nameColor }}">{{ r.name }}</span>
+<sc-if value="{{ r.isPro }}" hint-placeholder-val="{{ false }}"><span style="border-radius: 999px; padding: 1px 10px; font-size: 12px; font-weight: 600; background: #E3B84F; color: #1A1405">Pro</span></sc-if></span>
+<span style="width: 90px; text-align: right">{{ r.viewsLabel }}</span>
+<sc-if value="{{ flagAdminTools }}" hint-placeholder-val="{{ false }}">
+<span style="width: 60px; text-align: right; color: #8FB0BF">{{ r.score }}</span>
+<span style="width: 130px; display: flex; justify-content: flex-end">
+<sc-if value="{{ r.canPromote }}" hint-placeholder-val="{{ false }}"><button onClick="{{ r.toggle }}" style="min-height: 44px; padding: 0 14px; background: transparent; color: #E3B84F; border: 1px solid #8A6F2A; border-radius: 10px; font-size: 13px; font-weight: 600">Passer pro</button></sc-if>
+</span>
+</sc-if>
+</div>
+</sc-for>
+</div>
+</div>
+</sc-if>
+
+<!-- TRACKER : management (admin) -->
+<sc-if value="{{ pageManagement }}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-end">
+<button onClick="{{ importDiscord }}" style="min-height: 44px; padding: 0 14px; background: transparent; color: #8FB0BF; border: 0; font-size: 14px">Importer depuis Discord</button>
+<button onClick="{{ addClipper }}" style="min-height: 44px; padding: 0 18px; border-radius: 10px; font-size: 14px; font-weight: 600; {{ th.btn }}">Ajouter un clipper</button>
+</div>
+<div style="overflow-x: auto">
+<div style="min-width: 560px; display: flex; flex-direction: column">
+<sc-for list="{{ mgmtRows }}" as="r" hint-placeholder-count="9">
+<div style="display: flex; align-items: center; gap: 16px; min-height: 56px; padding: 0 4px; border-top: 1px solid #163650">
+<span style="flex: 1 1 180px; min-width: 0; font-weight: 600; color: {{ r.nameColor }}">{{ r.name }}</span>
+<span style="width: 110px; color: #8FB0BF; font-size: 13px">{{ r.platforms }}</span>
+<span style="width: 130px"><span style="border-radius: 999px; padding: 1px 10px; font-size: 12px; font-weight: 600; {{ r.tagStyle }}">{{ r.typeLabel }}</span></span>
+<button onClick="{{ r.toggle }}" style="width: 170px; min-height: 44px; background: transparent; color: #E6F3F5; border: 1px solid #1F4666; border-radius: 10px; font-size: 13px">{{ r.toggleLabel }}</button>
+</div>
+</sc-for>
+</div>
+</div>
+</sc-if>
+
+<!-- ONGLET : boutique communauté -->
+<sc-if value="{{ pageBoutique }}" hint-placeholder-val="{{ false }}">
+<div style="background: #FAF9F2; color: #111111; border-radius: 18px; padding: 28px; display: flex; flex-direction: column; gap: 32px">
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px">
+<span style="font-family: 'Sora', system-ui, sans-serif; font-weight: 700; font-size: 18px; text-transform: uppercase">{{ shop.name }}</span>
+<span style="background: #FFD43B; border-radius: 999px; padding: 6px 16px; font-weight: 700">{{ shop.coins }} coins</span>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 16px">
+<sc-for list="{{ shop.rewards }}" as="r" hint-placeholder-count="3">
+<div style="flex: 1 1 200px; max-width: 260px; background: #FFFFFF; border: 1px solid #E5E2D6; border-radius: 18px; padding: 16px; display: flex; flex-direction: column; gap: 8px">
+<div style="height: 96px; border-radius: 12px; background: #FFF1B8; display: flex; align-items: center; justify-content: center; font-family: 'Sora', system-ui, sans-serif; font-weight: 700; font-size: 26px">{{ r.badge }}</div>
+<strong style="font-size: 16px">{{ r.name }}</strong>
+<span style="color: #555555; font-size: 13px">{{ r.note }}</span>
+<span style="font-weight: 700">{{ r.price }} coins</span>
+<button aria-disabled="true" style="min-height: 44px; background: #E9E6D8; color: #555555; border: 0; border-radius: 12px; font-weight: 700; text-transform: uppercase; cursor: default">Échanger</button>
+</div>
+</sc-for>
+</div>
+<div style="display: flex; flex-direction: column; gap: 4px">
+<span style="font-family: 'Sora', system-ui, sans-serif; font-weight: 700; font-size: 16px; text-transform: uppercase; padding-bottom: 6px">Classement</span>
+<sc-for list="{{ shop.podium }}" as="p" hint-placeholder-count="3">
+<div style="display: flex; align-items: center; gap: 14px; min-height: 48px; border-top: 1px solid #E5E2D6">
+<span style="width: 30px; height: 30px; border-radius: 50%; background: #FFD43B; display: flex; align-items: center; justify-content: center; font-weight: 700">{{ p.rank }}</span>
+<strong style="flex: 1; min-width: 0">{{ p.name }}</strong>
+<span style="color: #555555">{{ p.views }} vues</span>
+</div>
+</sc-for>
+</div>
+</div>
+</sc-if>
+
+<!-- ONGLET : accès (Lucas) -->
+<sc-if value="{{ pageAcces }}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end">
+<div style="flex: 2 1 220px; display: flex; flex-direction: column; gap: 6px"><label for="nm" style="font-size: 13px; color: #8FB0BF">Adresse mail</label><input id="nm" type="email" value="{{ newEmail }}" onChange="{{ setNewEmail }}" placeholder="prenom@exemple.fr" style="min-height: 44px; box-sizing: border-box; padding: 0 12px; background: #0B2338; color: #E6F3F5; border: 1px solid #1F4666; border-radius: 10px; font-size: 14px"></div>
+<div style="flex: 1 1 170px; display: flex; flex-direction: column; gap: 6px"><label for="nr" style="font-size: 13px; color: #8FB0BF">Rôle</label>
+<select id="nr" value="{{ newRole }}" onChange="{{ setNewRole }}" style="min-height: 44px; padding: 0 10px; background: #0B2338; color: #E6F3F5; border: 1px solid #1F4666; border-radius: 10px; font-size: 14px"><option value="client">Client</option><option value="admin">Admin</option></select></div>
+<div style="flex: 1 1 170px; display: flex; flex-direction: column; gap: 6px"><label for="nc" style="font-size: 13px; color: #8FB0BF">Client</label>
+<select id="nc" value="{{ newClient }}" onChange="{{ setNewClient }}" style="min-height: 44px; padding: 0 10px; background: #0B2338; color: #E6F3F5; border: 1px solid #1F4666; border-radius: 10px; font-size: 14px">
+<sc-for list="{{ clientOptions }}" as="o" hint-placeholder-count="5"><option value="{{ o.id }}">{{ o.name }}</option></sc-for>
+</select></div>
+<button onClick="{{ addAccess }}" style="min-height: 44px; padding: 0 18px; border-radius: 10px; font-size: 14px; font-weight: 600; {{ th.btn }}">Donner l’accès</button>
+</div>
+<div style="overflow-x: auto">
+<div style="min-width: 520px; display: flex; flex-direction: column">
+<sc-for list="{{ accessRows }}" as="r" hint-placeholder-count="4">
+<div style="display: flex; align-items: center; gap: 16px; min-height: 56px; padding: 0 4px; border-top: 1px solid #163650">
+<span style="flex: 2 1 220px; min-width: 0; word-break: break-all">{{ r.email }}</span>
+<span style="width: 70px; font-weight: 600">{{ r.roleLabel }}</span>
+<span style="width: 140px; color: #8FB0BF">{{ r.clientLabel }}</span>
+<span style="width: 90px; display: flex; justify-content: flex-end">
+<sc-if value="{{ r.canRemove }}" hint-placeholder-val="{{ false }}"><button onClick="{{ r.remove }}" style="min-height: 44px; padding: 0 8px; background: transparent; color: #8FB0BF; border: 0; font-size: 13px">Retirer</button></sc-if>
+</span>
+</div>
+</sc-for>
+</div>
+</div>
+</sc-if>
+
+<!-- ONGLET : parametres -->
+<sc-if value="{{ pageParams }}" hint-placeholder-val="{{ false }}">
+
+<sc-if value="{{ pgSons }}" hint-placeholder-val="{{ true }}">
+<div style="display: flex; flex-direction: column; gap: 24px; padding: 24px; background: #0B2338; border-radius: 16px">
+<div style="display: flex; flex-direction: column; gap: 4px">
+<h2 style="margin: 0; font-family: 'Sora', system-ui, sans-serif; font-size: 18px; font-weight: 600">Sons</h2>
+<span style="color: #8FB0BF; font-size: 13px">Ces réglages sont gardés sur cet appareil.</span>
+</div>
+
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 20px">
+<div style="display: flex; flex-direction: column; gap: 2px; flex: 1 1 260px; min-width: 0">
+<strong style="font-size: 15px; font-weight: 600">Bruitages</strong>
+<span style="color: #8FB0BF; font-size: 13px">Les petits sons quand tu touches un bouton ou valides une action.</span>
+</div>
+<button role="switch" aria-checked="{{ sound }}" aria-label="Bruitages" onClick="{{ toggleSound }}" style="position: relative; flex-shrink: 0; width: 54px; height: 32px; padding: 0; border-radius: 99px; border: 1px solid #1F4666; {{ swStyle }}"><span style="position: absolute; top: 4px; width: 22px; height: 22px; border-radius: 50%; {{ knobStyle }}"></span></button>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 8px; {{ volDim }}">
+<div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px">
+<label for="sfx-vol" style="font-size: 15px; font-weight: 600">Volume des bruitages</label>
+<span style="color: {{ th.a }}; font-weight: 600">{{ volText }}</span>
+</div>
+<input id="sfx-vol" type="range" min="0" max="100" step="1" value="{{ vol }}" onInput="{{ onVol }}" data-sfx="none" style="accent-color: {{ th.a }}">
+<div style="display: flex; justify-content: space-between; color: #8FB0BF; font-size: 12px"><span>Muet</span><span>Normal</span><span>Fort</span></div>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; flex-direction: column; gap: 2px">
+<strong style="font-size: 15px; font-weight: 600">Musique d'ambiance</strong>
+<span style="color: #8FB0BF; font-size: 13px">Un fond sonore discret. Tu peux aussi la régler avec la note en bas à droite.</span>
+</div>
+<div role="radiogroup" aria-label="Niveau de la musique" style="display: flex; flex-wrap: wrap; gap: 8px">
+<sc-for list="{{ musicOpts }}" as="m" hint-placeholder-count="3">
+<button role="radio" aria-checked="{{ m.on }}" onClick="{{ m.go }}" style="min-height: 44px; padding: 0 20px; border-radius: 99px; font-size: 15px; font-weight: 600; {{ m.style }}">{{ m.label }}</button>
+</sc-for>
+</div>
+</div>
+</div>
+
+</sc-if>
+
+<sc-if value="{{ pgChans }}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; gap: 6px; padding: 24px; background: #0B2338; border-radius: 16px">
+<div style="display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 16px">
+<h2 style="margin: 0; font-family: 'Sora', system-ui, sans-serif; font-size: 18px; font-weight: 600">{{ chanTitle }}</h2>
+<span style="color: {{ th.a }}; font-size: 13px">{{ chanCount }}</span>
+</div>
+<span style="color: #8FB0BF; font-size: 13px">Connecte chaque chaîne dont tes clippers tirent leurs clips, en un clic : aucun lien à copier, aucun nom à taper. Tu peux en avoir plusieurs, par exemple une chaîne principale et une chaîne de replays.</span>
+
+<div style="display: flex; flex-direction: column; padding-top: 10px">
+<sc-for list="{{ chanItems }}" as="c" hint-placeholder-count="3">
+<sc-if value="{{ c.isRow }}" hint-placeholder-val="{{ true }}">
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; min-height: 60px; margin-bottom: 6px; padding: 0 6px 0 16px; box-sizing: border-box; background: #06182A; border-radius: 12px">
+<span style="flex-shrink: 0; min-width: 76px; padding: 3px 10px; box-sizing: border-box; text-align: center; border-radius: 99px; background: #10234A; border: 1px solid #1F3A6B; color: #CFE3EE; font-size: 13px">{{ c.pf }}</span>
+<span style="flex: 1 1 160px; min-width: 0; word-break: break-word; font-weight: 600">{{ c.name }}</span>
+<span style="color: #8FB0BF; font-size: 13px">{{ c.tag }}</span>
+<button aria-label="{{ c.editLabel }}" onClick="{{ c.edit }}" style="min-height: 44px; padding: 0 14px; border-radius: 10px; font-size: 14px; font-weight: 600; background: transparent; color: #E6F3F5; border: 1px solid #1F4666">Modifier</button>
+<button aria-label="{{ c.removeLabel }}" onClick="{{ c.remove }}" style="min-height: 44px; padding: 0 14px; border-radius: 10px; font-size: 14px; font-weight: 600; background: transparent; color: #8FB0BF; border: 0">Retirer</button>
+</div>
+</sc-if>
+<sc-if value="{{ c.isEdit }}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; min-height: 60px; margin-bottom: 6px; padding: 8px 6px 8px 16px; box-sizing: border-box; background: #06182A; border: 1px solid {{ th.a }}; border-radius: 12px">
+<span style="flex-shrink: 0; min-width: 76px; padding: 3px 10px; box-sizing: border-box; text-align: center; border-radius: 99px; background: #10234A; border: 1px solid #1F3A6B; color: #CFE3EE; font-size: 13px">{{ c.pf }}</span>
+<input type="text" aria-label="{{ c.inputLabel }}" value="{{ c.draft }}" onInput="{{ c.setDraft }}" data-sfx="none" style="flex: 1 1 180px; min-width: 0; min-height: 44px; box-sizing: border-box; padding: 0 12px; background: #0B2338; color: #E6F3F5; border: 1px solid #1F4666; border-radius: 10px; font-size: 14px">
+<button onClick="{{ c.save }}" style="min-height: 44px; padding: 0 16px; border-radius: 10px; font-size: 14px; font-weight: 600; {{ th.btn }}">Enregistrer</button>
+<button onClick="{{ c.cancel }}" style="min-height: 44px; padding: 0 14px; border-radius: 10px; font-size: 14px; font-weight: 600; background: transparent; color: #8FB0BF; border: 0">Annuler</button>
+</div>
+</sc-if>
+</sc-for>
+<sc-if value="{{ noChan }}" hint-placeholder-val="{{ false }}">
+<div style="margin-bottom: 6px; padding: 14px 16px; color: #8FB0BF; border: 1px dashed #1F4666; border-radius: 12px">Aucune chaîne pour le moment. Ajoute la première ci-dessous.</div>
+</sc-if>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 10px; margin-top: 10px; padding-top: 16px; border-top: 1px solid #163650">
+<strong style="font-size: 15px; font-weight: 600">Connecter une chaîne</strong>
+<div style="display: flex; flex-wrap: wrap; gap: 10px">
+<sc-for list="{{ connectBtns }}" as="k" hint-placeholder-count="2">
+<button onClick="{{ k.go }}" style="min-height: 44px; padding: 0 18px; border-radius: 10px; font-size: 14px; font-weight: 600; {{ th.btn }}">{{ k.label }}</button>
+</sc-for>
+</div>
+<span style="color: #8FB0BF; font-size: 13px">Tu autorises Neptune sur la page officielle de la plateforme, sans lui donner ton mot de passe. Neptune lit seulement les infos de la chaîne.</span>
+</div>
+</div>
+
+</sc-if>
+
+<sc-if value="{{ pgDc }}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; gap: 14px; padding: 24px; background: #0B2338; border-radius: 16px">
+<div style="display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 16px">
+<h2 style="margin: 0; font-family: 'Sora', system-ui, sans-serif; font-size: 18px; font-weight: 600">Discord</h2>
+<span style="color: {{ dcColor }}; font-size: 13px">{{ dcStatus }}</span>
+</div>
+<span style="color: #8FB0BF; font-size: 13px">Relie ton serveur en un clic pour retrouver tes clippers sans import à la main.</span>
+<div>
+<button onClick="{{ toggleDc }}" style="min-height: 44px; padding: 0 18px; border-radius: 10px; font-size: 14px; font-weight: 600; {{ dcBtnStyle }}">{{ dcBtnLabel }}</button>
+</div>
+</div>
+</sc-if>
+</sc-if>
+
+</main>
+</div>
+
+<sc-if value="{{ hasToast }}" hint-placeholder-val="{{ false }}">
+<div role="status" style="position: absolute; left: 50%; bottom: 28px; transform: translateX(-50%); z-index: 50; background: #0B2338; border: 1px solid {{ th.a }}; color: #E6F3F5; padding: 12px 20px; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.4)">{{ toast }}</div>
+</sc-if>
+</sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"onExit":{"editor":null},"$preview":{"width":1440,"height":1000}}'>
+class Component extends DCLogic {
+  defaults() {
+    // reglages de son lus dans le stockage du navigateur (bruitages, niveau de musique, volume des bruitages)
+    let sound = true, mlv = 1, vol = 50;
+    try { sound = localStorage.getItem('son') !== '0'; } catch (e) { sound = true; }
+    try { const x = localStorage.getItem('musique'); mlv = x === null ? 1 : (+x === 0 ? 0 : (+x === 2 ? 2 : 1)); } catch (e) { mlv = 1; }
+    try { const x = localStorage.getItem('sfxvol'); vol = x === null ? 50 : Math.max(0, Math.min(100, Math.round(+x || 0))); } catch (e) { vol = 50; }
+    return { screen: "login", preview: false, step: "email", email: "", code: "", loginError: "", loginNote: "", role: "", viewAs: "", menu: "", clientId: "beone", tab: "communaute", sub: "overview", period: "30", typeFilter: "all", selected: "hvk", accessList: null, typeOv: {}, newEmail: "", newRole: "client", newClient: "beone", toast: "", now: Date.now(), chans: null, chEdit: "", chDraft: "", dc: null, pst: "sons", sound: sound, mlv: mlv, vol: vol };
+  }
+  componentDidMount() {
+    this.installSfx();
+    this._onSfx = (e) => { try { const d = e.detail || {}; const c = this.state || {}; this.setState({ sound: !!d.on, mlv: d.level === undefined ? c.mlv : d.level, vol: d.vol === undefined ? c.vol : d.vol }); } catch (x) {} };
+    try { window.addEventListener('nsfx-change', this._onSfx); } catch (x) {}
+    this._tick = setInterval(() => {
+      const s = this.state || {};
+      if (s.screen === "app" && !s.menu && (s.tab === "communaute" || s.tab === "pro" || s.tab === undefined)) this.setState({ now: Date.now() });
+    }, 1000);
+  }
+  componentWillUnmount() { if (this._tick) clearInterval(this._tick); try { window.removeEventListener('nsfx-change', this._onSfx); } catch (e) {} }
+  // ---------- Bruitages et musique de l'interface : sobres et doux, façon bols tibétains (partagés par toutes les maquettes) ----------
+  sfx(name) { try { if (typeof window !== 'undefined' && window.__nsfx) window.__nsfx.play(name); } catch (e) {} }
+  installSfx() {
+    if (typeof window === 'undefined' || typeof document === 'undefined') return;
+    if (window.__nsfx) { window.__nsfx.scan(); return; }
+    const W = window, D = document, mem = { off: false };
+    let ctx = null, bus = null, nbuf = null, mst = null, cv = null, unlocked = false, lastDown = 0, lastHover = null, lastMove = 0, px = -1, py = -1;
+    const born = Date.now(), last = {};
+    // gamme pentatonique de ré : toutes les notes vont bien ensemble
+    const PENTA = [293.66, 329.63, 369.99, 440, 493.88, 587.33, 659.25, 739.99, 880, 987.77, 1174.66, 1318.51, 1479.98, 1760, 1975.53];
+    const isOn = () => {
+      if (mem.off) return false;
+      try { return W.localStorage.getItem('son') !== '0'; } catch (e) { return true; }
+    };
+    const ac = () => {
+      try {
+        if (!ctx) {
+          ctx = new (W.AudioContext || W.webkitAudioContext)();
+          const master = mst = ctx.createGain(); master.gain.value = 0.5;
+          const comp = ctx.createDynamicsCompressor();
+          master.connect(comp); comp.connect(ctx.destination);
+          bus = ctx.createGain(); bus.gain.value = svGain(sfxVol()); bus.connect(master);
+          // une longue réverbération douce donne l'effet « salle calme »
+          const conv = cv = ctx.createConvolver(), len = Math.floor(ctx.sampleRate * 2.6), ir = ctx.createBuffer(2, len, ctx.sampleRate);
+          for (let ch = 0; ch < 2; ch++) { const d = ir.getChannelData(ch); for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 3); }
+          conv.buffer = ir;
+          const send = ctx.createGain(); send.gain.value = 0.35;
+          const wet = ctx.createGain(); wet.gain.value = 0.7;
+          bus.connect(send); send.connect(conv); conv.connect(wet); wet.connect(master);
+        }
+        if (ctx.state === 'suspended') ctx.resume();
+      } catch (e) { ctx = null; bus = null; mst = null; cv = null; }
+      return ctx;
+    };
+    // [rapport de fréquence, volume relatif, durée relative, attaque]
+    const PARTS = {
+      soft: [[1, 1, 1, 0.02], [2, 0.16, 0.55, 0.02]],
+      bowl: [[1, 1, 1, 0.05], [1.004, 0.7, 1, 0.05], [2.71, 0.2, 0.5, 0.04], [5.1, 0.06, 0.28, 0.03]],
+      chime: [[1, 1, 1, 0.008], [2.76, 0.26, 0.42, 0.008], [5.4, 0.09, 0.2, 0.008]]
+    };
+    const voice = (kind, f, at, dur, vol) => {
+      const c = ac(); if (!c || !bus) return;
+      const t = c.currentTime + at;
+      PARTS[kind].forEach((p) => {
+        const o = c.createOscillator(), g = c.createGain(), d = dur * p[2], pk = Math.max(vol * p[1], 0.0002);
+        o.type = 'sine'; o.frequency.setValueAtTime(f * p[0], t);
+        g.gain.setValueAtTime(0.0001, t);
+        g.gain.exponentialRampToValueAtTime(pk, t + p[3]);
+        g.gain.exponentialRampToValueAtTime(0.0001, t + d);
+        o.connect(g); g.connect(bus); o.start(t); o.stop(t + d + 0.05);
+      });
+    };
+    const air = (ft, f0, f1, at, dur, vol, q) => {
+      const c = ac(); if (!c || !bus) return;
+      const t = c.currentTime + at, src = c.createBufferSource(), f = c.createBiquadFilter(), g = c.createGain();
+      if (!nbuf) { nbuf = c.createBuffer(1, c.sampleRate, c.sampleRate); const d = nbuf.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1; }
+      src.buffer = nbuf; f.type = ft; f.Q.value = q || 1;
+      f.frequency.setValueAtTime(f0, t); f.frequency.exponentialRampToValueAtTime(Math.max(f1, 20), t + dur);
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(Math.max(vol, 0.0002), t + dur * 0.4);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      src.connect(f); f.connect(g); g.connect(bus); src.start(t); src.stop(t + dur + 0.05);
+    };
+    const rnd = (a) => a[Math.floor(Math.random() * a.length)];
+    // f = 1 : son complet ; f = 0.5 : le même son déjà entendu il y a peu, joué plus court et plus bas
+    const S = {
+      tap: (f) => voice('soft', rnd([587.33, 659.25, 739.99, 880]), 0, 0.28, 0.034 * f),
+      hover: () => voice('soft', 1174.66, 0, 0.12, 0.008),
+      key: () => voice('soft', rnd([880, 987.77, 1174.66, 1318.51]), 0, 0.09, 0.01),
+      tick: () => voice('soft', rnd(PENTA.slice(5, 10)), 0, 0.12, 0.025),
+      confirm: (f) => { voice('bowl', rnd([587.33, 659.25]), 0, 0.6, 0.04 * f); if (f > 0.9) voice('bowl', 880, 0.12, 0.8, 0.028); },
+      back: (f) => { voice('bowl', 880, 0, 0.5, 0.036 * f); if (f > 0.9) voice('bowl', 587.33, 0.11, 0.7, 0.032); },
+      tab: (f) => voice('chime', 739.99, 0, 0.4, 0.024 * f),
+      open: (f) => { voice('soft', 587.33, 0, 0.4, 0.032 * f); if (f > 0.9) voice('soft', 739.99, 0.09, 0.5, 0.032); },
+      close: (f) => { voice('soft', 739.99, 0, 0.38, 0.03 * f); if (f > 0.9) voice('soft', 587.33, 0.09, 0.5, 0.03); },
+      check: (f) => voice('chime', 880, 0, 0.7, 0.036 * f),
+      uncheck: (f) => voice('soft', 587.33, 0, 0.4, 0.028 * f),
+      success: (f) => {
+        voice('bowl', 146.83, 0, 2.4, 0.045 * f);
+        [587.33, 739.99, 880].forEach((n, i) => { if (f > 0.9 || i < 2) voice('chime', n, 0.1 + i * 0.14, 1.5, 0.036 * f); });
+      },
+      error: (f) => { voice('bowl', 293.66, 0, 0.7, 0.042 * f); if (f > 0.9) voice('bowl', 220, 0.18, 1.0, 0.036); },
+      notif: (f) => voice('chime', 880, 0, 1.1, 0.036 * f),
+      coin: (f) => { voice('chime', 880, 0, 0.9, 0.032 * f); if (f > 0.9) voice('chime', 1318.51, 0.1, 1.2, 0.028); },
+      swish: (f) => air('bandpass', 380, 1500, 0, 0.4, 0.016 * f, 0.7),
+      swishBack: (f) => air('bandpass', 1500, 380, 0, 0.36, 0.014 * f, 0.7),
+      // succès débloqué : nappe grave + trois cloches qui montent + quelques étincelles
+      unlock: () => {
+        voice('bowl', 220, 0, 3.4, 0.055);
+        [587.33, 880, 1174.66].forEach((f, i) => voice('chime', f, 0.18 + i * 0.2, 2.4, 0.05));
+        [1760, 1975.53, 2349.32].forEach((f, i) => voice('soft', f, 0.75 + i * 0.12, 0.7, 0.011));
+      },
+      unlockBig: () => {
+        voice('bowl', 146.83, 0, 4.4, 0.07);
+        voice('bowl', 220, 0.1, 4, 0.045);
+        [587.33, 739.99, 880, 1174.66, 1479.98].forEach((f, i) => voice('chime', f, 0.2 + i * 0.18, 2.8, 0.05));
+        [1760, 1975.53, 2349.32, 2637.02].forEach((f, i) => voice('soft', f, 1.0 + i * 0.1, 0.8, 0.011));
+      }
+    };
+    // le même son entendu plusieurs fois de suite devient plus court et plus discret
+    const WIN = { tap: 1200, confirm: 15000, back: 8000, tab: 3000, open: 4000, close: 4000, check: 3000, uncheck: 3000, success: 15000, error: 8000, notif: 15000, coin: 15000, swish: 6000, swishBack: 6000 };
+    const GAP = { key: 30, hover: 90, tick: 50 };
+    const play = (name) => {
+      if (!unlocked || !isOn() || !S[name]) return;
+      const now = Date.now(), prev = last[name];
+      if (prev && now - prev < (GAP[name] || 45)) return;
+      const f = prev && now - prev < (WIN[name] || 0) ? 0.5 : 1;
+      last[name] = now;
+      if (W.__nsfxLog) W.__nsfxLog.push(f < 1 ? name + '~' : name);
+      if (name !== 'hover' && name !== 'key' && name !== 'tick') mduck();
+      try { S[name](f); } catch (e) {}
+    };
+    const SEL = 'button, a[href], [role=button], [role=checkbox], [role=menuitem], [role=menuitemradio], [role=tab], summary, select, input[type=checkbox], input[type=radio]';
+    const OK = /(continuer|suivant|valider|envoyer|confirmer|r[ée]server|acc[eèé]d|devenir|se connecter|connexion|commencer|rejoindre|terminer|g[ée]n[ée]rer|calculer|inviter|connecter|c'est parti|\boui\b|ajouter|enregistrer|choisir|recevoir)/;
+    const BACK = /(retour|annuler|\bnon\b|fermer|pr[ée]c[ée]dent|d[ée]connecter|‹)/;
+    const target = (e) => (e.composedPath && e.composedPath()[0]) || e.target;
+    const pick = (el) => {
+      if (!el || !el.closest) return null;
+      const b = el.closest(SEL);
+      if (b) return b;
+      const lab = el.closest('label');
+      return lab && lab.control && lab.control.matches(SEL) ? lab.control : null;
+    };
+    const muted = (b) => { const f = b.closest('[data-sfx]'); return !!f && f.getAttribute('data-sfx') === 'none'; };
+    const kindOf = (b, viaClick) => {
+      const f = b.closest('[data-sfx]');
+      if (f) { const v = f.getAttribute('data-sfx'); if (v === 'none') return null; if (v) return v; }
+      if (b.disabled || b.getAttribute('aria-disabled') === 'true') return null;
+      const role = b.getAttribute('role');
+      if (b.tagName === 'SELECT') return null;
+      if (b.type === 'checkbox') return (b.checked !== !!viaClick) ? 'uncheck' : 'check';
+      if (b.type === 'radio') return 'check';
+      if (role === 'checkbox') return b.getAttribute('aria-checked') === 'true' ? 'uncheck' : 'check';
+      if (b.tagName === 'SUMMARY') return b.parentElement && b.parentElement.open ? 'close' : 'open';
+      const txt = ((b.getAttribute('aria-label') || '') + ' ' + (b.textContent || '')).trim().toLowerCase().slice(0, 90);
+      if (/acheter|retirer mon argent/.test(txt)) return 'coin';
+      if (b.closest('nav') || role === 'tab' || b.closest('[role=tablist]')) return 'tab';
+      if (b.getAttribute('aria-label') && /menu/.test(txt)) return 'open';
+      if (BACK.test(txt)) return 'back';
+      if (OK.test(txt)) return 'confirm';
+      return 'tap';
+    };
+    const unlock = (e) => { unlocked = true; musicGesture(e); };
+    const toggler = (e) => { const t = target(e); const b = t && t.closest ? t.closest('[data-sfx-toggle],[data-music-toggle]') : null; return b; };
+    const sync = () => {
+      const on = isOn(), lv = musicLevel(), mo = lv > 0;
+      D.querySelectorAll('[data-sfx-toggle]').forEach((b) => {
+        const v = on ? 'true' : 'false';
+        if (b.getAttribute('aria-pressed') !== v) b.setAttribute('aria-pressed', v);
+        const ti = on ? 'Couper les bruitages' : 'Activer les bruitages';
+        if (b.getAttribute('title') !== ti) b.setAttribute('title', ti);
+        if (b.getAttribute('aria-label') !== ti) b.setAttribute('aria-label', ti);
+      });
+      D.querySelectorAll('[data-music-toggle]').forEach((b) => {
+        const v = mo ? 'true' : 'false';
+        if (b.getAttribute('aria-pressed') !== v) b.setAttribute('aria-pressed', v);
+        const ti = lv === 0 ? 'Musique coupée (cliquer pour l’activer)' : lv === 1 ? 'Musique douce (cliquer pour l’augmenter un peu)' : 'Musique plus présente (cliquer pour la couper)';
+        if (b.getAttribute('data-level') !== String(lv)) b.setAttribute('data-level', String(lv));
+        if (b.getAttribute('title') !== ti) b.setAttribute('title', ti);
+        if (b.getAttribute('aria-label') !== ti) b.setAttribute('aria-label', ti);
+      });
+    };
+    const setOn = (v, silent) => {
+      mem.off = !v;
+      try { W.localStorage.setItem('son', v ? '1' : '0'); } catch (e) {}
+      sync();
+      announce();
+      if (v && !silent) play('tap');
+    };
+    D.addEventListener('pointerdown', (e) => {
+      unlock(e);
+      if (e.pointerType !== 'mouse' || e.button !== 0) return;
+      lastDown = Date.now();
+      if (toggler(e)) return;
+      const b = pick(target(e)); if (!b) return;
+      const k = kindOf(b, false); if (k) play(k);
+    }, true);
+    D.addEventListener('click', (e) => {
+      unlock(e);
+      const tg = toggler(e);
+      if (tg) { if (tg.hasAttribute('data-music-toggle')) setMusic((musicLevel() + 1) % 3); else setOn(!isOn(), false); return; }
+      if (e.detail > 0 && Date.now() - lastDown < 700) return;
+      const b = pick(target(e)); if (!b) return;
+      const k = kindOf(b, true); if (k) play(k);
+    }, true);
+    D.addEventListener('keydown', (e) => unlock(e), true);
+    D.addEventListener('touchend', (e) => unlock(e), true);
+    D.addEventListener('pointermove', (e) => {
+      if (e.screenX !== px || e.screenY !== py) { px = e.screenX; py = e.screenY; lastMove = Date.now(); }
+    }, true);
+    D.addEventListener('pointerover', (e) => {
+      if (e.pointerType !== 'mouse') return;
+      const b = pick(target(e));
+      if (!b || b === lastHover) return;
+      lastHover = b;
+      if (Date.now() - lastMove > 400) return;
+      if (b.disabled || muted(b) || b.hasAttribute('data-sfx-toggle')) return;
+      play('hover');
+    }, true);
+    D.addEventListener('pointerout', (e) => {
+      if (!lastHover) return;
+      const rel = e.relatedTarget;
+      if (!rel || !lastHover.contains(rel)) lastHover = null;
+    }, true);
+    D.addEventListener('input', (e) => {
+      const t = target(e);
+      if (!t || !t.tagName || (t.closest && t.closest('[data-sfx=none]'))) return;
+      if (t.tagName === 'TEXTAREA' || (t.tagName === 'INPUT' && /^(text|email|url|tel|search|number|password)$/.test(t.type || 'text'))) play('key');
+      else if (t.type === 'range') play('tick');
+    }, true);
+    D.addEventListener('change', (e) => {
+      const t = target(e);
+      if (t && t.tagName === 'SELECT' && !(t.closest && t.closest('[data-sfx=none]'))) play('tap');
+    }, true);
+    try {
+      new MutationObserver((muts) => {
+        sync();
+        if (Date.now() - born < 1200) return;
+        const txt = (n) => ((n.textContent || '').trim());
+        const gone = {};
+        for (let i = 0; i < muts.length; i++) {
+          const rem = muts[i].removedNodes;
+          for (let j = 0; j < rem.length; j++) {
+            const n = rem[j];
+            if (n.nodeType !== 1) continue;
+            if (n.matches && n.matches('[role=alert],[role=status]')) gone[txt(n)] = 1;
+            if (n.querySelectorAll) n.querySelectorAll('[role=alert],[role=status]').forEach((x) => { gone[txt(x)] = 1; });
+          }
+        }
+        for (let i = 0; i < muts.length; i++) {
+          const add = muts[i].addedNodes;
+          for (let j = 0; j < add.length; j++) {
+            const n = add[j];
+            if (n.nodeType !== 1) continue;
+            const list = [];
+            if (n.matches && n.matches('[role=alert],[role=status]')) list.push(n);
+            if (n.querySelectorAll) n.querySelectorAll('[role=alert],[role=status]').forEach((x) => list.push(x));
+            for (let k = 0; k < list.length; k++) {
+              if (gone[txt(list[k])]) continue;
+              play(list[k].getAttribute('role') === 'alert' ? 'error' : 'notif');
+              return;
+            }
+          }
+        }
+      }).observe(D.body || D.documentElement, { childList: true, subtree: true });
+    } catch (e) {}
+    // ---------- Musique d'ambiance : générée en direct par le navigateur (aucun fichier, aucun droit d'auteur) ----------
+    // Style « corporate inspirant » : piano qui égrène l'accord en croches, cordes qui se gonflent, basse ronde, kick doux,
+    // claquements sur 2 et 4, shaker, 112 pulsations/min, en ré majeur (ré · la · si mineur · sol). Dans la deuxième moitié
+    // de chaque cycle de 8 mesures, une petite ligne de piano s'élève au-dessus ; une vague de mer porte le passage au cycle suivant.
+    // Même arrangement du début à la fin. Tout se calcule depuis l'horloge murale : deux maquettes ouvertes ensemble
+    // jouent la même mesure (relais sans coupure).
+    const MU = { id: Math.random().toString(36).slice(2), yielded: false, paused: false, G: null, timer: 0, hideT: 0, hideMs: 45000, bar: 0, barT: 0, first: false, sea: null, bc: null };
+    const BEAT = 60 / 112, S16 = BEAT / 4, BAR = BEAT * 4, EP = 1700000000, FADE = 2.2;
+    const MVOLS = [0, 0.042, 0.089];
+    const LV = { pad: 0.08, sea: 0.1, foam: 0.03, kick: 0.1, clap: 0.2, hat: 0.12, bass: 0.06, keys: 0.22, lead: 0.2 };
+    // 0 = coupée, 1 = douce (par défaut), 2 = un peu plus présente
+    const musicLevel = () => {
+      let v = mem.mlv;
+      try { const x = W.localStorage.getItem('musique'); if (x !== null) v = +x; } catch (e) {}
+      return v === 0 || v === 1 || v === 2 ? v : 1;
+    };
+    const musicOn = () => musicLevel() > 0;
+    // volume des bruitages : 0 à 100, 50 = niveau d'origine
+    const sfxVol = () => {
+      let v = mem.sv;
+      try { const x = W.localStorage.getItem('sfxvol'); if (x !== null) v = +x; } catch (e) {}
+      return v >= 0 && v <= 100 ? v : 50;
+    };
+    const svGain = (v) => (v <= 0 ? 0 : Math.pow(v / 50, 1.6));
+    const rng = (a) => () => { let t = (a += 0x6D2B79F5); t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+    // accords (2 mesures chacun) : ré · la · si mineur · sol. r = racine de la basse, pad = cordes, pn = notes du piano (grave vers aigu)
+    const CH = [
+      { r: 73.42, pad: [146.83, 220, 293.66, 369.99], pn: [220, 293.66, 369.99, 440, 587.33, 739.99] },
+      { r: 55, pad: [110, 164.81, 220, 277.18, 329.63], pn: [164.81, 220, 277.18, 329.63, 440, 554.37] },
+      { r: 61.74, pad: [123.47, 185, 246.94, 293.66], pn: [185, 246.94, 293.66, 369.99, 493.88, 587.33] },
+      { r: 49, pad: [98, 146.83, 196, 246.94, 293.66], pn: [146.83, 196, 246.94, 293.66, 392, 493.88] }
+    ];
+    // croches du piano (indices dans pn) et leur force ; ligne qui s'élève sur les mesures 5 à 8 : [temps en double-croches, note, durée en temps]
+    const PAT = [1, 2, 3, 2, 4, 2, 3, 2], VEL = [1, 0.55, 0.72, 0.55, 0.88, 0.55, 0.72, 0.55];
+    const LEAD = [
+      [[0, 739.99, 3], [12, 659.25, 1]],
+      [[0, 587.33, 2], [8, 739.99, 2]],
+      [[0, 587.33, 3], [12, 493.88, 1]],
+      [[0, 493.88, 2], [8, 440, 2]]
+    ];
+    const bellCurve = (n, pk, amp) => {
+      const a = new Float32Array(n);
+      for (let i = 0; i < n; i++) { const x = i / (n - 1); a[i] = amp * Math.pow(Math.sin((x < pk ? x / pk : 1 - (x - pk) / (1 - pk)) * Math.PI / 2), 2); }
+      return a;
+    };
+    // fondus en puissance égale : deux maquettes qui se relaient se croisent sans trou ni bosse
+    const mcurve = (n, to, up) => {
+      const a = new Float32Array(n);
+      for (let i = 0; i < n; i++) { const x = i / (n - 1); a[i] = Math.max(to * (up ? Math.sin(x * Math.PI / 2) : Math.cos(x * Math.PI / 2)), 0.0001); }
+      return a;
+    };
+    const mhold = (g, t) => { if (g.cancelAndHoldAtTime) g.cancelAndHoldAtTime(t); else { g.cancelScheduledValues(t); g.setValueAtTime(g.value, t); } };
+    const seaBuffer = (c) => {
+      if (MU.sea && MU.sea.sampleRate === c.sampleRate) return MU.sea;
+      const b = c.createBuffer(1, Math.floor(c.sampleRate * 10), c.sampleRate), d = b.getChannelData(0);
+      let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
+      for (let i = 0; i < d.length; i++) {
+        const w = Math.random() * 2 - 1;
+        b0 = 0.99886 * b0 + w * 0.0555179; b1 = 0.99332 * b1 + w * 0.0750759; b2 = 0.969 * b2 + w * 0.153852;
+        b3 = 0.8665 * b3 + w * 0.3104856; b4 = 0.55 * b4 + w * 0.5329522; b5 = -0.7616 * b5 - w * 0.016898;
+        d[i] = (b0 + b1 + b2 + b3 + b4 + b5 + b6 + w * 0.5362) * 0.11; b6 = w * 0.115926;
+      }
+      MU.sea = b; return b;
+    };
+    const noiseSrc = (c) => {
+      if (!nbuf) { nbuf = c.createBuffer(1, c.sampleRate, c.sampleRate); const d = nbuf.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1; }
+      const s = c.createBufferSource(); s.buffer = nbuf; return s;
+    };
+    const mbuild = (c) => {
+      const G = { c: c, sends: [] };
+      G.out = c.createGain(); G.out.gain.value = 0.0001; G.duck = c.createGain(); G.mix = c.createGain(); G.pump = c.createGain();
+      G.mix.connect(G.duck); G.duck.connect(G.out); G.out.connect(mst); G.pump.connect(G.mix);
+      // réverbération propre à la musique : elle passe par le même fondu et le même réglage de volume que le reste
+      G.rv = c.createConvolver(); G.rv.buffer = cv.buffer;
+      const wet = c.createGain(); wet.gain.value = 0.7; G.rv.connect(wet); wet.connect(G.duck);
+      const bus = (to, amount) => {
+        const b = c.createGain(); b.connect(to);
+        if (amount > 0) { const s = c.createGain(); s.gain.value = amount; b.connect(s); s.connect(G.rv); G.sends.push(s); }
+        return b;
+      };
+      G.padB = bus(G.pump, 0.5); G.seaB = bus(G.pump, 0.06);
+      G.lowB = bus(G.mix, 0); G.drmB = bus(G.mix, 0.15); G.keyB = bus(G.mix, 0.45);
+      return G;
+    };
+    // cordes : quatre ou cinq notes tenues, deux dents de scie désaccordées par note, filtre qui s'ouvre puis se referme, attaque lente
+    const mpad = (G, t, dur, ch) => {
+      const c = G.c, f = c.createBiquadFilter(), A = 1.1, R = 1.6, v = LV.pad / Math.sqrt(ch.pad.length);
+      f.type = 'lowpass'; f.Q.value = 0.4;
+      f.frequency.setValueAtTime(500, t); f.frequency.linearRampToValueAtTime(1400, t + dur * 0.8); f.frequency.linearRampToValueAtTime(650, t + dur + R);
+      f.connect(G.padB);
+      ch.pad.forEach((hz, i) => {
+        const g = c.createGain(), pn = c.createStereoPanner();
+        pn.pan.value = ((i % 4) - 1.5) * 0.3;
+        g.gain.setValueAtTime(0.0001, t); g.gain.linearRampToValueAtTime(v, t + A); g.gain.setValueAtTime(v, t + dur); g.gain.linearRampToValueAtTime(0.0001, t + dur + R);
+        [-6, 6].forEach((dt) => { const o = c.createOscillator(); o.type = 'sawtooth'; o.frequency.value = hz; o.detune.value = dt; o.connect(g); o.start(t); o.stop(t + dur + R + 0.05); });
+        g.connect(pn); pn.connect(f);
+      });
+    };
+    // vague : souffle grave qui monte puis retombe, écume plus aiguë, d'une oreille à l'autre
+    const mwave = (G, t, side, amp, D2, pk) => {
+      const c = G.c, buf = seaBuffer(c), off = Math.random() * 1.5;
+      const s1 = c.createBufferSource(), lp = c.createBiquadFilter(), g1 = c.createGain(), pn = c.createStereoPanner();
+      s1.buffer = buf; lp.type = 'lowpass'; lp.Q.value = 0.5;
+      lp.frequency.setValueAtTime(240, t); lp.frequency.exponentialRampToValueAtTime(900, t + D2 * pk); lp.frequency.exponentialRampToValueAtTime(260, t + D2);
+      g1.gain.setValueCurveAtTime(bellCurve(96, pk, LV.sea * amp), t, D2);
+      pn.pan.setValueAtTime(side ? 0.5 : -0.5, t); pn.pan.linearRampToValueAtTime(side ? -0.35 : 0.35, t + D2);
+      s1.connect(lp); lp.connect(g1); g1.connect(pn); pn.connect(G.seaB); s1.start(t, off); s1.stop(t + D2 + 0.1);
+      const s2 = c.createBufferSource(), bp = c.createBiquadFilter(), g2 = c.createGain(), p2 = c.createStereoPanner();
+      s2.buffer = buf; bp.type = 'bandpass'; bp.frequency.value = 2600; bp.Q.value = 0.7;
+      g2.gain.setValueCurveAtTime(bellCurve(96, Math.min(0.9, pk + 0.03), LV.foam * amp), t + 0.8, D2 - 1.6);
+      p2.pan.value = side ? 0.3 : -0.3;
+      s2.connect(bp); bp.connect(g2); g2.connect(p2); p2.connect(G.seaB); s2.start(t + 0.8, off + 1.5); s2.stop(t + D2 - 0.7);
+    };
+    const mkick = (G, t, v) => {
+      const c = G.c, o = c.createOscillator(), g = c.createGain();
+      o.type = 'sine'; o.frequency.setValueAtTime(130, t); o.frequency.exponentialRampToValueAtTime(50, t + 0.1);
+      g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(v, t + 0.005); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.3);
+      o.connect(g); g.connect(G.lowB); o.start(t); o.stop(t + 0.34);
+    };
+    const mclap = (G, t, v) => {
+      [0, 0.011, 0.023].forEach((dt, k) => {
+        const c = G.c, s = noiseSrc(c), bp = c.createBiquadFilter(), g = c.createGain();
+        bp.type = 'bandpass'; bp.frequency.value = 1500; bp.Q.value = 0.8;
+        g.gain.setValueAtTime(0.0001, t + dt); g.gain.exponentialRampToValueAtTime(v * (k === 2 ? 1 : 0.6), t + dt + 0.002); g.gain.exponentialRampToValueAtTime(0.0001, t + dt + (k === 2 ? 0.16 : 0.05));
+        s.connect(bp); bp.connect(g); g.connect(G.drmB); s.start(t + dt, Math.random() * 0.8); s.stop(t + dt + 0.2);
+      });
+    };
+    // shaker : bruit filtré très court, en croches régulières
+    const mhat = (G, t, v, len) => {
+      const c = G.c, s = noiseSrc(c), bp = c.createBiquadFilter(), g = c.createGain();
+      bp.type = 'bandpass'; bp.frequency.value = 6200; bp.Q.value = 0.7;
+      g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(v, t + 0.006); g.gain.exponentialRampToValueAtTime(0.0001, t + len);
+      s.connect(bp); bp.connect(g); g.connect(G.drmB); s.start(t, Math.random() * 0.8); s.stop(t + len + 0.03);
+    };
+    // basse ronde : triangle + sinus, sans mordant
+    const mbass = (G, t, hz, dur, v) => {
+      const c = G.c, o = c.createOscillator(), o2 = c.createOscillator(), lp = c.createBiquadFilter(), g = c.createGain(), g2 = c.createGain();
+      o.type = 'triangle'; o.frequency.value = hz; o2.type = 'sine'; o2.frequency.value = hz; g2.gain.value = 0.7;
+      lp.type = 'lowpass'; lp.Q.value = 0.5; lp.frequency.value = 520;
+      g.gain.setValueAtTime(0.0001, t); g.gain.linearRampToValueAtTime(v, t + 0.02); g.gain.setValueAtTime(v, t + Math.max(dur - 0.12, 0.03)); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      o.connect(lp); lp.connect(g); o2.connect(g2); g2.connect(g); g.connect(G.lowB); o.start(t); o2.start(t); o.stop(t + dur + 0.05); o2.stop(t + dur + 0.05);
+    };
+    // piano : partiels sinus à décroissance rapide, attaque marteau, filtre qui se ferme ; assez sourd pour rester un instrument d'ambiance
+    const mpiano = (G, t, hz, dur, v, pan) => {
+      const c = G.c, g = c.createGain(), lp = c.createBiquadFilter(), pn = c.createStereoPanner();
+      lp.type = 'lowpass'; lp.Q.value = 0.3;
+      lp.frequency.setValueAtTime(Math.min(7000, hz * 8), t); lp.frequency.exponentialRampToValueAtTime(Math.max(1000, hz * 2.4), t + Math.min(dur, 1) * 0.7);
+      g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(v, t + 0.005); g.gain.exponentialRampToValueAtTime(v * 0.3, t + 0.25); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      pn.pan.value = Math.max(-1, Math.min(1, pan || 0));
+      [[1, 1, 0], [2, 0.38, 3], [3, 0.16, -4], [4, 0.07, 5]].forEach((p) => {
+        const o = c.createOscillator(), og = c.createGain();
+        o.type = 'sine'; o.frequency.value = hz * p[0]; o.detune.value = p[2]; og.gain.value = p[1];
+        o.connect(og); og.connect(g); o.start(t); o.stop(t + dur + 0.05);
+      });
+      const s = noiseSrc(c), bp = c.createBiquadFilter(), hg = c.createGain();
+      bp.type = 'bandpass'; bp.frequency.value = Math.min(4500, hz * 5); bp.Q.value = 1.1;
+      hg.gain.setValueAtTime(v * 0.5, t); hg.gain.exponentialRampToValueAtTime(0.0001, t + 0.035);
+      s.connect(bp); bp.connect(hg); hg.connect(g); s.start(t, Math.random() * 0.8); s.stop(t + 0.06);
+      g.connect(lp); lp.connect(pn); pn.connect(G.keyB);
+    };
+    // une mesure entière (2,1 s) : tout ce qui joue pendant cette mesure est planifié d'avance
+    const mbar = (G, b, T, first) => {
+      const c = G.c, now = c.currentTime + 0.03, bi = b % 8, ch = CH[bi >> 1], last = bi === 7;
+      const at = (sb) => T + sb * S16, ok = (t) => t >= now;
+      if (bi % 2 === 0) { const t0 = Math.max(at(0), now); mpad(G, t0, 2 * BAR - (t0 - T), ch); }
+      else if (first && T + BAR - now > 0.8) mpad(G, now, T + BAR - now, ch);
+      // vagues : une petite au milieu du cycle, une grande qui culmine sur le temps 1 du cycle suivant
+      if (bi === 2 && ok(at(0))) mwave(G, at(0), 0, 0.55, 2 * BAR + 3.2, (2 * BAR) / (2 * BAR + 3.2));
+      if (bi === 6 && ok(at(0))) mwave(G, at(0), 1, 1, 2 * BAR + 3.6, (2 * BAR) / (2 * BAR + 3.6));
+      // rythme : kick sur 1 et 3, claquement sur 2 et 4, shaker en croches ; la dernière mesure se resserre avant la vague
+      [0, 8].forEach((sb) => { if (ok(at(sb))) mkick(G, at(sb), LV.kick * (sb === 0 ? 1 : 0.8)); });
+      if (last) [4, 10, 12, 14, 15].forEach((sb, k) => { if (ok(at(sb))) mclap(G, at(sb), LV.clap * (k === 0 ? 1 : 0.55 + k * 0.1)); });
+      else [4, 12].forEach((sb) => { if (ok(at(sb))) mclap(G, at(sb), LV.clap); });
+      const Rh = rng(77 + b * 13);
+      for (let sb = 0; sb < 16; sb += 2) { const t = at(sb) + (Rh() - 0.5) * 0.006; if (ok(t)) mhat(G, t, LV.hat * (sb % 4 ? 0.95 : 0.7) * (0.85 + Rh() * 0.3), 0.06); }
+      // basse : la racine puis la quinte, en blanches (volume corrigé selon la hauteur : les notes très graves paraissent plus faibles)
+      const bv = LV.bass * Math.pow(73.42 / ch.r, 0.7);
+      [[0, 1], [8, 1.5]].forEach((n) => { if (ok(at(n[0]))) mbass(G, at(n[0]), ch.r * n[1], BEAT * 1.9, bv * (n[0] ? 0.85 : 1)); });
+      // piano : la basse de l'accord une octave plus haut (mesures paires), puis le motif en croches
+      if (bi % 2 === 0 && ok(at(0))) mpiano(G, at(0), ch.r * 2, BAR * 1.8, LV.keys * 0.9, -0.15);
+      const Rp = rng(4242 + b * 7);
+      PAT.forEach((ix, k) => {
+        const t = at(k * 2) + (Rp() - 0.5) * 0.008;
+        if (ok(t)) mpiano(G, t, ch.pn[ix], 1.15, LV.keys * VEL[k] * (0.92 + Rp() * 0.16), (k % 2 ? 0.14 : -0.14) + (ix - 3) * 0.04);
+      });
+      // la ligne qui s'élève (deuxième moitié du cycle)
+      if (bi >= 4) LEAD[bi - 4].forEach((n) => { if (ok(at(n[0]))) mpiano(G, at(n[0]), n[1], n[2] * BEAT + 0.8, LV.lead, 0.1); });
+    };
+    const mtick = (ahead) => {
+      const G = MU.G; if (!G) return;
+      const c = G.c, lim = c.currentTime + (ahead || 3);
+      if (c.state === 'suspended') { try { const p = c.resume(); if (p && p.catch) p.catch(() => {}); } catch (e) {} }
+      // le planificateur a pris trop de retard (onglet figé) : on se recale sur l'horloge murale
+      if (MU.barT < c.currentTime - 4) { const k = (Date.now() / 1000 - EP) / BAR; MU.bar = Math.floor(k); MU.barT = c.currentTime - (k - MU.bar) * BAR; MU.first = true; }
+      while (MU.barT < lim) {
+        try { mbar(G, MU.bar, MU.barT, MU.first); } catch (e) { if (W.__nsfxLog) W.__nsfxLog.push('music-error: ' + (e && e.message)); }
+        MU.first = false; MU.bar++; MU.barT += BAR;
+      }
+    };
+    const mannounce = () => {
+      try { W.localStorage.setItem('nmusic-owner', MU.id + '|' + Date.now()); } catch (e) {}
+      try { if (MU.bc) MU.bc.postMessage({ take: MU.id }); } catch (e) {}
+    };
+    const mstart = () => {
+      const c = ac(); if (!c || !mst || !cv) return;
+      const G = mbuild(c), k = (Date.now() / 1000 - EP) / BAR, b = Math.floor(k), t = c.currentTime;
+      MU.G = G; MU.bar = b; MU.barT = t - (k - b) * BAR; MU.first = true;
+      G.out.gain.setValueCurveAtTime(mcurve(48, MVOLS[musicLevel()], true), t, FADE);
+      mtick();
+      MU.timer = setInterval(() => mtick(), 250);
+      mannounce();
+    };
+    const mstop = () => {
+      const G = MU.G; if (!G) return;
+      MU.G = null; clearInterval(MU.timer); MU.timer = 0;
+      try { const g = G.out.gain, t = G.c.currentTime; mhold(g, t); g.setValueCurveAtTime(mcurve(48, Math.max(+g.value || 0, 0.0001), false), t, FADE); } catch (e) {}
+      setTimeout(() => { try { G.out.disconnect(); G.sends.forEach((s) => s.disconnect()); } catch (e) {} }, FADE * 1000 + 400);
+    };
+    const musicSync = () => {
+      const should = musicOn() && unlocked && !MU.yielded && !MU.paused;
+      if (should && !MU.G) mstart(); else if (!should && MU.G) mstop();
+    };
+    // sous un bruitage la musique s'efface un instant pour laisser passer le son
+    const mduck = () => {
+      const G = MU.G; if (!G) return;
+      try {
+        const g = G.duck.gain, t = G.c.currentTime;
+        mhold(g, t);
+        g.setTargetAtTime(0.62, t, 0.03); g.setTargetAtTime(1, t + 0.45, 0.35);
+      } catch (e) {}
+    };
+    // premier geste dans cette maquette : la musique démarre (les navigateurs interdisent le son avant)
+    const musicGesture = (e) => {
+      const t = e && target(e);
+      if (t && t.closest && t.closest('[data-music-toggle],[data-sfx-toggle]')) return;
+      MU.yielded = false; musicSync();
+    };
+    // le volume suit le réglage tout de suite (fondu de 0,8 s) quand la musique joue déjà
+    const mlevel = () => {
+      const G = MU.G; if (!G) return;
+      try {
+        const g = G.out.gain, t = G.c.currentTime;
+        mhold(g, t);
+        g.linearRampToValueAtTime(Math.max(MVOLS[musicLevel()], 0.0001), t + 0.8);
+      } catch (e) {}
+    };
+    const announce = () => { try { W.dispatchEvent(new CustomEvent('nsfx-change', { detail: { on: isOn(), music: musicOn(), level: musicLevel(), vol: sfxVol() } })); } catch (e) {} };
+    const setMusic = (v) => {
+      const lv = v === true ? 1 : v === false ? 0 : (+v || 0);
+      mem.mlv = lv;
+      try { W.localStorage.setItem('musique', String(lv)); } catch (e) {}
+      if (lv > 0) MU.yielded = false;
+      sync(); musicSync(); mlevel(); announce();
+    };
+    const setSfxVol = (v, preview) => {
+      const n = Math.max(0, Math.min(100, Math.round(+v || 0)));
+      mem.sv = n;
+      try { W.localStorage.setItem('sfxvol', String(n)); } catch (e) {}
+      if (bus && ctx) { try { bus.gain.setTargetAtTime(svGain(n), ctx.currentTime, 0.03); } catch (e) {} }
+      announce();
+      if (preview) play('tap');
+    };
+    // une seule maquette joue à la fois : la dernière touchée reprend la même mesure, l'autre s'éteint en fondu enchaîné
+    try {
+      if (W.BroadcastChannel) {
+        MU.bc = new W.BroadcastChannel('neptune-musique');
+        MU.bc.onmessage = (e) => { if (e.data && e.data.take && e.data.take !== MU.id) { MU.yielded = true; musicSync(); } };
+      }
+    } catch (e) {}
+    W.addEventListener('storage', (e) => {
+      if (e.key === 'nmusic-owner' && e.newValue && e.newValue.split('|')[0] !== MU.id) { MU.yielded = true; musicSync(); }
+      else if (e.key === 'musique' || e.key === 'son' || e.key === 'sfxvol') {
+        sync(); musicSync(); mlevel();
+        if (e.key === 'sfxvol' && bus && ctx) { try { bus.gain.setTargetAtTime(svGain(sfxVol()), ctx.currentTime, 0.03); } catch (x) {} }
+        announce();
+      }
+    });
+    // onglet masqué : la musique continue un moment (aller-retour rapide = aucun blanc), puis se met en pause en fondu
+    D.addEventListener('visibilitychange', () => {
+      clearTimeout(MU.hideT);
+      if (D.hidden) MU.hideT = setTimeout(() => { if (D.hidden) { MU.paused = true; musicSync(); } }, MU.hideMs);
+      else if (MU.paused) { MU.paused = false; musicSync(); }
+    });
+    W.addEventListener('pagehide', mstop);
+    W.__nsfx = { play: play, setOn: setOn, isOn: isOn, scan: sync, voice: voice, air: air, ac: ac, PENTA: PENTA, musicOn: musicOn, musicLevel: musicLevel, setMusic: setMusic, sfxVol: sfxVol, setSfxVol: setSfxVol, music: { state: MU, tick: mtick, start: mstart, stop: mstop, LV: LV } };
+    sync();
+  }
+
+  renderVals() {
+    const st = Object.assign(this.defaults(), this.state || {});
+    const set = (o) => this.setState(o);
+    const flash = (t) => { set({ toast: t }); clearTimeout(this._tt); this._tt = setTimeout(() => set({ toast: "" }), 2600); };
+    const fmt = (n) => {
+      if (n >= 1000000) return (n / 1000000).toFixed(1).replace(".", ",") + " M";
+      if (n >= 10000) return Math.round(n / 1000) + " k";
+      if (n >= 1000) return (n / 1000).toFixed(1).replace(".", ",") + " k";
+      return String(n);
+    };
+    const sp = (n) => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+    const euro = (x) => (Math.round(x * 100) / 100).toFixed(2).replace(".", ",") + " €";
+    const pad = (n) => ("0" + n).slice(-2);
+
+    /* ---- couleurs : doré + bleu pour le pro et les clients Empereur, turquoise sinon ---- */
+    const GOLD = "#E3B84F", GOLD_TXT = "#1A1405", TEAL = "#35D6C8", TEAL_TXT = "#06182A", MUTED = "#8FB0BF", TXT = "#E6F3F5";
+    const toggle = (on) => on ? "background: #163A5A; color: #E6F3F5;" : "background: transparent; color: #8FB0BF;";
+    const tagStyle = (pro) => pro ? "background: #E3B84F; color: #1A1405; border: 1px solid #E3B84F;" : "background: transparent; color: #8FB0BF; border: 1px solid #2A5173;";
+    const nameColor = (pro) => pro ? GOLD : TXT;
+
+    /* ---- données d'exemple ---- */
+    const clients = [
+      { id: "beone", name: "BeOne", plan: "roi", v7: 70000, posts7: 67, clippers: 517, comReward: "produit", comProduct: { name: "VIP", palier: 10000, reobt: false }, comRate: 1, comPalier: 5000, comPot: 0, proReward: "", proRate: 0, proPot: 0, proPeriod: "month" },
+      { id: "squiduu", name: "SQUIDUU", plan: "empereur", v7: 166000, posts7: 35, clippers: 148, comReward: "euro", comProduct: { name: "", palier: 0, reobt: false }, comRate: 1, comPalier: 5000, comPot: 0, proReward: "cagnotte", proRate: 0, proPot: 800, proPeriod: "month" },
+      { id: "loann", name: "Loann", plan: "empereur", v7: 2200000, posts7: 417, clippers: 83, comReward: "cagnotte", comProduct: { name: "", palier: 0, reobt: false }, comRate: 0, comPalier: 0, comPot: 500, proReward: "euro", proRate: 1, proPot: 0, proPeriod: "week" },
+      { id: "mickael", name: "Mickaël Wu", plan: "roi", v7: 109000, posts7: 242, clippers: 144, comReward: "cagnotte", comProduct: { name: "", palier: 0, reobt: false }, comRate: 0, comPalier: 0, comPot: 300, proReward: "", proRate: 0, proPot: 0, proPeriod: "month" },
+      { id: "noah", name: "Noah Panchaud", plan: "roi", v7: 0, posts7: 0, clippers: 11, comReward: "euro", comProduct: { name: "", palier: 0, reobt: false }, comRate: 1, comPalier: 5000, comPot: 0, proReward: "", proRate: 0, proPot: 0, proPeriod: "month" }
+    ];
+    const planName = { roi: "Roi des mers", empereur: "Empereur des mers" };
+    const base = [
+      { id: "hvk", name: "HVK_Chocolat 1k not ezz", views: 48000, posts: 4, type: "community", pf: ["TT"], sc: [3, 10, 1, 10] },
+      { id: "veldra", name: "#VELDRA", views: 31000, posts: 14, type: "pro", pf: ["IG", "TT", "YT"], sc: [6, 12, 6, 10] },
+      { id: "zaiko", name: "?zAikø", views: 30000, posts: 35, type: "pro", pf: ["IG", "TT", "YT"], sc: [14, 14, 9, 10] },
+      { id: "implety", name: "Implety84", views: 25000, posts: 27, type: "pro", pf: ["IG", "TT", "YT"], sc: [10, 12, 6, 10] },
+      { id: "lemgui", name: "Lemgui the french yeep", views: 18000, posts: 3, type: "community", pf: ["TT"], sc: [2, 8, 1, 6] },
+      { id: "nexo", name: "Nexo", views: 14000, posts: 15, type: "community", pf: ["IG", "TT", "YT"], sc: [7, 10, 3, 8] },
+      { id: "chained", name: "La Team Chained", views: 9900, posts: 46, type: "pro", pf: ["TT"], sc: [22, 18, 11, 10] },
+      { id: "ufio", name: "ufio_official", views: 9200, posts: 5, type: "community", pf: ["IG", "TT", "YT"], sc: [3, 7, 2, 6] },
+      { id: "braven", name: "BravenV2", views: 7500, posts: 6, type: "community", pf: ["IG", "TT", "YT"], sc: [3, 8, 2, 5] }
+    ];
+    const s30 = [0, 0, 0, 0, 0, 0, 0, 0, 0, 1.2, 6.5, 15, 30, 31, 25, 18, 13, 10, 8.5, 7.5, 7, 6.5, 7.5, 8, 9, 10.5, 11, 15.5, 16, 2].map((v) => Math.round(v * 1000));
+    const baseAccess = [
+      { email: "mcddonuts@gmail.com", role: "lucas", client: "all" },
+      { email: "staff@exemple.fr", role: "admin", client: "beone" },
+      { email: "beone@exemple.fr", role: "client", client: "beone" },
+      { email: "squiduu@exemple.fr", role: "client", client: "squiduu" },
+      { email: "loann@exemple.fr", role: "client", client: "loann" }
+    ];
+    const access = st.accessList || baseAccess;
+    const roleName = { lucas: "Lucas", admin: "Admin", client: "Client" };
+    const clientNameOf = (id) => { const c = clients.find((x) => x.id === id); return id === "all" ? "Tous les clients" : (c ? c.name : id); };
+
+    /* ---- connexion par mail + code ---- */
+    const findEntry = () => { const mail = (st.email || "").trim().toLowerCase(); return access.find((a) => a.email.toLowerCase() === mail); };
+    const sendCode = () => {
+      if (!(st.email || "").trim()) { set({ loginError: "Entre ton adresse mail." }); return; }
+      if (!findEntry()) { set({ loginError: "Aucun accès pour cet email. Choisis un compte de test ci-dessous." }); return; }
+      set({ step: "code", code: "", loginError: "", loginNote: "" });
+    };
+    const verify = () => {
+      const entry = findEntry();
+      if ((st.code || "").length !== 6) { set({ loginError: "Entre les 6 chiffres du code.", loginNote: "" }); return; }
+      if (!entry) { set({ loginError: "Aucun accès pour cet email.", loginNote: "" }); return; }
+      this.sfx("success");
+      set({ screen: "app", step: "email", code: "", loginError: "", loginNote: "", role: entry.role, clientId: entry.client === "all" ? "beone" : entry.client, tab: entry.role === "lucas" ? "clients" : "communaute", sub: "overview", viewAs: "", menu: "" });
+    };
+
+    /* ---- vue active (Lucas et admin peuvent changer d'affichage depuis le logo) ---- */
+    const viewMode = st.role === "client" ? "client" : (st.viewAs || st.role);
+    const canSwitch = st.role === "lucas" || st.role === "admin";
+    const cl = clients.find((c) => c.id === st.clientId) || clients[0];
+    const clientName = cl.name;
+    const isEmp = cl.plan === "empereur";
+    const flagAdminTools = viewMode !== "client";
+
+    /* ---- onglets (une seule ligne) ---- */
+    const tabDefs = [];
+    if (viewMode === "lucas") tabDefs.push({ id: "clients", label: "Tous les clients" });
+    tabDefs.push({ id: "communaute", label: "Clipper commu" });
+    if (isEmp) tabDefs.push({ id: "pro", label: "Pro", gold: true });
+    tabDefs.push({ id: "tracker", label: "Tracker" });
+    tabDefs.push({ id: "boutique", label: "Boutique" });
+    if (viewMode === "lucas") tabDefs.push({ id: "acces", label: "Accès" });
+    tabDefs.push({ id: "parametres", label: "Paramètres" });
+    const tabIds = tabDefs.map((t) => t.id);
+    const tabId = tabIds.indexOf(st.tab) >= 0 ? st.tab : tabIds[0];
+
+    const goldCtx = tabId === "pro";
+    const th = {
+      a: goldCtx ? GOLD : TEAL,
+      at: goldCtx ? GOLD_TXT : TEAL_TXT,
+      line: goldCtx ? "rgba(227,184,79,0.30)" : "#163650",
+      btn: goldCtx ? "background: #E3B84F; color: #1A1405; border: 0;" : "background: #35D6C8; color: #06182A; border: 0;"
+    };
+
+    const tabs = tabDefs.map((t) => {
+      const on = tabId === t.id;
+      const accent = t.gold ? GOLD : th.a;
+      const col = on ? TXT : (t.gold ? "#C9A247" : MUTED);
+      return { label: t.label, style: "color: " + col + "; font-weight: " + (on ? 600 : 500) + "; border-bottom: 2px solid " + (on ? accent : "transparent") + ";", go: () => set({ tab: t.id, menu: "" }) };
+    });
+
+    /* ---- menu du logo ---- */
+    const viewDefs = st.role === "lucas" ? [["lucas", "Vue Lucas"], ["admin", "Vue admin"], ["client", "Vue client"]] : [["admin", "Vue admin"], ["client", "Vue client"]];
+    const viewOptions = viewDefs.map((v) => ({
+      label: v[1],
+      dot: viewMode === v[0] ? "background: " + th.a + ";" : "background: transparent; border: 1px solid #3A5F7A;",
+      style: viewMode === v[0] ? "background: #0F2C46;" : "background: transparent;",
+      pick: () => set({ viewAs: v[0], menu: "" })
+    }));
+
+    /* ---- sous-onglets du tracker ---- */
+    const subDefs = [{ id: "overview", label: "Vue d’ensemble" }, { id: "clippers", label: "Clippers" }, { id: "classement", label: "Classement" }];
+    if (flagAdminTools) subDefs.push({ id: "management", label: "Management" });
+    const subIds = subDefs.map((s) => s.id);
+    const subId = subIds.indexOf(st.sub) >= 0 ? st.sub : "overview";
+    const subTabs = subDefs.map((s) => ({ label: s.label, style: toggle(subId === s.id), go: () => set({ sub: s.id }) }));
+
+    /* ---- clippers ---- */
+    const typeOv = st.typeOv || {};
+    const all = base.map((c, i) => { const type = typeOv[c.id] || c.type; return Object.assign({}, c, { rank: i + 1, type: type, pro: type === "pro" }); });
+    const comList = all.filter((c) => !c.pro);
+    const proList = all.filter((c) => c.pro);
+    const filtered = st.typeFilter === "all" ? all : all.filter((c) => c.type === st.typeFilter);
+    const toggleType = (c) => { const o = Object.assign({}, typeOv); o[c.id] = c.pro ? "community" : "pro"; set({ typeOv: o }); };
+    const typeChips = [["all", "Tous"], ["pro", "Pro"], ["community", "Clipper commu"]].map((t) => ({ label: t[1], style: toggle(st.typeFilter === t[0]), pick: () => set({ typeFilter: t[0] }) }));
+    const rankRows = filtered.map((c, i) => ({
+      rank: i + 1, name: c.name, nameColor: nameColor(c.pro), viewsLabel: fmt(c.views), isPro: c.pro,
+      canPromote: !c.pro && c.rank <= 5,
+      score: c.sc.reduce((a, b) => a + b, 0), toggle: () => toggleType(c)
+    }));
+    const clipperRows = filtered.map((c) => ({
+      name: c.name, nameColor: nameColor(c.pro), viewsLabel: fmt(c.views), isPro: c.pro,
+      rowStyle: c.id === st.selected ? "background: #0B2338;" : "background: transparent;",
+      pick: () => set({ selected: c.id })
+    }));
+    const sel = all.find((c) => c.id === st.selected) || all[0];
+    const partNames = [["Production", 40], ["Performance", 30], ["Régularité", 20], ["Discipline", 10]];
+    const d = {
+      name: sel.name, nameColor: nameColor(sel.pro), isPro: sel.pro, accent: sel.pro ? GOLD : th.a,
+      viewsLabel: fmt(sel.views), posts: sel.posts, avgLabel: fmt(Math.round(sel.views / sel.posts)),
+      scoreTotal: sel.sc.reduce((a, b) => a + b, 0),
+      parts: partNames.map((p, i) => ({ label: p[0], valueLabel: sel.sc[i] + " / " + p[1], w: Math.round(sel.sc[i] / p[1] * 100) + "%" })),
+      clips: [["YouTube", "04/10", 0.5], ["TikTok", "02/10", 0.3], ["Reels", "30/09", 0.2]].map((x) => ({ plat: x[0], date: x[1], viewsLabel: fmt(Math.round(sel.views * x[2])) }))
+    };
+    const mgmtRows = all.map((c) => ({
+      name: c.name, nameColor: nameColor(c.pro), platforms: c.pf.join(" · "), typeLabel: c.pro ? "Pro" : "Clipper commu", tagStyle: tagStyle(c.pro),
+      toggleLabel: c.pro ? "Repasser commu" : "Passer pro", toggle: () => toggleType(c)
+    }));
+
+    /* ---- tracker : vue d'ensemble ---- */
+    const arr = st.period === "7" ? s30.slice(-7) : s30;
+    const rawMax = Math.max.apply(null, arr);
+    const mag = Math.pow(10, Math.floor(Math.log10(rawMax)));
+    const niceMax = Math.ceil(rawMax / mag) * mag;
+    const dateLabel = (i, n) => { const dt = new Date(2026, 9, 22 - (n - 1 - i)); return pad(dt.getDate()) + "/" + pad(dt.getMonth() + 1); };
+    const bars = arr.map((v, i) => ({ h: Math.max(2, Math.round(v / niceMax * 160)) + "px", tip: dateLabel(i, arr.length) + " · " + fmt(v) + " vues" }));
+    const yLabels = [niceMax, niceMax / 2, 0].map((v) => ({ label: fmt(v) }));
+    const xLabels = [0, Math.floor((arr.length - 1) / 2), arr.length - 1].map((i) => ({ label: dateLabel(i, arr.length) }));
+    const total = arr.reduce((a, b) => a + b, 0);
+    const kpis = [
+      { label: "Vues", value: fmt(total) },
+      { label: "Posts", value: st.period === "7" ? "67" : "511" },
+      { label: "Clippers actifs", value: "74 / 517" }
+    ];
+    const periods = [["7", "7 jours"], ["30", "30 jours"]].map((p) => ({ label: p[1], style: toggle(st.period === p[0]), pick: () => set({ period: p[0] }) }));
+    const proViews = all.filter((c) => c.pro).reduce((a, c) => a + c.views, 0);
+    const allViews = all.reduce((a, c) => a + c.views, 0);
+    const proShare = Math.round(proViews / allViews * 100);
+    const topClips = [["YouTube", "04/10", all[0]], ["TikTok", "06/10", all[1]], ["Shorts", "05/10", all[2]]].map((x, i) => ({ plat: x[0], date: x[1], viewsLabel: fmt(Math.round(x[2].views * [0.9, 0.7, 0.6][i])) }));
+    const topClippers = all.slice(0, 3).map((c) => ({ rank: c.rank, name: c.name, nameColor: nameColor(c.pro), viewsLabel: fmt(c.views) }));
+    const alerts = [["werenol", "14 j"], ["Zenox79", "21 j"], ["Lolocld70", "28 j"]].map((a) => ({ name: a[0], days: a[1], relance: () => flash("Maquette : message de relance simulé pour " + a[0]) }));
+
+    /* ---- onglets communauté et pro ---- */
+    const now = st.now;
+    const endOf = (period) => {
+      const dt = new Date(now);
+      if (period === "week") return new Date(dt.getFullYear(), dt.getMonth(), dt.getDate() + ((7 - dt.getDay()) % 7), 23, 59, 59).getTime();
+      return new Date(dt.getFullYear(), dt.getMonth() + 1, 0, 23, 59, 59).getTime();
+    };
+    const buildBlock = (who) => {
+      const isPro = who === "pro";
+      const kind = isPro ? cl.proReward : cl.comReward;
+      const period = isPro ? cl.proPeriod : "month";
+      const week = period === "week";
+      const list = isPro ? proList : comList;
+      const vw = (c) => week ? Math.round(c.views * 0.23) : c.views;
+      const target = endOf(period);
+      const diff = Math.max(0, target - now);
+      const dd = Math.floor(diff / 86400000), hh = Math.floor(diff % 86400000 / 3600000), mm = Math.floor(diff % 3600000 / 60000), ss = Math.floor(diff % 60000 / 1000);
+      const periodWord = week ? "semaine" : "mois";
+      const rate = isPro ? cl.proRate : cl.comRate;
+      const pot = isPro ? cl.proPot : cl.comPot;
+      const palier = isPro ? 0 : (kind === "produit" ? cl.comProduct.palier : cl.comPalier);
+      const src = (kind === "cagnotte" || palier === 0) ? list : list.filter((c) => vw(c) >= palier);
+      const totalViews = src.reduce((a, c) => a + vw(c), 0) || 1;
+      const amount = (c) => vw(c) / 1000 * rate;
+      const rows = src.map((c) => {
+        let result = "";
+        if (kind === "produit") result = cl.comProduct.name;
+        else if (kind === "euro") result = euro(amount(c));
+        else result = euro(pot * vw(c) / totalViews);
+        return { pseudo: c.name, fullName: "Prénom Nom", email: c.id + "@exemple.fr", discord: "@" + c.id, viewsLabel: fmt(vw(c)), result: result };
+      });
+      const dist = { label: "Distribution", value: "dans " + dd + " j" };
+      let stats = [], h1 = "", sub = "", resultHeader = "";
+      const palierTxt = palier > 0 ? "Clippers ayant atteint " + sp(palier) + " vues." : "Tous les clippers de la communauté.";
+      if (kind === "produit") {
+        h1 = "Produits à donner";
+        sub = palierTxt;
+        resultHeader = "Produit";
+        stats = [{ label: "À donner", value: String(rows.length) }, { label: "Produit", value: cl.comProduct.name }, dist];
+      } else if (kind === "euro") {
+        h1 = isPro ? "À distribuer" : "À donner";
+        sub = isPro ? "Clippers pro, fin de " + periodWord + "." : palierTxt;
+        resultHeader = "Montant";
+        stats = [{ label: "Total", value: euro(src.reduce((a, c) => a + amount(c), 0)) }, { label: "Taux", value: rate + " € / 1 000 vues" }, dist];
+      } else {
+        h1 = "Cagnotte";
+        sub = isPro ? "Répartie entre les clippers pro selon leurs vues." : "Répartie entre les clippers selon leurs vues.";
+        resultHeader = "Part estimée";
+        stats = [{ label: "Dans la cagnotte", value: sp(Math.round(pot)) + " €" }, { label: "Participants", value: String(rows.length) }];
+      }
+      const showIdentity = !isPro || flagAdminTools;
+      let footnote = "";
+      if (isPro) footnote = flagAdminTools ? "Identités visibles par Neptune uniquement : le client ne voit que les pseudos." : "Les identités des clippers pro restent anonymes.";
+      return {
+        h1: h1, sub: sub, stats: stats, isCagnotte: kind === "cagnotte",
+        countdown: [{ value: pad(dd), label: "j" }, { value: pad(hh), label: "h" }, { value: pad(mm), label: "min" }, { value: pad(ss), label: "s" }],
+        rowsLabel: (kind === "cagnotte" ? "Répartition estimée" : "Clippers à récompenser") + " · " + rows.length,
+        showIdentity: showIdentity, resultHeader: resultHeader, rows: rows, isEmpty: rows.length === 0,
+        footnote: footnote, hasFootnote: !!footnote,
+        nameColor: isPro ? GOLD : TXT,
+        wrapStyle: isPro ? "padding: 32px; border-radius: 18px; background: linear-gradient(180deg, rgba(227,184,79,0.09), rgba(227,184,79,0) 70%); border: 1px solid rgba(227,184,79,0.28);" : ""
+      };
+    };
+    const blk = tabId === "pro" ? buildBlock("pro") : buildBlock("com");
+
+    /* ---- boutique communauté ---- */
+    const shop = {
+      name: clientName + " Rewards", coins: "1 240",
+      rewards: [
+        { badge: "VIP", name: "VIP", note: "Accès VIP exclusif", price: "5 000" },
+        { badge: "?", name: "[Nom de la récompense]", note: "[Description]", price: "[prix]" },
+        { badge: "?", name: "[Nom de la récompense]", note: "[Description]", price: "[prix]" }
+      ],
+      podium: comList.slice(0, 3).map((c, i) => ({ rank: i + 1, name: c.name, views: fmt(c.views) }))
+    };
+
+    /* ---- tous les clients (Lucas) ---- */
+    const sumV7 = clients.reduce((a, c) => a + c.v7, 0);
+    const allKpis = [
+      { label: "Vues (7 j)", value: fmt(sumV7) },
+      { label: "Posts (7 j)", value: String(clients.reduce((a, c) => a + c.posts7, 0)) },
+      { label: "Clippers", value: String(clients.reduce((a, c) => a + c.clippers, 0)) }
+    ];
+    const clientRows = clients.map((c) => ({
+      name: c.name, planLabel: planName[c.plan], planStyle: c.plan === "empereur" ? "color: #E3B84F;" : "color: #8FB0BF;",
+      v7Label: fmt(c.v7), clippers: c.clippers, open: () => set({ clientId: c.id, tab: "communaute" })
+    }));
+
+    /* ---- accès ---- */
+    const accessRows = access.map((a) => ({
+      email: a.email, roleLabel: roleName[a.role], clientLabel: clientNameOf(a.client), canRemove: a.role !== "lucas",
+      remove: () => set({ accessList: access.filter((x) => x.email !== a.email) })
+    }));
+    const addAccess = () => {
+      const mail = (st.newEmail || "").trim();
+      if (!mail) { flash("Entre d’abord un mail."); return; }
+      set({ accessList: access.concat([{ email: mail, role: st.newRole, client: st.newClient }]), newEmail: "" });
+      flash("Accès donné à " + mail);
+    };
+
+    /* ---- paramètres : chaînes du créateur + sons ---- */
+        const baseChans = {
+      beone: [{ id: "b1", pf: "YouTube", name: "BeOne", conn: true }],
+      squiduu: [{ id: "s1", pf: "YouTube", name: "SQUIDUU", conn: true }, { id: "s2", pf: "TikTok", name: "@squiduu", conn: true }],
+      loann: [{ id: "l1", pf: "YouTube", name: "Loann", conn: true }],
+      mickael: [{ id: "m1", pf: "YouTube", name: "Mickaël Wu", conn: true }],
+      noah: [{ id: "n1", pf: "YouTube", name: "Noah Panchaud", conn: true }]
+    };
+    const allChans = st.chans || baseChans;
+    const myChans = allChans[cl.id] || [];
+    const putChans = (list) => set({ chans: Object.assign({}, allChans, { [cl.id]: list }) });
+    const chanItems = myChans.map((c) => {
+      const editing = st.chEdit === c.id;
+      return {
+        id: c.id, pf: c.pf, name: c.name, tag: "Connectée", isRow: !editing, isEdit: editing,
+        editLabel: "Modifier " + c.name, removeLabel: "Retirer " + c.name, inputLabel: "Nom de la chaîne " + c.pf,
+        draft: st.chDraft,
+        edit: () => set({ chEdit: c.id, chDraft: c.name }),
+        setDraft: (e) => set({ chDraft: e.target.value }),
+        save: () => {
+          const v = (st.chDraft || "").trim();
+          if (!v) { flash("Le nom ne peut pas être vide."); return; }
+          putChans(myChans.map((x) => (x.id === c.id ? Object.assign({}, x, { name: v }) : x)));
+          set({ chEdit: "", chDraft: "" });
+          flash("Chaîne renommée : " + v);
+        },
+        cancel: () => set({ chEdit: "", chDraft: "" }),
+        remove: () => { putChans(myChans.filter((x) => x.id !== c.id)); if (st.chEdit === c.id) set({ chEdit: "", chDraft: "" }); flash("Chaîne retirée : " + c.name); }
+      };
+    });
+    const connectChan = (pf) => () => {
+      const slug = clientName.toLowerCase().replace(/[^a-z0-9]+/g, "");
+      const base = pf === "YouTube" ? clientName : "@" + slug;
+      let nm = base, k = 1;
+      while (myChans.some((x) => x.name === nm)) { k += 1; nm = base + " " + k; }
+      putChans(myChans.concat([{ id: "c" + Date.now(), pf: pf, name: nm, conn: true }]));
+      flash("Maquette : chaîne " + pf + " connectée (" + nm + ").");
+    };
+    const connectBtns = ["YouTube", "TikTok"].map((pf) => ({ label: "Se connecter avec " + pf, go: connectChan(pf) }));
+    const dcMap = st.dc || { beone: true };
+    const dcOn = dcMap[cl.id] === true;
+    const toggleDc = () => { set({ dc: Object.assign({}, dcMap, { [cl.id]: !dcOn }) }); flash(dcOn ? "Discord déconnecté." : "Maquette : serveur Discord de " + clientName + " connecté."); };
+    const musicOpts = [{ v: 0, l: "Coupée" }, { v: 1, l: "Douce" }, { v: 2, l: "Plus présente" }].map((o) => ({
+      label: o.l, on: st.mlv === o.v,
+      go: () => { set({ mlv: o.v }); if (window.__nsfx) window.__nsfx.setMusic(o.v); else { try { localStorage.setItem("musique", String(o.v)); } catch (e) {} } },
+      style: st.mlv === o.v ? "background: " + th.a + "; color: " + th.at + "; border: 0;" : "background: transparent; color: " + TXT + "; border: 1px solid #1F4666;"
+    }));
+
+    /* ---- titre de page : [petite ligne, titre, sous-titre] ---- */
+    const titles = {
+      clients: ["Neptune", "Tous les clients", ""],
+      communaute: [clientName + " · Clipper commu", blk.h1, blk.sub],
+      pro: [clientName + " · Clippers pro", blk.h1, blk.sub],
+      tracker: [clientName, "Tracker", ""],
+      boutique: [clientName, "Boutique", "Aperçu de la boutique vue par la communauté."],
+      acces: ["Neptune", "Accès", "Qui peut se connecter, avec quel rôle."],
+      parametres: [clientName, "Paramètres", "Les sons, la musique et les chaînes."]
+    };
+    const tt = titles[tabId];
+
+    return {
+      flagLogin: st.screen === "login", flagApp: st.screen === "app" && !st.preview, flagPreview: st.screen === "app" && !!st.preview,
+      showInvite: tabId === "communaute", inviteName: clientName, inviteLink: "neptune.com/clipper/" + cl.id,
+      openPreview: () => { set({ preview: true, menu: "" }); try { window.scrollTo(0, 0); } catch (e) {} },
+      closePreview: () => set({ preview: false }),
+      copyInvite: () => { const link = "neptune.com/clipper/" + cl.id; let p = null; try { p = navigator.clipboard && navigator.clipboard.writeText(link); } catch (e) { p = null; } if (p && p.then) p.then(() => flash("Lien copié"), () => flash("Copie impossible ici : sélectionne le lien.")); else flash("Copie impossible ici : sélectionne le lien."); },
+      hasExit: !!this.props.onExit, exitSite: () => { if (this.props.onExit) this.props.onExit(); },
+      stepEmail: st.step === "email", stepCode: st.step === "code",
+      email: st.email, setEmail: (e) => set({ email: e.target.value, loginError: "" }),
+      code: st.code, setCode: (e) => set({ code: e.target.value.replace(/\D/g, "").slice(0, 6), loginError: "" }),
+      sendCode: sendCode, verify: verify,
+      demoAccounts: [["Lucas", "mcddonuts@gmail.com"], ["Admin BeOne", "staff@exemple.fr"], ["Client BeOne", "beone@exemple.fr"], ["Client SQUIDUU", "squiduu@exemple.fr"], ["Client Loann", "loann@exemple.fr"]].map((a) => ({ label: a[0], pick: () => set({ email: a[1], loginError: "" }) })),
+      resend: () => set({ loginNote: "Un nouveau code vient d’être envoyé.", loginError: "" }),
+      backToEmail: () => set({ step: "email", code: "", loginError: "", loginNote: "" }),
+      loginError: st.loginError, hasError: !!st.loginError, loginNote: st.loginNote, hasNote: !!st.loginNote,
+      th: th, tabs: tabs, userEmail: st.email,
+      toggleMenu: () => set({ menu: st.menu ? "" : "open" }),
+      closeMenu: () => set({ menu: "" }),
+      menuOpen: !!st.menu, menuAsk: st.menu === "open", menuConfirm: st.menu === "confirm",
+      askLogout: () => set({ menu: "confirm" }),
+      cancelLogout: () => set({ menu: "open" }),
+      logout: () => { set({ screen: "login", step: "email", email: "", code: "", role: "", viewAs: "", menu: "", tab: "communaute", loginError: "", loginNote: "" }); if (this.props.onExit) this.props.onExit(); },
+      canSwitch: canSwitch, viewOptions: viewOptions,
+      isLucasUser: st.role === "lucas",
+      clientOptions: clients.map((c) => ({ id: c.id, name: c.name })), clientId: st.clientId,
+      setClient: (e) => set({ clientId: e.target.value }),
+      overText: tt[0], overStyle: tabId === "pro" ? "color: #E3B84F;" : "color: #8FB0BF;",
+      titleText: tt[1], subText: tt[2], hasSub: !!tt[2], titleStyle: tabId === "pro" ? "color: #E3B84F;" : "color: #E6F3F5;",
+      pageClients: tabId === "clients", pageReward: tabId === "communaute" || tabId === "pro",
+      pageTracker: tabId === "tracker", pageBoutique: tabId === "boutique", pageAcces: tabId === "acces",
+      pageOverview: tabId === "tracker" && subId === "overview", pageClippers: tabId === "tracker" && subId === "clippers",
+      pageClassement: tabId === "tracker" && subId === "classement", pageManagement: tabId === "tracker" && subId === "management",
+      flagAdminTools: flagAdminTools, subTabs: subTabs,
+      allKpis: allKpis, clientRows: clientRows,
+      blk: blk,
+      kpis: kpis, periods: periods, bars: bars, yLabels: yLabels, xLabels: xLabels,
+      proW: proShare + "%", comW: (100 - proShare) + "%", proPct: proShare + " %", comPct: (100 - proShare) + " %",
+      topClips: topClips, topClippers: topClippers, alerts: alerts,
+      typeChips: typeChips, clipperRows: clipperRows, d: d,
+      addStrike: () => flash("Maquette : strike simulé pour " + sel.name),
+      giveFeedback: () => flash("Maquette : retour simulé pour " + sel.name),
+      rankRows: rankRows, mgmtRows: mgmtRows,
+      importDiscord: () => flash("Maquette : import Discord simulé"),
+      addClipper: () => flash("Maquette : ajout de clipper simulé"),
+      shop: shop,
+      accessRows: accessRows, newEmail: st.newEmail, setNewEmail: (e) => set({ newEmail: e.target.value }),
+      newRole: st.newRole, setNewRole: (e) => set({ newRole: e.target.value }),
+      newClient: st.newClient, setNewClient: (e) => set({ newClient: e.target.value }),
+      addAccess: addAccess,
+      pageParams: tabId === "parametres",
+      pgSons: tabId === "parametres" && (st.pst || "sons") === "sons", pgChans: tabId === "parametres" && st.pst === "chaines", pgDc: tabId === "parametres" && st.pst === "discord",
+      paramTabs: [["sons", "Sons"], ["chaines", viewMode === "client" ? "Mes chaînes" : "Chaînes"], ["discord", "Discord"]].map((x) => ({ label: x[1], on: (st.pst || "sons") === x[0], style: toggle((st.pst || "sons") === x[0]), go: () => set({ pst: x[0] }) })),
+      sound: st.sound,
+      swStyle: st.sound ? "background: " + th.a + "; border-color: transparent;" : "background: #06182A;",
+      knobStyle: st.sound ? "left: 28px; background: #06182A;" : "left: 4px; background: #8FB0BF;",
+      toggleSound: () => { const v = !st.sound; set({ sound: v }); if (window.__nsfx) window.__nsfx.setOn(v, false); else { try { localStorage.setItem("son", v ? "1" : "0"); } catch (e) {} } },
+      vol: st.vol, volText: st.vol === 0 ? "Muet" : st.vol + " %", volDim: st.sound ? "" : "opacity: 0.5;",
+      onVol: (e) => {
+        const v = Math.max(0, Math.min(100, Math.round(+(e && e.target ? e.target.value : 0) || 0)));
+        set({ vol: v });
+        if (window.__nsfx) {
+          window.__nsfx.setSfxVol(v, false);
+          const now = Date.now();
+          if (!this._pvT || now - this._pvT > 260) { this._pvT = now; setTimeout(() => { try { window.__nsfx.play("tap"); } catch (x) {} }, 70); }
+        } else { try { localStorage.setItem("sfxvol", String(v)); } catch (x) {} }
+      },
+      musicOpts: musicOpts,
+      chanTitle: viewMode === "client" ? "Mes chaînes" : "Chaînes de " + clientName,
+      chanCount: myChans.length === 0 ? "Aucune chaîne" : myChans.length + (myChans.length > 1 ? " chaînes" : " chaîne"),
+      chanItems: chanItems, noChan: myChans.length === 0, connectBtns: connectBtns,
+      dcStatus: dcOn ? "Serveur de " + clientName + " connecté" : "Non connecté", dcColor: dcOn ? th.a : "#8FB0BF",
+      dcBtnLabel: dcOn ? "Déconnecter Discord" : "Se connecter avec Discord",
+      dcBtnStyle: dcOn ? "background: transparent; color: #E6F3F5; border: 1px solid #1F4666;" : th.btn, toggleDc: toggleDc,
+
+      toast: st.toast, hasToast: !!st.toast
+    };
+  }
+}
+</script>
+</body>
+</html>

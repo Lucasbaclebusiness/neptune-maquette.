@@ -1,0 +1,1284 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Neptune, parcours prospect</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#07111F}
+*{box-sizing:border-box}
+.dcn{font-family:'Instrument Sans',system-ui,sans-serif;color:#EFE6D2;background:#07111F;position:relative;min-height:900px;line-height:1.5}
+.dcn h1,.dcn h2,.dcn h3{font-family:'Fraunces',Georgia,serif;font-weight:700;margin:0;line-height:1.12;letter-spacing:-0.01em}
+.dcn p{margin:0}
+.wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+.narrow{max-width:640px;margin:0 auto;padding:0 24px}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 28px;border:0;border-radius:10px;background:#2FD4C0;color:#07111F;font:600 16px 'Instrument Sans',sans-serif;cursor:pointer;text-decoration:none}
+.btn:hover{background:#7BE6D6}
+.btn:disabled{background:#1F3A5A;color:#8FA6BE;cursor:not-allowed}
+.btn2{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0 24px;border:1px solid #3A587B;border-radius:10px;background:transparent;color:#EFE6D2;font:500 16px 'Instrument Sans',sans-serif;cursor:pointer}
+.btn2:hover{border-color:#2FD4C0}
+.back{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 14px 0 10px;border:1px solid #1F3A5A;border-radius:10px;background:#0C1D33;color:#EFE6D2;font:500 15px 'Instrument Sans',sans-serif;cursor:pointer}
+.back:hover{border-color:#2FD4C0}
+.card{background:rgba(7,17,31,.55);border:1px solid #1F3A5A;border-radius:16px;padding:28px}
+.choice{display:block;width:100%;text-align:left;background:#0C1D33;border:1px solid #1F3A5A;border-radius:14px;padding:20px 22px;color:#EFE6D2;font:400 16px 'Instrument Sans',sans-serif;cursor:pointer}
+.choice:hover{border-color:#2FD4C0}
+.choice.sel{border-color:#2FD4C0;background:#0F2A40}
+.chip{min-width:48px;min-height:48px;padding:0 10px;border:1px solid #1F3A5A;border-radius:10px;background:#0C1D33;color:#EFE6D2;font:600 17px 'Instrument Sans',sans-serif;cursor:pointer}
+.chip:hover{border-color:#2FD4C0}
+.chip.sel{background:#2FD4C0;color:#07111F;border-color:#2FD4C0}
+.inp{width:100%;min-height:52px;padding:0 16px;border:1px solid #2A4565;border-radius:10px;background:#07111F;color:#EFE6D2;font:400 17px 'Instrument Sans',sans-serif}
+.inp:focus,.btn:focus-visible,.btn2:focus-visible,.back:focus-visible,.choice:focus-visible,.chip:focus-visible{outline:2px solid #7BE6D6;outline-offset:2px}
+.inp::placeholder{color:#8FA6BE}
+textarea.inp{padding:14px 16px;min-height:96px;resize:vertical}
+.lab{display:block;font-weight:500;font-size:15px;color:#C9D7E6;margin:0 0 8px}
+.muted{color:#9DB2C8}
+.small{font-size:14px;color:#9DB2C8}
+.row{display:flex;gap:12px;flex-wrap:wrap}
+.stack{display:flex;flex-direction:column;gap:16px}
+.qtitle{font-size:34px}
+.pill{display:inline-block;padding:4px 12px;border-radius:999px;font-size:13px;font-weight:600}
+.pill.reco{background:#2FD4C0;color:#07111F}
+.pill.lux{background:#E3B75B;color:#241A05}
+.cell{padding:14px 18px;border-top:1px solid #1F3A5A}
+.good{color:#2FD4C0}
+.bad{color:#F08A7E}
+.gaug{position:relative;height:12px;border-radius:999px;display:flex;overflow:hidden}
+.zl{flex:1;background:#7A3B3B}.zo{flex:1;background:#2F8F7F}.zh{flex:1;background:#B28A2E}
+details{border-top:1px solid #1F3A5A;padding:18px 0}
+details summary{cursor:pointer;font-weight:600;font-size:18px}
+details p{margin-top:10px;color:#C9D7E6}
+.ph{border:1px dashed #3A587B;border-radius:16px;background:rgba(7,17,31,.45);aspect-ratio:9/14;display:flex;align-items:center;justify-content:center;text-align:center;padding:20px;color:#9DB2C8;font-size:15px}
+.slot{min-height:48px;padding:0 20px;border:1px solid #2A4565;border-radius:10px;background:#0C1D33;color:#EFE6D2;font:500 16px 'Instrument Sans',sans-serif;cursor:pointer}
+.slot:hover{border-color:#2FD4C0}
+.slot.sel{background:#2FD4C0;color:#07111F;border-color:#2FD4C0}
+.dock{position:fixed;left:16px;bottom:20px;z-index:50;display:inline-flex;align-items:center;gap:10px;min-height:48px;padding:0 18px;border:1px solid #2FD4C0;border-radius:999px;background:#0C1D33;color:#EFE6D2;font:600 15px 'Instrument Sans',sans-serif;cursor:pointer;box-shadow:0 6px 20px rgba(0,0,0,.45)}.dock:hover{background:#12304A}.dock:focus-visible{outline:2px solid #7BE6D6;outline-offset:2px}
+.fadein{animation:dcfade 1.8s ease both}@keyframes dcfade{from{opacity:0}to{opacity:1}}@media (prefers-reduced-motion:reduce){.fadein{animation:none}}
+.dcw1{animation:dcwv 14s linear infinite}.dcw2{animation:dcwv 20s linear infinite reverse}@keyframes dcwv{from{transform:translateX(0)}to{transform:translateX(200px)}}@media (prefers-reduced-motion:reduce){.dcw1,.dcw2{animation:none}}
+.water{background:linear-gradient(180deg,#126C68 0,#0F5560 260px,#0A3350 900px,#06182C 1700px,#030B16 100%)}
+.wband{overflow:hidden;line-height:0;background:#07111F}
+.wband svg{display:block;width:200%;height:130px;animation:dcb 40s linear infinite}
+@keyframes dcb{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.dcwi{animation:dcwind 9s ease-in-out infinite}
+@keyframes dcwind{0%{transform:translateX(-14px);opacity:0}30%{opacity:.6}100%{transform:translateX(22px);opacity:0}}
+@media (prefers-reduced-motion:reduce){.wband svg,.dcwi{animation:none}}
+.gold{color:#E3B75B}.ec{}.btn.gb{background:#E3B75B;color:#241A05}.btn.gb:hover{background:#F0C970}
+.infobtn{width:28px;height:28px;border-radius:50%;border:1px solid #2FD4C0;background:transparent;color:#2FD4C0;font:600 14px 'Instrument Sans',sans-serif;cursor:pointer}
+.linkbtn{min-height:44px;padding:0 12px;border:0;background:transparent;color:#9DB2C8;font:500 15px 'Instrument Sans',sans-serif;cursor:pointer;text-decoration:underline;text-underline-offset:4px}.linkbtn:hover{color:#EFE6D2}.linkbtn:focus-visible{outline:2px solid #7BE6D6;outline-offset:2px}
+.sfx-tog{position:fixed;right:16px;bottom:20px;z-index:80;width:44px;height:44px;padding:0;border-radius:50%;border:1px solid rgba(255,255,255,.2);background:rgba(8,20,34,.85);color:#cfe3ee;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.sfx-tog:hover{background:rgba(20,44,66,.95)}
+.sfx-tog:focus-visible{outline:2px solid #7BE6D6;outline-offset:2px}
+.sfx-tog[aria-pressed=false]{color:#7d93a3}
+.sfx-tog[aria-pressed=false] .sfx-on{display:none}
+.sfx-tog[aria-pressed=true] .sfx-off{display:none}
+.mus-tog{right:68px}
+.mus-tog[aria-pressed=false] .m-on{display:none}
+.mus-tog[aria-pressed=true] .m-off{display:none}
+.mus-tog[data-level="1"] .m-d2{display:none}
+</style>
+</helmet>
+
+<div class="dcn">
+
+<sc-if value="{{showHeader}}" hint-placeholder-val="{{ true }}">
+<header style="border-bottom:1px solid #12304A;background:#07111F">
+<div class="wrap" style="display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:76px">
+<div style="display:flex;align-items:center;gap:14px">
+<svg width="48" height="48" viewBox="0 0 400 400" role="img" aria-label="Logo Neptune">
+<defs><clipPath id="lg"><circle cx="200" cy="200" r="180"/></clipPath></defs>
+<circle cx="200" cy="200" r="180" fill="#0C2038"/>
+<g clip-path="url(#lg)"><path class="dcw1" d="M-400 268 q50 -16 100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 V420 H-400 Z" fill="#2FD4C0" fill-opacity="0.45"/><path class="dcw2" d="M-400 294 q50 -14 100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 V420 H-400 Z" fill="#2FD4C0" fill-opacity="0.75"/><path class="dcw1" d="M-400 326 q50 -12 100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 V420 H-400 Z" fill="#1A9C8C" fill-opacity="1"/></g>
+<circle cx="200" cy="200" r="180" fill="none" stroke="#2FD4C0" stroke-width="12"/>
+<path d="M146 246 V132 L254 246 V132" fill="none" stroke="#EFE6D2" stroke-width="30" stroke-linejoin="round" stroke-linecap="round"/>
+</svg>
+<span style="font-family:'Fraunces',serif;font-weight:700;font-size:22px;letter-spacing:0.18em">NEPTUNE</span>
+</div>
+<div style="display:flex;align-items:center;gap:8px">
+<sc-if value="{{showClipperLink}}" hint-placeholder-val="{{ true }}">
+<button type="button" class="linkbtn" onClick="{{goClipper}}">Espace clippers</button>
+</sc-if>
+<sc-if value="{{showBack}}" hint-placeholder-val="{{ true }}">
+<button type="button" class="back" onClick="{{goBack}}">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#EFE6D2" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+Retour
+</button>
+</sc-if>
+</div>
+</div>
+</header>
+</sc-if>
+
+<sc-if value="{{showDock}}" hint-placeholder-val="{{ true }}">
+<button type="button" class="dock" onClick="{{openClient}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2FD4C0" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>Se connecter</button>
+</sc-if>
+
+<!-- ============ LANDING ============ -->
+<sc-if value="{{s_landing}}" hint-placeholder-val="{{ true }}">
+<section style="padding:88px 0 72px;background:radial-gradient(900px 420px at 80% 10%,rgba(47,212,192,.10) 0%,transparent 70%)">
+<div class="wrap" style="display:flex;gap:56px;align-items:center;flex-wrap:wrap">
+<div style="flex:1 1 440px;display:flex;flex-direction:column;gap:24px">
+<h1 style="font-size:58px">Inonde les réseaux avec le clipping.</h1>
+<p style="font-size:20px;color:#C9D7E6;max-width:520px">Ta communauté clippe tes vidéos, Neptune s'occupe de tout. Toi, tu suis chaque clip, vue après vue.</p>
+<div class="row" style="align-items:center;gap:16px">
+<button type="button" class="btn" onClick="{{startFlow}}">Je veux rejoindre l'équipage</button>
+<a class="btn2" href="#methode" style="text-decoration:none">Comment ça marche</a>
+</div>
+</div>
+<div style="flex:1 1 320px;display:flex;justify-content:center">
+<svg width="100%" style="max-width:400px" viewBox="0 0 400 400" role="img" aria-label="Logo Neptune">
+<defs><clipPath id="hg"><circle cx="200" cy="200" r="180"/></clipPath></defs>
+<circle cx="200" cy="200" r="180" fill="#0C2038"/>
+<g clip-path="url(#hg)"><path class="dcw1" d="M-400 268 q50 -16 100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 V420 H-400 Z" fill="#2FD4C0" fill-opacity="0.45"/><path class="dcw2" d="M-400 294 q50 -14 100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 V420 H-400 Z" fill="#2FD4C0" fill-opacity="0.75"/><path class="dcw1" d="M-400 326 q50 -12 100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 V420 H-400 Z" fill="#1A9C8C" fill-opacity="1"/></g>
+<circle cx="200" cy="200" r="180" fill="none" stroke="#2FD4C0" stroke-width="12"/>
+<path d="M146 246 V132 L254 246 V132" fill="none" stroke="#EFE6D2" stroke-width="30" stroke-linejoin="round" stroke-linecap="round"/>
+</svg>
+</div>
+</div>
+</section>
+<div class="wband"><svg viewBox="0 0 2400 130" preserveAspectRatio="none" aria-hidden="true"><path d="M0 76 q50 -22 100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 t100 0 V130 H0 Z" fill="#126C68" fill-opacity="1"/></svg></div>
+<div class="water">
+<section id="methode" style="padding:72px 0">
+<div class="wrap stack" style="gap:36px">
+<h2 style="font-size:38px">La méthode Neptune</h2>
+<div class="row" style="gap:20px;align-items:stretch">
+<div class="card" style="flex:1 1 280px;border-color:#2FD4C0"><h3 style="font-size:22px;margin-bottom:10px">Ta communauté clippe</h3><p class="muted">Tes fans transforment tes vidéos longues et tes lives en clips courts.</p><div style="display:flex;align-items:flex-start;gap:10px;margin-top:16px;font-size:15px;font-weight:500;color:#E3B75B"><span aria-hidden="true" style="display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;width:20px;height:20px;border:1px solid #E3B75B;border-radius:50%;font-size:14px;font-weight:600;line-height:1">+</span><span>Des clippers spécialisés pour booster tes vues</span></div></div>
+<div class="card" style="flex:1 1 280px;border-color:#2FD4C0"><h3 style="font-size:22px;margin-bottom:10px">Neptune s'occupe de tout</h3><p class="muted">Récompenses, suivi des clippers et des clips, du début à la fin.</p></div>
+<div class="card" style="flex:1 1 280px;border-color:#2FD4C0"><h3 style="font-size:22px;margin-bottom:10px">Tu suis chaque résultat</h3><p class="muted">Un seul tableau de bord pour voir chaque clip et chaque clipper.</p></div>
+</div>
+<div><button type="button" class="btn" onClick="{{startFlow}}">Je veux rejoindre l'équipage</button></div>
+</div>
+</section>
+
+<section style="padding:72px 0;background:transparent">
+<div class="wrap stack" style="gap:36px">
+<h2 id="programmes" style="font-size:38px">Deux programmes</h2>
+<div class="row" style="gap:20px;align-items:stretch">
+<div class="card" style="flex:1 1 360px;display:flex;flex-direction:column;gap:12px">
+<h3 style="font-size:28px">Roi des mers</h3>
+<p class="muted">Pour les créateurs dont la communauté clippe déjà ou ne demande qu'à le faire.</p>
+<p>Ta communauté devient une machine à vues, avec un suivi 1-1 des clippers et une vue totale sur tous les clips.</p>
+</div>
+<div class="card" style="flex:1 1 360px;display:flex;flex-direction:column;gap:12px;border:2px solid #E3B75B;background:rgba(227,183,91,.06);box-shadow:0 0 32px rgba(227,183,91,.12)">
+<div><span class="pill lux">Premium</span></div>
+<h3 style="font-size:28px;color:#E3B75B">Empereur des mers</h3>
+<p class="muted">Pour les créateurs qui veulent des vues assurées, avec des clippers qualifiés par Neptune en renfort.</p>
+<ul style="margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px">
+<li><span class="gold" aria-hidden="true">&#10003;</span> Tout le programme Roi des mers</li>
+<li><span class="gold" aria-hidden="true">&#10003;</span> Des clippers qualifiés par Neptune en renfort</li>
+<li><span class="gold" aria-hidden="true">&#10003;</span> Une garantie de vues</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+
+<section style="padding:72px 0">
+<div class="wrap stack" style="gap:36px">
+<h2 style="font-size:38px">Ils en parlent</h2>
+<div class="row" style="gap:20px">
+<div class="ph" style="flex:1 1 220px;max-width:320px">Témoignage vidéo à venir</div>
+<div class="ph" style="flex:1 1 220px;max-width:320px">Témoignage vidéo à venir</div>
+<div class="ph" style="flex:1 1 220px;max-width:320px">Témoignage vidéo à venir</div>
+</div>
+</div>
+</section>
+
+<section style="padding:72px 0;background:transparent">
+<div class="narrow stack" style="gap:8px">
+<h2 style="font-size:38px;margin-bottom:16px">Questions fréquentes</h2>
+<details><summary>C'est quoi, le clipping&nbsp;?</summary><p>Ta communauté découpe les meilleurs moments de tes vidéos longues et de tes lives en clips de 15 à 60 secondes, puis les poste sur TikTok, Instagram Reels et YouTube Shorts. Chaque clip renvoie du public vers ta chaîne, et tu récompenses les clippers selon les vues qu'ils génèrent.</p></details>
+<details><summary>Combien ça coûte&nbsp;?</summary><p>Le tarif est présenté pendant l'appel, une fois qu'on connaît ton profil.</p></details>
+<details><summary>Que se passe-t-il après ma réservation&nbsp;?</summary><p>Tu reçois la confirmation de ton créneau d'appel. On prépare ton dossier de notre côté et on en parle ensemble pendant l'appel.</p></details>
+</div>
+</section>
+
+<section style="padding:80px 0;text-align:center">
+<div class="narrow stack" style="align-items:center;gap:24px">
+<h2 style="font-size:40px">Prêt à faire clipper ta communauté&nbsp;?</h2>
+<button type="button" class="btn" onClick="{{startFlow}}">Je veux rejoindre l'équipage</button>
+</div>
+</section>
+<footer style="padding:8px 0 56px;text-align:center"><button type="button" class="linkbtn" onClick="{{goClipper}}">Tu es clipper&nbsp;? Rejoins l'espace clippers</button></footer>
+</div>
+</sc-if>
+
+<!-- ============ INTRO ============ -->
+<sc-if value="{{s_intro}}" hint-placeholder-val="{{ false }}">
+<section style="padding:140px 0">
+<div class="narrow stack" style="align-items:center;text-align:center;gap:40px;min-height:300px;justify-content:center">
+<h1 class="fadein" style="font-size:44px;min-height:106px">{{typed}}</h1>
+<button type="button" class="btn" onClick="{{startQuestions}}">Commencer</button>
+</div>
+</section>
+</sc-if>
+
+<!-- ============ QUESTIONS ============ -->
+<sc-if value="{{s_questions}}" hint-placeholder-val="{{ false }}">
+<section style="padding:56px 0 96px">
+<div class="narrow stack" style="gap:32px">
+<div style="height:6px;border-radius:999px;background:#12304A"><div style="height:6px;border-radius:999px;background:#2FD4C0;width:{{progress}}"></div></div>
+<p class="small">Question {{qNum}} sur 7</p>
+
+<sc-if value="{{q_name}}" hint-placeholder-val="{{ true }}">
+<div class="stack" style="gap:24px"><h2 class="qtitle">Comment tu t'appelles&nbsp;?</h2>
+<input class="inp" type="text" aria-label="Ton prénom" placeholder="Ton prénom" value="{{name}}" onInput="{{onName}}"></div>
+</sc-if>
+
+<sc-if value="{{q_age}}" hint-placeholder-val="{{ false }}">
+<div class="stack" style="gap:24px"><h2 class="qtitle">Tu as quel âge&nbsp;?</h2>
+<input class="inp" type="number" inputmode="numeric" aria-label="Ton âge" placeholder="Ton âge" value="{{age}}" onInput="{{onAge}}"></div>
+</sc-if>
+
+<sc-if value="{{q_goal}}" hint-placeholder-val="{{ false }}">
+<div class="stack" style="gap:24px"><h2 class="qtitle">Quel est ton objectif principal avec le clipping&nbsp;?</h2>
+<button type="button" class="{{goalVuesCls}}" onClick="{{pickVues}}"><strong style="font-size:20px">Faire plus de vues</strong><br><span class="muted">YouTuber, streamer</span></button>
+<button type="button" class="{{goalVentesCls}}" onClick="{{pickVentes}}"><strong style="font-size:20px">Faire plus de ventes</strong><br><span class="muted">Entrepreneur, infopreneur</span></button></div>
+</sc-if>
+
+<sc-if value="{{q_links}}" hint-placeholder-val="{{ false }}">
+<div class="stack" style="gap:24px"><h2 class="qtitle">Les liens de tes comptes sur les réseaux</h2>
+<div class="stack" style="gap:12px"><span class="lab">YouTube</span>
+<sc-for list="{{ytList}}" as="l" hint-placeholder-count="1"><input class="inp" type="url" aria-label="Lien YouTube" placeholder="https://youtube.com/@…" value="{{l.v}}" onInput="{{l.set}}"></sc-for>
+<div><button type="button" class="btn2" onClick="{{addYt}}">Ajouter un compte YouTube</button></div></div>
+<div class="stack" style="gap:12px"><span class="lab">TikTok</span>
+<sc-for list="{{ttList}}" as="l" hint-placeholder-count="1"><input class="inp" type="url" aria-label="Lien TikTok" placeholder="https://tiktok.com/@…" value="{{l.v}}" onInput="{{l.set}}"></sc-for>
+<div><button type="button" class="btn2" onClick="{{addTt}}">Ajouter un compte TikTok</button></div></div>
+<div class="stack" style="gap:12px"><span class="lab">Instagram</span>
+<sc-for list="{{igList}}" as="l" hint-placeholder-count="1"><input class="inp" type="url" aria-label="Lien Instagram" placeholder="https://instagram.com/…" value="{{l.v}}" onInput="{{l.set}}"></sc-for>
+<div><button type="button" class="btn2" onClick="{{addIg}}">Ajouter un compte Instagram</button></div></div></div>
+</sc-if>
+
+<sc-if value="{{q_ca}}" hint-placeholder-val="{{ false }}">
+<div class="stack" style="gap:24px"><h2 class="qtitle">Ton chiffre d'affaires par mois</h2>
+<div style="display:flex;align-items:center;gap:12px"><input class="inp" type="number" inputmode="numeric" aria-label="Chiffre d'affaires mensuel en euros" placeholder="0" value="{{ca}}" onInput="{{onCa}}"><span style="font-size:22px">€</span></div></div>
+</sc-if>
+
+<sc-if value="{{q_vues}}" hint-placeholder-val="{{ false }}">
+<div class="stack" style="gap:24px"><h2 class="qtitle">Tes vues par mois</h2>
+<div style="display:flex;align-items:center;gap:12px"><input class="inp" type="number" inputmode="numeric" aria-label="Vues par mois" placeholder="0" value="{{vues}}" onInput="{{onVues}}"><span style="font-size:18px;white-space:nowrap" class="muted">vues</span></div></div>
+</sc-if>
+
+<sc-if value="{{q_eng}}" hint-placeholder-val="{{ false }}">
+<div class="stack" style="gap:24px"><h2 class="qtitle">Le niveau d'engagement de ta communauté</h2>
+<div class="row" role="group" aria-label="Note de 1 à 10"><sc-for list="{{engList}}" as="c" hint-placeholder-count="10"><button type="button" class="{{c.cls}}" onClick="{{c.pick}}">{{c.n}}</button></sc-for></div>
+<div style="display:flex;justify-content:space-between" class="small"><span>Peu engagée</span><span>Très engagée</span></div></div>
+</sc-if>
+
+<sc-if value="{{q_clip}}" hint-placeholder-val="{{ false }}">
+<div class="stack" style="gap:24px"><h2 class="qtitle">À quel point ton contenu est clipable&nbsp;?</h2>
+<div class="row" role="group" aria-label="Note de 1 à 10"><sc-for list="{{clipList}}" as="c" hint-placeholder-count="10"><button type="button" class="{{c.cls}}" onClick="{{c.pick}}">{{c.n}}</button></sc-for></div>
+<div style="display:flex;justify-content:space-between" class="small"><span>Peu clipable</span><span>Très clipable</span></div></div>
+</sc-if>
+
+<div class="row" style="justify-content:space-between;align-items:center">
+<span class="small">{{qHint}}</span>
+<button type="button" class="btn" disabled="{{noNext}}" onClick="{{nextQ}}">Continuer</button>
+</div>
+</div>
+</section>
+</sc-if>
+
+<!-- ============ OFFRES ============ -->
+<sc-if value="{{s_offers}}" hint-placeholder-val="{{ false }}">
+<section style="padding:56px 0 96px">
+<div class="wrap stack" style="gap:32px">
+<div class="stack" style="gap:10px"><h2 style="font-size:38px">{{offersTitle}}</h2>
+<p class="muted" style="max-width:620px">Voici nos deux programmes. On a mis en avant celui qui correspond le mieux à ce que tu nous as dit.</p></div>
+<div style="display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr) minmax(0,1fr);background:#0C1D33;border:1px solid #1F3A5A;border-radius:16px;position:relative">
+<div style="padding:28px 18px;display:flex;align-items:flex-end"><span class="muted">Ce qui est inclus</span></div>
+<div style="padding:28px 18px;display:flex;flex-direction:column;gap:10px;align-items:flex-start;{{roiHead}}">
+<sc-if value="{{recoRoi}}" hint-placeholder-val="{{ false }}"><span class="pill reco">Recommandé pour toi</span></sc-if>
+<h3 style="font-size:24px">Roi des mers</h3></div>
+<div style="padding:28px 18px;display:flex;flex-direction:column;gap:10px;align-items:flex-start;{{empHead}}">
+<span class="pill lux">Premium</span>
+<sc-if value="{{recoEmp}}" hint-placeholder-val="{{ true }}"><span class="pill reco">Recommandé pour toi</span></sc-if>
+<h3 style="font-size:24px;color:#E3B75B">Empereur des mers</h3></div>
+<sc-for list="{{rows}}" as="r" hint-placeholder-count="6">
+<div class="cell">{{r.label}}</div>
+<div class="cell"><sc-if value="{{r.roiYes}}" hint-placeholder-val="{{ true }}"><span class="good" aria-label="Inclus">&#10003;</span></sc-if><sc-if value="{{r.roiNo}}" hint-placeholder-val="{{ false }}"><span class="bad" aria-label="Non inclus">&#10007;</span></sc-if> <span class="small">{{r.roiNote}}</span></div>
+<div class="{{r.empCls}}"><sc-if value="{{r.empYes}}" hint-placeholder-val="{{ true }}"><span class="gold" aria-label="Inclus">&#10003;</span></sc-if><sc-if value="{{r.empNo}}" hint-placeholder-val="{{ false }}"><span class="bad" aria-label="Non inclus">&#10007;</span></sc-if> <span class="small">{{r.empNote}}</span></div>
+</sc-for>
+<div style="position:absolute;top:-1px;bottom:-1px;right:-1px;width:28.5714%;border:2px solid #E3B75B;border-radius:17px;background:rgba(227,183,91,.05);pointer-events:none" aria-hidden="true"></div>
+</div>
+<div class="row" style="justify-content:flex-end;gap:16px">
+<button type="button" class="btn2" onClick="{{chooseRoi}}">Choisir Roi des mers</button>
+<button type="button" class="btn gb" onClick="{{chooseEmp}}">Choisir Empereur des mers</button>
+</div>
+</div>
+</section>
+</sc-if>
+
+<!-- ============ COMMUNAUTE ============ -->
+<sc-if value="{{s_comm}}" hint-placeholder-val="{{ false }}">
+<section style="padding:56px 0 96px">
+<div class="narrow stack" style="gap:28px">
+<h2 class="qtitle">Comment veux-tu rémunérer ta communauté&nbsp;?</h2>
+<button type="button" class="choice" onClick="{{commProduit}}"><strong style="font-size:20px">Avec mon produit</strong><br><span class="muted">Tes clippers gagnent un produit ou un avantage que tu proposes.</span></button>
+<button type="button" class="choice" onClick="{{commArgent}}"><strong style="font-size:20px">Avec de l'argent</strong><br><span class="muted">Tes clippers sont payés selon les vues qu'ils génèrent.</span></button>
+</div>
+</section>
+</sc-if>
+
+<!-- ============ A-T-IL UN PRODUIT ============ -->
+<sc-if value="{{s_hasProd}}" hint-placeholder-val="{{ false }}">
+<section style="padding:56px 0 96px">
+<div class="narrow stack" style="gap:28px">
+<h2 class="qtitle">As-tu un produit à offrir&nbsp;?</h2>
+<button type="button" class="choice" onClick="{{hasYes}}"><strong style="font-size:20px">Oui, j'ai un produit</strong></button>
+<button type="button" class="choice" onClick="{{hasMaybe}}"><strong style="font-size:20px">Pas de produit, mais je pense pouvoir donner quelque chose à ma communauté</strong></button>
+<button type="button" class="choice" onClick="{{hasNo}}"><strong style="font-size:20px">Je n'ai pas de produit</strong></button>
+</div>
+</section>
+</sc-if>
+
+<!-- ============ PAS DE PRODUIT ============ -->
+<sc-if value="{{s_noProd}}" hint-placeholder-val="{{ false }}">
+<section style="padding:56px 0 96px">
+<div class="narrow stack" style="gap:28px">
+<h2 class="qtitle">Quelques idées de choses à offrir</h2>
+<div class="card stack" style="gap:12px">
+<p>Une formation ou un accompagnement, si tu en proposes.</p>
+<p>Un partenariat avec des marques : cartes cadeaux ou réductions.</p>
+<p>Des avantages en jeu si tu possèdes un jeu vidéo ou une expérience, par exemple sur Roblox.</p>
+</div>
+<button type="button" class="choice" onClick="{{foundIdea}}"><strong style="font-size:20px">J'ai trouvé quoi donner</strong></button>
+<button type="button" class="choice" onClick="{{preferMoney}}"><strong style="font-size:20px">Je préfère rémunérer avec de l'argent</strong></button>
+</div>
+</section>
+</sc-if>
+
+<!-- ============ DETAILS PRODUIT ============ -->
+<sc-if value="{{s_prod}}" hint-placeholder-val="{{ false }}">
+<section style="padding:56px 0 96px">
+<div class="narrow stack" style="gap:24px">
+<h2 class="qtitle">Ton produit</h2>
+<div><label class="lab" for="pn">Nom du produit</label><input id="pn" class="inp" type="text" placeholder="Nom" value="{{pName}}" onInput="{{onPName}}"></div>
+<div><label class="lab" for="pw">Image ou site web (facultatif)</label><input id="pw" class="inp" type="url" placeholder="https://" value="{{pSite}}" onInput="{{onPSite}}"></div>
+<div><label class="lab" for="pd">Description</label><textarea id="pd" class="inp" placeholder="Décris ton produit en quelques lignes" onInput="{{onPDesc}}">{{pDesc}}</textarea></div>
+<div><label class="lab" for="pp">Valeur du produit, en euros</label><input id="pp" class="inp" type="number" inputmode="decimal" placeholder="30" value="{{pPrice}}" onInput="{{onPPrice}}"></div>
+<div><span class="lab">Le produit peut-il être obtenu plusieurs fois&nbsp;?</span>
+<div class="row"><button type="button" class="{{reYesCls}}" onClick="{{reYes}}" style="padding:0 20px">Oui</button><button type="button" class="{{reNoCls}}" onClick="{{reNo}}" style="padding:0 20px">Non</button></div></div>
+<div><label class="lab" for="pv">À combien de vues générées le débloquer&nbsp;?</label><input id="pv" class="inp" type="number" inputmode="numeric" placeholder="150000" value="{{pViews}}" onInput="{{onPViews}}"></div>
+<sc-if value="{{prodGauge}}" hint-placeholder-val="{{ false }}">
+<div class="card stack" style="gap:14px">
+<p>Repère conseillé&nbsp;: environ <strong>{{prodIdeal}}</strong> vues.</p>
+<div class="gaug" role="img" aria-label="Indicateur"><div class="zl"></div><div class="zo"></div><div class="zh"></div></div>
+<div style="position:relative;height:14px"><div style="position:absolute;left:{{prodPos}};top:0;width:14px;height:14px;margin-left:-7px;border-radius:50%;background:#EFE6D2"></div></div>
+<p><strong class="{{prodCls}}">{{prodLabel}}</strong> <span class="muted">{{prodMsg}}</span></p>
+</div>
+</sc-if>
+<div class="row" style="justify-content:flex-end"><button type="button" class="btn" disabled="{{noProdNext}}" onClick="{{prodNext}}">Continuer</button></div>
+</div>
+</section>
+</sc-if>
+
+<!-- ============ CLIPPERS PRO ============ -->
+<sc-if value="{{s_pros}}" hint-placeholder-val="{{ false }}">
+<section style="padding:56px 0 96px">
+<div class="narrow stack" style="gap:28px">
+<h2 class="qtitle">Comment rémunérer les clippers qualifiés&nbsp;?</h2>
+<p class="muted" style="font-size:18px">Avec l'Empereur des mers, des clippers qualifiés par Neptune viennent en renfort de ta communauté. Eux sont rémunérés en argent.</p>
+<div class="row" style="justify-content:flex-end"><button type="button" class="btn" onClick="{{prosNext}}">Continuer</button></div>
+</div>
+</section>
+</sc-if>
+
+<!-- ============ ARGENT ============ -->
+<sc-if value="{{s_argent}}" hint-placeholder-val="{{ false }}">
+<section style="padding:56px 0 96px">
+<div class="narrow stack" style="gap:28px">
+<h2 class="qtitle">{{argentTitle}}</h2>
+<button type="button" class="choice" onClick="{{pickRpm}}"><strong style="font-size:20px">Rémunérer les clippers aux vues</strong><br><span class="muted">Tu paies pour les résultats, pas de surprise.</span></button>
+<button type="button" class="choice" onClick="{{pickCag}}"><strong style="font-size:20px">Rémunérer avec une cagnotte</strong><br><span class="muted">Tu sais exactement combien tu vas dépenser, pas de mauvaises surprises.</span></button>
+<sc-if value="{{isEmp}}" hint-placeholder-val="{{ false }}"><p class="small">Les clippers qualifiés de Neptune sont rémunérés de la même façon.</p></sc-if>
+</div>
+</section>
+</sc-if>
+
+<!-- ============ RPM ============ -->
+<sc-if value="{{s_rpm}}" hint-placeholder-val="{{ false }}">
+<section style="padding:56px 0 96px">
+<div class="narrow stack" style="gap:24px">
+<h2 class="qtitle">Combien payer pour 1 000 vues&nbsp;?</h2>
+<div><span class="lab">Fréquence de paiement</span>
+<div class="row"><button type="button" class="{{rpmWeekCls}}" onClick="{{rpmWeek}}" style="padding:0 20px">Chaque semaine</button><button type="button" class="{{rpmMonthCls}}" onClick="{{rpmMonth}}" style="padding:0 20px">Chaque mois</button></div></div>
+<div><label class="lab" for="rp">Montant pour 1 000 vues, en euros</label><input id="rp" class="inp" type="number" inputmode="decimal" placeholder="0,10" value="{{rpm}}" onInput="{{onRpm}}"></div>
+<div><label class="lab" for="pl">Plafond de vues par période (facultatif)</label><input id="pl" class="inp" type="number" inputmode="numeric" placeholder="Aucun plafond" value="{{plafond}}" onInput="{{onPlafond}}">
+<sc-if value="{{plafondWarn}}" hint-placeholder-val="{{ false }}"><p class="small" style="margin-top:8px;color:#2FD4C0">Avec un plafond, la garantie de remboursement de l'Empereur des mers ne s'applique plus.</p></sc-if></div>
+<sc-if value="{{rpmGauge}}" hint-placeholder-val="{{ false }}">
+<div class="card stack" style="gap:14px">
+<p>Repère conseillé&nbsp;: environ <strong>{{rpmIdeal}} €</strong> pour 1 000 vues.</p>
+<div class="gaug" role="img" aria-label="Indicateur"><div class="zl"></div><div class="zo"></div><div class="zh"></div></div>
+<div style="position:relative;height:14px"><div style="position:absolute;left:{{rpmPos}};top:0;width:14px;height:14px;margin-left:-7px;border-radius:50%;background:#EFE6D2"></div></div>
+<div style="display:flex;gap:10px;align-items:flex-start"><p><strong class="{{rpmCls}}">{{rpmLabel}}</strong> <span class="muted">{{rpmMsg}}</span></p>
+<sc-if value="{{rpmInfoBtn}}" hint-placeholder-val="{{ false }}"><button type="button" class="infobtn" aria-label="Plus d'informations" onClick="{{toggleInfo}}">i</button></sc-if></div>
+<sc-if value="{{infoOpen}}" hint-placeholder-val="{{ false }}"><p class="small" style="color:#2FD4C0">{{infoText}}</p></sc-if>
+</div>
+</sc-if>
+<div class="row" style="justify-content:flex-end"><button type="button" class="btn" disabled="{{noRpmNext}}" onClick="{{toLogin}}">Continuer</button></div>
+</div>
+</section>
+</sc-if>
+
+<!-- ============ CAGNOTTE ============ -->
+<sc-if value="{{s_cag}}" hint-placeholder-val="{{ false }}">
+<section style="padding:56px 0 96px">
+<div class="narrow stack" style="gap:24px">
+<h2 class="qtitle">Quelle cagnotte veux-tu remettre&nbsp;?</h2>
+<div><span class="lab">Fréquence de la cagnotte</span>
+<div class="row"><button type="button" class="{{cagWeekCls}}" onClick="{{cagWeek}}" style="padding:0 20px">Par semaine</button><button type="button" class="{{cagMonthCls}}" onClick="{{cagMonth}}" style="padding:0 20px">Par mois</button></div></div>
+<div><label class="lab" for="cv">Vues de tes vidéos longues et lives par mois</label><input id="cv" class="inp" type="number" inputmode="numeric" placeholder="500000" value="{{cagViews}}" onInput="{{onCagViews}}"></div>
+<div><label class="lab" for="cm">Montant de la cagnotte, en euros</label><input id="cm" class="inp" type="number" inputmode="decimal" placeholder="500" value="{{cag}}" onInput="{{onCag}}"></div>
+<sc-if value="{{cagGauge}}" hint-placeholder-val="{{ false }}">
+<div class="card stack" style="gap:14px">
+<p>Repère conseillé&nbsp;: environ <strong>{{cagIdeal}} €</strong> {{cagPer}}.</p>
+<div class="gaug" role="img" aria-label="Indicateur"><div class="zl"></div><div class="zo"></div><div class="zh"></div></div>
+<div style="position:relative;height:14px"><div style="position:absolute;left:{{cagPos}};top:0;width:14px;height:14px;margin-left:-7px;border-radius:50%;background:#EFE6D2"></div></div>
+<div style="display:flex;gap:10px;align-items:flex-start"><p><strong class="{{cagCls}}">{{cagLabel}}</strong> <span class="muted">{{cagMsg}}</span></p>
+<sc-if value="{{cagInfoBtn}}" hint-placeholder-val="{{ false }}"><button type="button" class="infobtn" aria-label="Plus d'informations" onClick="{{toggleInfo}}">i</button></sc-if></div>
+<sc-if value="{{infoOpen}}" hint-placeholder-val="{{ false }}"><p class="small" style="color:#2FD4C0">{{infoText}}</p></sc-if>
+</div>
+</sc-if>
+<div class="row" style="justify-content:flex-end"><button type="button" class="btn" disabled="{{noCagNext}}" onClick="{{toLogin}}">Continuer</button></div>
+</div>
+</section>
+</sc-if>
+
+<!-- ============ ESPACE CLIENT (connexion + tracker) ============ -->
+<sc-if value="{{s_client}}" hint-placeholder-val="{{ false }}">
+<dc-import name="Espace" on-exit="{{goHome}}" hint-size="100%,1000px"></dc-import>
+</sc-if>
+
+<!-- ============ PAGE CLIPPER ============ -->
+<sc-if value="{{s_clipper}}" hint-placeholder-val="{{ false }}">
+<dc-import name="Clipper" on-home="{{goHome}}" hint-size="100%,900px"></dc-import>
+</sc-if>
+
+<!-- ============ CONNEXION ============ -->
+<sc-if value="{{s_login}}" hint-placeholder-val="{{ false }}">
+<section style="padding:64px 0 96px">
+<div class="narrow stack" style="gap:24px">
+<h2 class="qtitle">Connecte-toi pour réserver ton appel</h2>
+<p class="muted" style="font-size:18px">On t'envoie un code par email. Pas de mot de passe à créer.</p>
+<sc-if value="{{loginStep1}}" hint-placeholder-val="{{ true }}">
+<div class="stack" style="gap:20px">
+<div><label class="lab" for="em">Ton email</label><input id="em" class="inp" type="email" placeholder="toi@exemple.com" value="{{email}}" onInput="{{onEmail}}"></div>
+<label style="display:flex;gap:12px;align-items:flex-start;cursor:pointer"><input type="checkbox" checked="{{consent}}" onChange="{{onConsent}}" style="width:22px;height:22px;margin-top:2px"><span class="small" style="color:#C9D7E6">J'accepte que Neptune utilise mon email et mes réponses pour préparer notre appel.</span></label>
+<div class="row" style="justify-content:flex-end"><button type="button" class="btn" disabled="{{noSend}}" onClick="{{sendCode}}">Recevoir mon code</button></div>
+</div>
+</sc-if>
+<sc-if value="{{loginStep2}}" hint-placeholder-val="{{ false }}">
+<div class="stack" style="gap:20px">
+<div><label class="lab" for="cd">Code reçu par email</label><input id="cd" class="inp" type="text" inputmode="numeric" maxlength="6" placeholder="6 chiffres" value="{{code}}" onInput="{{onCode}}"><p class="small" style="margin-top:8px">Maquette&nbsp;: n'importe quel code à 6 chiffres fonctionne.</p></div>
+<div class="row" style="justify-content:flex-end"><button type="button" class="btn" disabled="{{noVerify}}" onClick="{{verify}}">Valider</button></div>
+</div>
+</sc-if>
+</div>
+</section>
+</sc-if>
+
+<!-- ============ CRENEAUX ============ -->
+<sc-if value="{{s_slots}}" hint-placeholder-val="{{ false }}">
+<section style="padding:56px 0 96px">
+<div class="narrow stack" style="gap:24px">
+<h2 class="qtitle">Choisis ton créneau</h2>
+<p class="muted" style="font-size:18px">Appel en visio avec Lucas, heure de Paris.</p>
+<div class="row" role="group" aria-label="Jour"><sc-for list="{{days}}" as="d" hint-placeholder-count="3"><button type="button" class="{{d.cls}}" onClick="{{d.pick}}">{{d.label}}</button></sc-for></div>
+<div class="row" role="group" aria-label="Heure"><sc-for list="{{times}}" as="t" hint-placeholder-count="4"><button type="button" class="{{t.cls}}" onClick="{{t.pick}}">{{t.label}}</button></sc-for></div>
+<p class="small">Maquette&nbsp;: ces créneaux sont fictifs. Le vrai agenda cal.com sera branché ensuite.</p>
+<div class="row" style="justify-content:flex-end"><button type="button" class="btn" disabled="{{noSlot}}" onClick="{{confirmSlot}}">Confirmer le créneau</button></div>
+</div>
+</section>
+</sc-if>
+
+<!-- ============ CONFIRMATION ============ -->
+<sc-if value="{{s_done}}" hint-placeholder-val="{{ false }}">
+<section style="padding:120px 0">
+<div class="narrow stack" style="align-items:center;text-align:center;gap:24px">
+<svg width="64" height="64" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="30" fill="none" stroke="#2FD4C0" stroke-width="3"/><path d="M19 33l9 9 18-20" fill="none" stroke="#2FD4C0" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+<h1 style="font-size:44px">Rendez-vous confirmé</h1>
+<p style="font-size:22px">{{slotText}}</p>
+<p class="muted" style="font-size:18px;max-width:480px">Rien à préparer avant l'appel. On a déjà tes réponses et ton programme, on en parle ensemble.</p>
+</div>
+</section>
+</sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":900}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = {
+      screen: 'landing', hist: [], q: 0, typed: '',
+      name: '', age: '', goal: '', yt: [''], tt: [''], ig: [''],
+      ca: '', vues: '', eng: 0, clip: 0,
+      offer: '', pFlow: 'communauté', pName: '', pSite: '', pDesc: '', pPrice: '', pViews: '', reob: '',
+      rpmPeriod: 'mensuel', rpm: '', plafond: '', cagPeriod: 'mensuel', cagViews: '', cag: '',
+      info: false, email: '', consent: false, sent: false, code: '', day: -1, time: -1, confirmed: false
+    };
+  }
+  componentWillUnmount() { if (this._t) clearInterval(this._t); }
+
+  nav(screen, q) {
+    const s = this.state;
+    const hist = s.hist.concat([{ screen: s.screen, q: s.q }]);
+    this.setState({ screen: screen, q: q == null ? 0 : q, hist: hist, info: false });
+    this.sfx('swish');
+    if (this._t) { clearInterval(this._t); this._t = null; }
+    if (screen === 'intro') this.startTyping();
+    if (typeof window !== 'undefined') { try { window.scrollTo(0, 0); } catch (e) {} }
+  }
+  startTyping() {
+    this.setState({ typed: 'Nous ne te connaissons pas encore, personnalisons ton expérience' });
+  }
+  goBack() {
+    const s = this.state;
+    if (!s.hist.length) return;
+    const last = s.hist[s.hist.length - 1];
+    if (this._t) { clearInterval(this._t); this._t = null; }
+    this.setState({ screen: last.screen, q: last.q, hist: s.hist.slice(0, -1), info: false });
+    this.sfx('swishBack');
+  }
+  num(v) { const n = parseFloat(String(v).replace(',', '.')); return isNaN(n) ? 0 : n; }
+  fr(n, d) { return Number(n).toLocaleString('fr-FR', { maximumFractionDigits: d == null ? 0 : d, minimumFractionDigits: d == null ? 0 : d }); }
+  multOf(n) {
+    const t = { 1: 5, 2: 4, 3: 3, 4: 2, 5: 1.5, 6: 1, 7: 0.8, 8: 0.6, 9: 0.4, 10: 0.2 };
+    return t[n] || 1;
+  }
+  // RPM et cagnotte : moyenne du multiplicateur « clipable » et du multiplicateur « engagement » (mêmes valeurs)
+  mult() {
+    const s = this.state;
+    return (this.multOf(s.clip) + this.multOf(s.eng)) / 2;
+  }
+  gauge(g) {
+    let pos, label, cls, msg, zone;
+    if (g < 0.9) { pos = Math.max(2, (g / 0.9) * 33); zone = 'low'; label = 'Pas assez'; cls = 'bad'; msg = 'Risque de démotiver les clippers.'; }
+    else if (g <= 1.2) { pos = 33 + ((g - 0.9) / 0.3) * 33; zone = 'ok'; label = 'Parfait'; cls = 'good'; msg = 'Le meilleur rapport entre vues et argent.'; }
+    else { pos = 66 + Math.min((g - 1.2) / 1.2, 1) * 32; zone = 'high'; label = 'Bonne offre'; cls = ''; msg = 'Les meilleures offres attirent le plus de clippers.'; }
+    return { pos: pos + '%', label: label, cls: cls, msg: msg, zone: zone };
+  }
+  recommended() {
+    const s = this.state;
+    let tier = 0;
+    if (s.goal === 'ventes') { const c = this.num(s.ca); tier = c >= 20000 ? 2 : c >= 5000 ? 1 : 0; }
+    else { const v = this.num(s.vues); tier = v >= 2000000 ? 2 : v >= 500000 ? 1 : 0; }
+    if (s.eng >= 8) tier -= 1;
+    if (s.eng <= 4) tier += 1;
+    return tier >= 2 ? 'emp' : 'roi';
+  }
+  inp(k) { return (e) => this.setState({ [k]: e.target.value }); }
+  listVals(key) {
+    const arr = this.state[key];
+    return arr.map((v, i) => ({ v: v, set: (e) => { const c = this.state[key].slice(); c[i] = e.target.value; this.setState({ [key]: c }); } }));
+  }
+  scale(key) {
+    return Array.from({ length: 10 }, (_, i) => ({ n: i + 1, cls: this.state[key] === i + 1 ? 'chip sel' : 'chip', pick: () => this.setState({ [key]: i + 1 }) }));
+  }
+  afterComm() {
+    // fin du parcours récompense -> connexion
+    this.nav('login');
+  }
+
+  componentDidMount() { this.installSfx(); }
+  // ---------- Bruitages et musique de l'interface : sobres et doux, façon bols tibétains (partagés par toutes les maquettes) ----------
+  sfx(name) { try { if (typeof window !== 'undefined' && window.__nsfx) window.__nsfx.play(name); } catch (e) {} }
+  installSfx() {
+    if (typeof window === 'undefined' || typeof document === 'undefined') return;
+    if (window.__nsfx) { window.__nsfx.scan(); return; }
+    const W = window, D = document, mem = { off: false };
+    let ctx = null, bus = null, nbuf = null, mst = null, cv = null, unlocked = false, lastDown = 0, lastHover = null, lastMove = 0, px = -1, py = -1;
+    const born = Date.now(), last = {};
+    // gamme pentatonique de ré : toutes les notes vont bien ensemble
+    const PENTA = [293.66, 329.63, 369.99, 440, 493.88, 587.33, 659.25, 739.99, 880, 987.77, 1174.66, 1318.51, 1479.98, 1760, 1975.53];
+    const isOn = () => {
+      if (mem.off) return false;
+      try { return W.localStorage.getItem('son') !== '0'; } catch (e) { return true; }
+    };
+    const ac = () => {
+      try {
+        if (!ctx) {
+          ctx = new (W.AudioContext || W.webkitAudioContext)();
+          const master = mst = ctx.createGain(); master.gain.value = 0.5;
+          const comp = ctx.createDynamicsCompressor();
+          master.connect(comp); comp.connect(ctx.destination);
+          bus = ctx.createGain(); bus.gain.value = svGain(sfxVol()); bus.connect(master);
+          // une longue réverbération douce donne l'effet « salle calme »
+          const conv = cv = ctx.createConvolver(), len = Math.floor(ctx.sampleRate * 2.6), ir = ctx.createBuffer(2, len, ctx.sampleRate);
+          for (let ch = 0; ch < 2; ch++) { const d = ir.getChannelData(ch); for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 3); }
+          conv.buffer = ir;
+          const send = ctx.createGain(); send.gain.value = 0.35;
+          const wet = ctx.createGain(); wet.gain.value = 0.7;
+          bus.connect(send); send.connect(conv); conv.connect(wet); wet.connect(master);
+        }
+        if (ctx.state === 'suspended') ctx.resume();
+      } catch (e) { ctx = null; bus = null; mst = null; cv = null; }
+      return ctx;
+    };
+    // [rapport de fréquence, volume relatif, durée relative, attaque]
+    const PARTS = {
+      soft: [[1, 1, 1, 0.02], [2, 0.16, 0.55, 0.02]],
+      bowl: [[1, 1, 1, 0.05], [1.004, 0.7, 1, 0.05], [2.71, 0.2, 0.5, 0.04], [5.1, 0.06, 0.28, 0.03]],
+      chime: [[1, 1, 1, 0.008], [2.76, 0.26, 0.42, 0.008], [5.4, 0.09, 0.2, 0.008]]
+    };
+    const voice = (kind, f, at, dur, vol) => {
+      const c = ac(); if (!c || !bus) return;
+      const t = c.currentTime + at;
+      PARTS[kind].forEach((p) => {
+        const o = c.createOscillator(), g = c.createGain(), d = dur * p[2], pk = Math.max(vol * p[1], 0.0002);
+        o.type = 'sine'; o.frequency.setValueAtTime(f * p[0], t);
+        g.gain.setValueAtTime(0.0001, t);
+        g.gain.exponentialRampToValueAtTime(pk, t + p[3]);
+        g.gain.exponentialRampToValueAtTime(0.0001, t + d);
+        o.connect(g); g.connect(bus); o.start(t); o.stop(t + d + 0.05);
+      });
+    };
+    const air = (ft, f0, f1, at, dur, vol, q) => {
+      const c = ac(); if (!c || !bus) return;
+      const t = c.currentTime + at, src = c.createBufferSource(), f = c.createBiquadFilter(), g = c.createGain();
+      if (!nbuf) { nbuf = c.createBuffer(1, c.sampleRate, c.sampleRate); const d = nbuf.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1; }
+      src.buffer = nbuf; f.type = ft; f.Q.value = q || 1;
+      f.frequency.setValueAtTime(f0, t); f.frequency.exponentialRampToValueAtTime(Math.max(f1, 20), t + dur);
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(Math.max(vol, 0.0002), t + dur * 0.4);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      src.connect(f); f.connect(g); g.connect(bus); src.start(t); src.stop(t + dur + 0.05);
+    };
+    const rnd = (a) => a[Math.floor(Math.random() * a.length)];
+    // f = 1 : son complet ; f = 0.5 : le même son déjà entendu il y a peu, joué plus court et plus bas
+    const S = {
+      tap: (f) => voice('soft', rnd([587.33, 659.25, 739.99, 880]), 0, 0.28, 0.034 * f),
+      hover: () => voice('soft', 1174.66, 0, 0.12, 0.008),
+      key: () => voice('soft', rnd([880, 987.77, 1174.66, 1318.51]), 0, 0.09, 0.01),
+      tick: () => voice('soft', rnd(PENTA.slice(5, 10)), 0, 0.12, 0.025),
+      confirm: (f) => { voice('bowl', rnd([587.33, 659.25]), 0, 0.6, 0.04 * f); if (f > 0.9) voice('bowl', 880, 0.12, 0.8, 0.028); },
+      back: (f) => { voice('bowl', 880, 0, 0.5, 0.036 * f); if (f > 0.9) voice('bowl', 587.33, 0.11, 0.7, 0.032); },
+      tab: (f) => voice('chime', 739.99, 0, 0.4, 0.024 * f),
+      open: (f) => { voice('soft', 587.33, 0, 0.4, 0.032 * f); if (f > 0.9) voice('soft', 739.99, 0.09, 0.5, 0.032); },
+      close: (f) => { voice('soft', 739.99, 0, 0.38, 0.03 * f); if (f > 0.9) voice('soft', 587.33, 0.09, 0.5, 0.03); },
+      check: (f) => voice('chime', 880, 0, 0.7, 0.036 * f),
+      uncheck: (f) => voice('soft', 587.33, 0, 0.4, 0.028 * f),
+      success: (f) => {
+        voice('bowl', 146.83, 0, 2.4, 0.045 * f);
+        [587.33, 739.99, 880].forEach((n, i) => { if (f > 0.9 || i < 2) voice('chime', n, 0.1 + i * 0.14, 1.5, 0.036 * f); });
+      },
+      error: (f) => { voice('bowl', 293.66, 0, 0.7, 0.042 * f); if (f > 0.9) voice('bowl', 220, 0.18, 1.0, 0.036); },
+      notif: (f) => voice('chime', 880, 0, 1.1, 0.036 * f),
+      coin: (f) => { voice('chime', 880, 0, 0.9, 0.032 * f); if (f > 0.9) voice('chime', 1318.51, 0.1, 1.2, 0.028); },
+      swish: (f) => air('bandpass', 380, 1500, 0, 0.4, 0.016 * f, 0.7),
+      swishBack: (f) => air('bandpass', 1500, 380, 0, 0.36, 0.014 * f, 0.7),
+      // succès débloqué : nappe grave + trois cloches qui montent + quelques étincelles
+      unlock: () => {
+        voice('bowl', 220, 0, 3.4, 0.055);
+        [587.33, 880, 1174.66].forEach((f, i) => voice('chime', f, 0.18 + i * 0.2, 2.4, 0.05));
+        [1760, 1975.53, 2349.32].forEach((f, i) => voice('soft', f, 0.75 + i * 0.12, 0.7, 0.011));
+      },
+      unlockBig: () => {
+        voice('bowl', 146.83, 0, 4.4, 0.07);
+        voice('bowl', 220, 0.1, 4, 0.045);
+        [587.33, 739.99, 880, 1174.66, 1479.98].forEach((f, i) => voice('chime', f, 0.2 + i * 0.18, 2.8, 0.05));
+        [1760, 1975.53, 2349.32, 2637.02].forEach((f, i) => voice('soft', f, 1.0 + i * 0.1, 0.8, 0.011));
+      }
+    };
+    // le même son entendu plusieurs fois de suite devient plus court et plus discret
+    const WIN = { tap: 1200, confirm: 15000, back: 8000, tab: 3000, open: 4000, close: 4000, check: 3000, uncheck: 3000, success: 15000, error: 8000, notif: 15000, coin: 15000, swish: 6000, swishBack: 6000 };
+    const GAP = { key: 30, hover: 90, tick: 50 };
+    const play = (name) => {
+      if (!unlocked || !isOn() || !S[name]) return;
+      const now = Date.now(), prev = last[name];
+      if (prev && now - prev < (GAP[name] || 45)) return;
+      const f = prev && now - prev < (WIN[name] || 0) ? 0.5 : 1;
+      last[name] = now;
+      if (W.__nsfxLog) W.__nsfxLog.push(f < 1 ? name + '~' : name);
+      if (name !== 'hover' && name !== 'key' && name !== 'tick') mduck();
+      try { S[name](f); } catch (e) {}
+    };
+    const SEL = 'button, a[href], [role=button], [role=checkbox], [role=menuitem], [role=menuitemradio], [role=tab], summary, select, input[type=checkbox], input[type=radio]';
+    const OK = /(continuer|suivant|valider|envoyer|confirmer|r[ée]server|acc[eèé]d|devenir|se connecter|connexion|commencer|rejoindre|terminer|g[ée]n[ée]rer|calculer|inviter|connecter|c'est parti|\boui\b|ajouter|enregistrer|choisir|recevoir)/;
+    const BACK = /(retour|annuler|\bnon\b|fermer|pr[ée]c[ée]dent|d[ée]connecter|‹)/;
+    const target = (e) => (e.composedPath && e.composedPath()[0]) || e.target;
+    const pick = (el) => {
+      if (!el || !el.closest) return null;
+      const b = el.closest(SEL);
+      if (b) return b;
+      const lab = el.closest('label');
+      return lab && lab.control && lab.control.matches(SEL) ? lab.control : null;
+    };
+    const muted = (b) => { const f = b.closest('[data-sfx]'); return !!f && f.getAttribute('data-sfx') === 'none'; };
+    const kindOf = (b, viaClick) => {
+      const f = b.closest('[data-sfx]');
+      if (f) { const v = f.getAttribute('data-sfx'); if (v === 'none') return null; if (v) return v; }
+      if (b.disabled || b.getAttribute('aria-disabled') === 'true') return null;
+      const role = b.getAttribute('role');
+      if (b.tagName === 'SELECT') return null;
+      if (b.type === 'checkbox') return (b.checked !== !!viaClick) ? 'uncheck' : 'check';
+      if (b.type === 'radio') return 'check';
+      if (role === 'checkbox') return b.getAttribute('aria-checked') === 'true' ? 'uncheck' : 'check';
+      if (b.tagName === 'SUMMARY') return b.parentElement && b.parentElement.open ? 'close' : 'open';
+      const txt = ((b.getAttribute('aria-label') || '') + ' ' + (b.textContent || '')).trim().toLowerCase().slice(0, 90);
+      if (/acheter|retirer mon argent/.test(txt)) return 'coin';
+      if (b.closest('nav') || role === 'tab' || b.closest('[role=tablist]')) return 'tab';
+      if (b.getAttribute('aria-label') && /menu/.test(txt)) return 'open';
+      if (BACK.test(txt)) return 'back';
+      if (OK.test(txt)) return 'confirm';
+      return 'tap';
+    };
+    const unlock = (e) => { unlocked = true; musicGesture(e); };
+    const toggler = (e) => { const t = target(e); const b = t && t.closest ? t.closest('[data-sfx-toggle],[data-music-toggle]') : null; return b; };
+    const sync = () => {
+      const on = isOn(), lv = musicLevel(), mo = lv > 0;
+      D.querySelectorAll('[data-sfx-toggle]').forEach((b) => {
+        const v = on ? 'true' : 'false';
+        if (b.getAttribute('aria-pressed') !== v) b.setAttribute('aria-pressed', v);
+        const ti = on ? 'Couper les bruitages' : 'Activer les bruitages';
+        if (b.getAttribute('title') !== ti) b.setAttribute('title', ti);
+        if (b.getAttribute('aria-label') !== ti) b.setAttribute('aria-label', ti);
+      });
+      D.querySelectorAll('[data-music-toggle]').forEach((b) => {
+        const v = mo ? 'true' : 'false';
+        if (b.getAttribute('aria-pressed') !== v) b.setAttribute('aria-pressed', v);
+        const ti = lv === 0 ? 'Musique coupée (cliquer pour l’activer)' : lv === 1 ? 'Musique douce (cliquer pour l’augmenter un peu)' : 'Musique plus présente (cliquer pour la couper)';
+        if (b.getAttribute('data-level') !== String(lv)) b.setAttribute('data-level', String(lv));
+        if (b.getAttribute('title') !== ti) b.setAttribute('title', ti);
+        if (b.getAttribute('aria-label') !== ti) b.setAttribute('aria-label', ti);
+      });
+    };
+    const setOn = (v, silent) => {
+      mem.off = !v;
+      try { W.localStorage.setItem('son', v ? '1' : '0'); } catch (e) {}
+      sync();
+      announce();
+      if (v && !silent) play('tap');
+    };
+    D.addEventListener('pointerdown', (e) => {
+      unlock(e);
+      if (e.pointerType !== 'mouse' || e.button !== 0) return;
+      lastDown = Date.now();
+      if (toggler(e)) return;
+      const b = pick(target(e)); if (!b) return;
+      const k = kindOf(b, false); if (k) play(k);
+    }, true);
+    D.addEventListener('click', (e) => {
+      unlock(e);
+      const tg = toggler(e);
+      if (tg) { if (tg.hasAttribute('data-music-toggle')) setMusic((musicLevel() + 1) % 3); else setOn(!isOn(), false); return; }
+      if (e.detail > 0 && Date.now() - lastDown < 700) return;
+      const b = pick(target(e)); if (!b) return;
+      const k = kindOf(b, true); if (k) play(k);
+    }, true);
+    D.addEventListener('keydown', (e) => unlock(e), true);
+    D.addEventListener('touchend', (e) => unlock(e), true);
+    D.addEventListener('pointermove', (e) => {
+      if (e.screenX !== px || e.screenY !== py) { px = e.screenX; py = e.screenY; lastMove = Date.now(); }
+    }, true);
+    D.addEventListener('pointerover', (e) => {
+      if (e.pointerType !== 'mouse') return;
+      const b = pick(target(e));
+      if (!b || b === lastHover) return;
+      lastHover = b;
+      if (Date.now() - lastMove > 400) return;
+      if (b.disabled || muted(b) || b.hasAttribute('data-sfx-toggle')) return;
+      play('hover');
+    }, true);
+    D.addEventListener('pointerout', (e) => {
+      if (!lastHover) return;
+      const rel = e.relatedTarget;
+      if (!rel || !lastHover.contains(rel)) lastHover = null;
+    }, true);
+    D.addEventListener('input', (e) => {
+      const t = target(e);
+      if (!t || !t.tagName || (t.closest && t.closest('[data-sfx=none]'))) return;
+      if (t.tagName === 'TEXTAREA' || (t.tagName === 'INPUT' && /^(text|email|url|tel|search|number|password)$/.test(t.type || 'text'))) play('key');
+      else if (t.type === 'range') play('tick');
+    }, true);
+    D.addEventListener('change', (e) => {
+      const t = target(e);
+      if (t && t.tagName === 'SELECT' && !(t.closest && t.closest('[data-sfx=none]'))) play('tap');
+    }, true);
+    try {
+      new MutationObserver((muts) => {
+        sync();
+        if (Date.now() - born < 1200) return;
+        const txt = (n) => ((n.textContent || '').trim());
+        const gone = {};
+        for (let i = 0; i < muts.length; i++) {
+          const rem = muts[i].removedNodes;
+          for (let j = 0; j < rem.length; j++) {
+            const n = rem[j];
+            if (n.nodeType !== 1) continue;
+            if (n.matches && n.matches('[role=alert],[role=status]')) gone[txt(n)] = 1;
+            if (n.querySelectorAll) n.querySelectorAll('[role=alert],[role=status]').forEach((x) => { gone[txt(x)] = 1; });
+          }
+        }
+        for (let i = 0; i < muts.length; i++) {
+          const add = muts[i].addedNodes;
+          for (let j = 0; j < add.length; j++) {
+            const n = add[j];
+            if (n.nodeType !== 1) continue;
+            const list = [];
+            if (n.matches && n.matches('[role=alert],[role=status]')) list.push(n);
+            if (n.querySelectorAll) n.querySelectorAll('[role=alert],[role=status]').forEach((x) => list.push(x));
+            for (let k = 0; k < list.length; k++) {
+              if (gone[txt(list[k])]) continue;
+              play(list[k].getAttribute('role') === 'alert' ? 'error' : 'notif');
+              return;
+            }
+          }
+        }
+      }).observe(D.body || D.documentElement, { childList: true, subtree: true });
+    } catch (e) {}
+    // ---------- Musique d'ambiance : générée en direct par le navigateur (aucun fichier, aucun droit d'auteur) ----------
+    // Style « corporate inspirant » : piano qui égrène l'accord en croches, cordes qui se gonflent, basse ronde, kick doux,
+    // claquements sur 2 et 4, shaker, 112 pulsations/min, en ré majeur (ré · la · si mineur · sol). Dans la deuxième moitié
+    // de chaque cycle de 8 mesures, une petite ligne de piano s'élève au-dessus ; une vague de mer porte le passage au cycle suivant.
+    // Même arrangement du début à la fin. Tout se calcule depuis l'horloge murale : deux maquettes ouvertes ensemble
+    // jouent la même mesure (relais sans coupure).
+    const MU = { id: Math.random().toString(36).slice(2), yielded: false, paused: false, G: null, timer: 0, hideT: 0, hideMs: 45000, bar: 0, barT: 0, first: false, sea: null, bc: null };
+    const BEAT = 60 / 112, S16 = BEAT / 4, BAR = BEAT * 4, EP = 1700000000, FADE = 2.2;
+    const MVOLS = [0, 0.042, 0.089];
+    const LV = { pad: 0.08, sea: 0.1, foam: 0.03, kick: 0.1, clap: 0.2, hat: 0.12, bass: 0.06, keys: 0.22, lead: 0.2 };
+    // 0 = coupée, 1 = douce (par défaut), 2 = un peu plus présente
+    const musicLevel = () => {
+      let v = mem.mlv;
+      try { const x = W.localStorage.getItem('musique'); if (x !== null) v = +x; } catch (e) {}
+      return v === 0 || v === 1 || v === 2 ? v : 1;
+    };
+    const musicOn = () => musicLevel() > 0;
+    // volume des bruitages : 0 à 100, 50 = niveau d'origine
+    const sfxVol = () => {
+      let v = mem.sv;
+      try { const x = W.localStorage.getItem('sfxvol'); if (x !== null) v = +x; } catch (e) {}
+      return v >= 0 && v <= 100 ? v : 50;
+    };
+    const svGain = (v) => (v <= 0 ? 0 : Math.pow(v / 50, 1.6));
+    const rng = (a) => () => { let t = (a += 0x6D2B79F5); t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+    // accords (2 mesures chacun) : ré · la · si mineur · sol. r = racine de la basse, pad = cordes, pn = notes du piano (grave vers aigu)
+    const CH = [
+      { r: 73.42, pad: [146.83, 220, 293.66, 369.99], pn: [220, 293.66, 369.99, 440, 587.33, 739.99] },
+      { r: 55, pad: [110, 164.81, 220, 277.18, 329.63], pn: [164.81, 220, 277.18, 329.63, 440, 554.37] },
+      { r: 61.74, pad: [123.47, 185, 246.94, 293.66], pn: [185, 246.94, 293.66, 369.99, 493.88, 587.33] },
+      { r: 49, pad: [98, 146.83, 196, 246.94, 293.66], pn: [146.83, 196, 246.94, 293.66, 392, 493.88] }
+    ];
+    // croches du piano (indices dans pn) et leur force ; ligne qui s'élève sur les mesures 5 à 8 : [temps en double-croches, note, durée en temps]
+    const PAT = [1, 2, 3, 2, 4, 2, 3, 2], VEL = [1, 0.55, 0.72, 0.55, 0.88, 0.55, 0.72, 0.55];
+    const LEAD = [
+      [[0, 739.99, 3], [12, 659.25, 1]],
+      [[0, 587.33, 2], [8, 739.99, 2]],
+      [[0, 587.33, 3], [12, 493.88, 1]],
+      [[0, 493.88, 2], [8, 440, 2]]
+    ];
+    const bellCurve = (n, pk, amp) => {
+      const a = new Float32Array(n);
+      for (let i = 0; i < n; i++) { const x = i / (n - 1); a[i] = amp * Math.pow(Math.sin((x < pk ? x / pk : 1 - (x - pk) / (1 - pk)) * Math.PI / 2), 2); }
+      return a;
+    };
+    // fondus en puissance égale : deux maquettes qui se relaient se croisent sans trou ni bosse
+    const mcurve = (n, to, up) => {
+      const a = new Float32Array(n);
+      for (let i = 0; i < n; i++) { const x = i / (n - 1); a[i] = Math.max(to * (up ? Math.sin(x * Math.PI / 2) : Math.cos(x * Math.PI / 2)), 0.0001); }
+      return a;
+    };
+    const mhold = (g, t) => { if (g.cancelAndHoldAtTime) g.cancelAndHoldAtTime(t); else { g.cancelScheduledValues(t); g.setValueAtTime(g.value, t); } };
+    const seaBuffer = (c) => {
+      if (MU.sea && MU.sea.sampleRate === c.sampleRate) return MU.sea;
+      const b = c.createBuffer(1, Math.floor(c.sampleRate * 10), c.sampleRate), d = b.getChannelData(0);
+      let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
+      for (let i = 0; i < d.length; i++) {
+        const w = Math.random() * 2 - 1;
+        b0 = 0.99886 * b0 + w * 0.0555179; b1 = 0.99332 * b1 + w * 0.0750759; b2 = 0.969 * b2 + w * 0.153852;
+        b3 = 0.8665 * b3 + w * 0.3104856; b4 = 0.55 * b4 + w * 0.5329522; b5 = -0.7616 * b5 - w * 0.016898;
+        d[i] = (b0 + b1 + b2 + b3 + b4 + b5 + b6 + w * 0.5362) * 0.11; b6 = w * 0.115926;
+      }
+      MU.sea = b; return b;
+    };
+    const noiseSrc = (c) => {
+      if (!nbuf) { nbuf = c.createBuffer(1, c.sampleRate, c.sampleRate); const d = nbuf.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1; }
+      const s = c.createBufferSource(); s.buffer = nbuf; return s;
+    };
+    const mbuild = (c) => {
+      const G = { c: c, sends: [] };
+      G.out = c.createGain(); G.out.gain.value = 0.0001; G.duck = c.createGain(); G.mix = c.createGain(); G.pump = c.createGain();
+      G.mix.connect(G.duck); G.duck.connect(G.out); G.out.connect(mst); G.pump.connect(G.mix);
+      // réverbération propre à la musique : elle passe par le même fondu et le même réglage de volume que le reste
+      G.rv = c.createConvolver(); G.rv.buffer = cv.buffer;
+      const wet = c.createGain(); wet.gain.value = 0.7; G.rv.connect(wet); wet.connect(G.duck);
+      const bus = (to, amount) => {
+        const b = c.createGain(); b.connect(to);
+        if (amount > 0) { const s = c.createGain(); s.gain.value = amount; b.connect(s); s.connect(G.rv); G.sends.push(s); }
+        return b;
+      };
+      G.padB = bus(G.pump, 0.5); G.seaB = bus(G.pump, 0.06);
+      G.lowB = bus(G.mix, 0); G.drmB = bus(G.mix, 0.15); G.keyB = bus(G.mix, 0.45);
+      return G;
+    };
+    // cordes : quatre ou cinq notes tenues, deux dents de scie désaccordées par note, filtre qui s'ouvre puis se referme, attaque lente
+    const mpad = (G, t, dur, ch) => {
+      const c = G.c, f = c.createBiquadFilter(), A = 1.1, R = 1.6, v = LV.pad / Math.sqrt(ch.pad.length);
+      f.type = 'lowpass'; f.Q.value = 0.4;
+      f.frequency.setValueAtTime(500, t); f.frequency.linearRampToValueAtTime(1400, t + dur * 0.8); f.frequency.linearRampToValueAtTime(650, t + dur + R);
+      f.connect(G.padB);
+      ch.pad.forEach((hz, i) => {
+        const g = c.createGain(), pn = c.createStereoPanner();
+        pn.pan.value = ((i % 4) - 1.5) * 0.3;
+        g.gain.setValueAtTime(0.0001, t); g.gain.linearRampToValueAtTime(v, t + A); g.gain.setValueAtTime(v, t + dur); g.gain.linearRampToValueAtTime(0.0001, t + dur + R);
+        [-6, 6].forEach((dt) => { const o = c.createOscillator(); o.type = 'sawtooth'; o.frequency.value = hz; o.detune.value = dt; o.connect(g); o.start(t); o.stop(t + dur + R + 0.05); });
+        g.connect(pn); pn.connect(f);
+      });
+    };
+    // vague : souffle grave qui monte puis retombe, écume plus aiguë, d'une oreille à l'autre
+    const mwave = (G, t, side, amp, D2, pk) => {
+      const c = G.c, buf = seaBuffer(c), off = Math.random() * 1.5;
+      const s1 = c.createBufferSource(), lp = c.createBiquadFilter(), g1 = c.createGain(), pn = c.createStereoPanner();
+      s1.buffer = buf; lp.type = 'lowpass'; lp.Q.value = 0.5;
+      lp.frequency.setValueAtTime(240, t); lp.frequency.exponentialRampToValueAtTime(900, t + D2 * pk); lp.frequency.exponentialRampToValueAtTime(260, t + D2);
+      g1.gain.setValueCurveAtTime(bellCurve(96, pk, LV.sea * amp), t, D2);
+      pn.pan.setValueAtTime(side ? 0.5 : -0.5, t); pn.pan.linearRampToValueAtTime(side ? -0.35 : 0.35, t + D2);
+      s1.connect(lp); lp.connect(g1); g1.connect(pn); pn.connect(G.seaB); s1.start(t, off); s1.stop(t + D2 + 0.1);
+      const s2 = c.createBufferSource(), bp = c.createBiquadFilter(), g2 = c.createGain(), p2 = c.createStereoPanner();
+      s2.buffer = buf; bp.type = 'bandpass'; bp.frequency.value = 2600; bp.Q.value = 0.7;
+      g2.gain.setValueCurveAtTime(bellCurve(96, Math.min(0.9, pk + 0.03), LV.foam * amp), t + 0.8, D2 - 1.6);
+      p2.pan.value = side ? 0.3 : -0.3;
+      s2.connect(bp); bp.connect(g2); g2.connect(p2); p2.connect(G.seaB); s2.start(t + 0.8, off + 1.5); s2.stop(t + D2 - 0.7);
+    };
+    const mkick = (G, t, v) => {
+      const c = G.c, o = c.createOscillator(), g = c.createGain();
+      o.type = 'sine'; o.frequency.setValueAtTime(130, t); o.frequency.exponentialRampToValueAtTime(50, t + 0.1);
+      g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(v, t + 0.005); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.3);
+      o.connect(g); g.connect(G.lowB); o.start(t); o.stop(t + 0.34);
+    };
+    const mclap = (G, t, v) => {
+      [0, 0.011, 0.023].forEach((dt, k) => {
+        const c = G.c, s = noiseSrc(c), bp = c.createBiquadFilter(), g = c.createGain();
+        bp.type = 'bandpass'; bp.frequency.value = 1500; bp.Q.value = 0.8;
+        g.gain.setValueAtTime(0.0001, t + dt); g.gain.exponentialRampToValueAtTime(v * (k === 2 ? 1 : 0.6), t + dt + 0.002); g.gain.exponentialRampToValueAtTime(0.0001, t + dt + (k === 2 ? 0.16 : 0.05));
+        s.connect(bp); bp.connect(g); g.connect(G.drmB); s.start(t + dt, Math.random() * 0.8); s.stop(t + dt + 0.2);
+      });
+    };
+    // shaker : bruit filtré très court, en croches régulières
+    const mhat = (G, t, v, len) => {
+      const c = G.c, s = noiseSrc(c), bp = c.createBiquadFilter(), g = c.createGain();
+      bp.type = 'bandpass'; bp.frequency.value = 6200; bp.Q.value = 0.7;
+      g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(v, t + 0.006); g.gain.exponentialRampToValueAtTime(0.0001, t + len);
+      s.connect(bp); bp.connect(g); g.connect(G.drmB); s.start(t, Math.random() * 0.8); s.stop(t + len + 0.03);
+    };
+    // basse ronde : triangle + sinus, sans mordant
+    const mbass = (G, t, hz, dur, v) => {
+      const c = G.c, o = c.createOscillator(), o2 = c.createOscillator(), lp = c.createBiquadFilter(), g = c.createGain(), g2 = c.createGain();
+      o.type = 'triangle'; o.frequency.value = hz; o2.type = 'sine'; o2.frequency.value = hz; g2.gain.value = 0.7;
+      lp.type = 'lowpass'; lp.Q.value = 0.5; lp.frequency.value = 520;
+      g.gain.setValueAtTime(0.0001, t); g.gain.linearRampToValueAtTime(v, t + 0.02); g.gain.setValueAtTime(v, t + Math.max(dur - 0.12, 0.03)); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      o.connect(lp); lp.connect(g); o2.connect(g2); g2.connect(g); g.connect(G.lowB); o.start(t); o2.start(t); o.stop(t + dur + 0.05); o2.stop(t + dur + 0.05);
+    };
+    // piano : partiels sinus à décroissance rapide, attaque marteau, filtre qui se ferme ; assez sourd pour rester un instrument d'ambiance
+    const mpiano = (G, t, hz, dur, v, pan) => {
+      const c = G.c, g = c.createGain(), lp = c.createBiquadFilter(), pn = c.createStereoPanner();
+      lp.type = 'lowpass'; lp.Q.value = 0.3;
+      lp.frequency.setValueAtTime(Math.min(7000, hz * 8), t); lp.frequency.exponentialRampToValueAtTime(Math.max(1000, hz * 2.4), t + Math.min(dur, 1) * 0.7);
+      g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(v, t + 0.005); g.gain.exponentialRampToValueAtTime(v * 0.3, t + 0.25); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      pn.pan.value = Math.max(-1, Math.min(1, pan || 0));
+      [[1, 1, 0], [2, 0.38, 3], [3, 0.16, -4], [4, 0.07, 5]].forEach((p) => {
+        const o = c.createOscillator(), og = c.createGain();
+        o.type = 'sine'; o.frequency.value = hz * p[0]; o.detune.value = p[2]; og.gain.value = p[1];
+        o.connect(og); og.connect(g); o.start(t); o.stop(t + dur + 0.05);
+      });
+      const s = noiseSrc(c), bp = c.createBiquadFilter(), hg = c.createGain();
+      bp.type = 'bandpass'; bp.frequency.value = Math.min(4500, hz * 5); bp.Q.value = 1.1;
+      hg.gain.setValueAtTime(v * 0.5, t); hg.gain.exponentialRampToValueAtTime(0.0001, t + 0.035);
+      s.connect(bp); bp.connect(hg); hg.connect(g); s.start(t, Math.random() * 0.8); s.stop(t + 0.06);
+      g.connect(lp); lp.connect(pn); pn.connect(G.keyB);
+    };
+    // une mesure entière (2,1 s) : tout ce qui joue pendant cette mesure est planifié d'avance
+    const mbar = (G, b, T, first) => {
+      const c = G.c, now = c.currentTime + 0.03, bi = b % 8, ch = CH[bi >> 1], last = bi === 7;
+      const at = (sb) => T + sb * S16, ok = (t) => t >= now;
+      if (bi % 2 === 0) { const t0 = Math.max(at(0), now); mpad(G, t0, 2 * BAR - (t0 - T), ch); }
+      else if (first && T + BAR - now > 0.8) mpad(G, now, T + BAR - now, ch);
+      // vagues : une petite au milieu du cycle, une grande qui culmine sur le temps 1 du cycle suivant
+      if (bi === 2 && ok(at(0))) mwave(G, at(0), 0, 0.55, 2 * BAR + 3.2, (2 * BAR) / (2 * BAR + 3.2));
+      if (bi === 6 && ok(at(0))) mwave(G, at(0), 1, 1, 2 * BAR + 3.6, (2 * BAR) / (2 * BAR + 3.6));
+      // rythme : kick sur 1 et 3, claquement sur 2 et 4, shaker en croches ; la dernière mesure se resserre avant la vague
+      [0, 8].forEach((sb) => { if (ok(at(sb))) mkick(G, at(sb), LV.kick * (sb === 0 ? 1 : 0.8)); });
+      if (last) [4, 10, 12, 14, 15].forEach((sb, k) => { if (ok(at(sb))) mclap(G, at(sb), LV.clap * (k === 0 ? 1 : 0.55 + k * 0.1)); });
+      else [4, 12].forEach((sb) => { if (ok(at(sb))) mclap(G, at(sb), LV.clap); });
+      const Rh = rng(77 + b * 13);
+      for (let sb = 0; sb < 16; sb += 2) { const t = at(sb) + (Rh() - 0.5) * 0.006; if (ok(t)) mhat(G, t, LV.hat * (sb % 4 ? 0.95 : 0.7) * (0.85 + Rh() * 0.3), 0.06); }
+      // basse : la racine puis la quinte, en blanches (volume corrigé selon la hauteur : les notes très graves paraissent plus faibles)
+      const bv = LV.bass * Math.pow(73.42 / ch.r, 0.7);
+      [[0, 1], [8, 1.5]].forEach((n) => { if (ok(at(n[0]))) mbass(G, at(n[0]), ch.r * n[1], BEAT * 1.9, bv * (n[0] ? 0.85 : 1)); });
+      // piano : la basse de l'accord une octave plus haut (mesures paires), puis le motif en croches
+      if (bi % 2 === 0 && ok(at(0))) mpiano(G, at(0), ch.r * 2, BAR * 1.8, LV.keys * 0.9, -0.15);
+      const Rp = rng(4242 + b * 7);
+      PAT.forEach((ix, k) => {
+        const t = at(k * 2) + (Rp() - 0.5) * 0.008;
+        if (ok(t)) mpiano(G, t, ch.pn[ix], 1.15, LV.keys * VEL[k] * (0.92 + Rp() * 0.16), (k % 2 ? 0.14 : -0.14) + (ix - 3) * 0.04);
+      });
+      // la ligne qui s'élève (deuxième moitié du cycle)
+      if (bi >= 4) LEAD[bi - 4].forEach((n) => { if (ok(at(n[0]))) mpiano(G, at(n[0]), n[1], n[2] * BEAT + 0.8, LV.lead, 0.1); });
+    };
+    const mtick = (ahead) => {
+      const G = MU.G; if (!G) return;
+      const c = G.c, lim = c.currentTime + (ahead || 3);
+      if (c.state === 'suspended') { try { const p = c.resume(); if (p && p.catch) p.catch(() => {}); } catch (e) {} }
+      // le planificateur a pris trop de retard (onglet figé) : on se recale sur l'horloge murale
+      if (MU.barT < c.currentTime - 4) { const k = (Date.now() / 1000 - EP) / BAR; MU.bar = Math.floor(k); MU.barT = c.currentTime - (k - MU.bar) * BAR; MU.first = true; }
+      while (MU.barT < lim) {
+        try { mbar(G, MU.bar, MU.barT, MU.first); } catch (e) { if (W.__nsfxLog) W.__nsfxLog.push('music-error: ' + (e && e.message)); }
+        MU.first = false; MU.bar++; MU.barT += BAR;
+      }
+    };
+    const mannounce = () => {
+      try { W.localStorage.setItem('nmusic-owner', MU.id + '|' + Date.now()); } catch (e) {}
+      try { if (MU.bc) MU.bc.postMessage({ take: MU.id }); } catch (e) {}
+    };
+    const mstart = () => {
+      const c = ac(); if (!c || !mst || !cv) return;
+      const G = mbuild(c), k = (Date.now() / 1000 - EP) / BAR, b = Math.floor(k), t = c.currentTime;
+      MU.G = G; MU.bar = b; MU.barT = t - (k - b) * BAR; MU.first = true;
+      G.out.gain.setValueCurveAtTime(mcurve(48, MVOLS[musicLevel()], true), t, FADE);
+      mtick();
+      MU.timer = setInterval(() => mtick(), 250);
+      mannounce();
+    };
+    const mstop = () => {
+      const G = MU.G; if (!G) return;
+      MU.G = null; clearInterval(MU.timer); MU.timer = 0;
+      try { const g = G.out.gain, t = G.c.currentTime; mhold(g, t); g.setValueCurveAtTime(mcurve(48, Math.max(+g.value || 0, 0.0001), false), t, FADE); } catch (e) {}
+      setTimeout(() => { try { G.out.disconnect(); G.sends.forEach((s) => s.disconnect()); } catch (e) {} }, FADE * 1000 + 400);
+    };
+    const musicSync = () => {
+      const should = musicOn() && unlocked && !MU.yielded && !MU.paused;
+      if (should && !MU.G) mstart(); else if (!should && MU.G) mstop();
+    };
+    // sous un bruitage la musique s'efface un instant pour laisser passer le son
+    const mduck = () => {
+      const G = MU.G; if (!G) return;
+      try {
+        const g = G.duck.gain, t = G.c.currentTime;
+        mhold(g, t);
+        g.setTargetAtTime(0.62, t, 0.03); g.setTargetAtTime(1, t + 0.45, 0.35);
+      } catch (e) {}
+    };
+    // premier geste dans cette maquette : la musique démarre (les navigateurs interdisent le son avant)
+    const musicGesture = (e) => {
+      const t = e && target(e);
+      if (t && t.closest && t.closest('[data-music-toggle],[data-sfx-toggle]')) return;
+      MU.yielded = false; musicSync();
+    };
+    // le volume suit le réglage tout de suite (fondu de 0,8 s) quand la musique joue déjà
+    const mlevel = () => {
+      const G = MU.G; if (!G) return;
+      try {
+        const g = G.out.gain, t = G.c.currentTime;
+        mhold(g, t);
+        g.linearRampToValueAtTime(Math.max(MVOLS[musicLevel()], 0.0001), t + 0.8);
+      } catch (e) {}
+    };
+    const announce = () => { try { W.dispatchEvent(new CustomEvent('nsfx-change', { detail: { on: isOn(), music: musicOn(), level: musicLevel(), vol: sfxVol() } })); } catch (e) {} };
+    const setMusic = (v) => {
+      const lv = v === true ? 1 : v === false ? 0 : (+v || 0);
+      mem.mlv = lv;
+      try { W.localStorage.setItem('musique', String(lv)); } catch (e) {}
+      if (lv > 0) MU.yielded = false;
+      sync(); musicSync(); mlevel(); announce();
+    };
+    const setSfxVol = (v, preview) => {
+      const n = Math.max(0, Math.min(100, Math.round(+v || 0)));
+      mem.sv = n;
+      try { W.localStorage.setItem('sfxvol', String(n)); } catch (e) {}
+      if (bus && ctx) { try { bus.gain.setTargetAtTime(svGain(n), ctx.currentTime, 0.03); } catch (e) {} }
+      announce();
+      if (preview) play('tap');
+    };
+    // une seule maquette joue à la fois : la dernière touchée reprend la même mesure, l'autre s'éteint en fondu enchaîné
+    try {
+      if (W.BroadcastChannel) {
+        MU.bc = new W.BroadcastChannel('neptune-musique');
+        MU.bc.onmessage = (e) => { if (e.data && e.data.take && e.data.take !== MU.id) { MU.yielded = true; musicSync(); } };
+      }
+    } catch (e) {}
+    W.addEventListener('storage', (e) => {
+      if (e.key === 'nmusic-owner' && e.newValue && e.newValue.split('|')[0] !== MU.id) { MU.yielded = true; musicSync(); }
+      else if (e.key === 'musique' || e.key === 'son' || e.key === 'sfxvol') {
+        sync(); musicSync(); mlevel();
+        if (e.key === 'sfxvol' && bus && ctx) { try { bus.gain.setTargetAtTime(svGain(sfxVol()), ctx.currentTime, 0.03); } catch (x) {} }
+        announce();
+      }
+    });
+    // onglet masqué : la musique continue un moment (aller-retour rapide = aucun blanc), puis se met en pause en fondu
+    D.addEventListener('visibilitychange', () => {
+      clearTimeout(MU.hideT);
+      if (D.hidden) MU.hideT = setTimeout(() => { if (D.hidden) { MU.paused = true; musicSync(); } }, MU.hideMs);
+      else if (MU.paused) { MU.paused = false; musicSync(); }
+    });
+    W.addEventListener('pagehide', mstop);
+    W.__nsfx = { play: play, setOn: setOn, isOn: isOn, scan: sync, voice: voice, air: air, ac: ac, PENTA: PENTA, musicOn: musicOn, musicLevel: musicLevel, setMusic: setMusic, sfxVol: sfxVol, setSfxVol: setSfxVol, music: { state: MU, tick: mtick, start: mstart, stop: mstop, LV: LV } };
+    sync();
+  }
+
+  renderVals() {
+    const s = this.state;
+    const sc = s.screen;
+    const isEmp = s.offer === 'emp';
+    const qList = ['name', 'age', 'goal', 'links', 'metric', 'eng', 'clip'];
+    const cur = qList[s.q];
+    const m = this.mult();
+
+    // validation questions
+    let noNext = true;
+    if (cur === 'name') noNext = !s.name.trim();
+    else if (cur === 'age') noNext = !(this.num(s.age) > 0);
+    else if (cur === 'goal') noNext = !s.goal;
+    else if (cur === 'links') noNext = !s.yt.some((v) => v.trim().length > 4);
+    else if (cur === 'metric') noNext = !(this.num(s.goal === 'ventes' ? s.ca : s.vues) > 0);
+    else if (cur === 'eng') noNext = !s.eng;
+    else if (cur === 'clip') noNext = !s.clip;
+
+    const reco = this.recommended();
+
+    // produit
+    const price = this.num(s.pPrice);
+    const pViews = this.num(s.pViews);
+    const prodIdealN = price > 0 ? Math.round((price * 5000 / this.multOf(s.clip)) / 1000) * 1000 : 0;
+    const prodG = prodIdealN > 0 && pViews > 0 ? this.gauge(prodIdealN / pViews) : null;
+
+    // rpm
+    const rpmIdealN = 0.10 * m;
+    const rpmV = this.num(s.rpm);
+    const rpmG = rpmV > 0 ? this.gauge(rpmV / rpmIdealN) : null;
+
+    // cagnotte
+    const cv = this.num(s.cagViews);
+    const cagIdealN = s.cagPeriod === 'mensuel' ? (cv / 1000) * m : (cv / 4000) * m;
+    const cagV = this.num(s.cag);
+    const cagG = cv > 0 && cagV > 0 ? this.gauge(cagV / cagIdealN) : null;
+
+    const lowInfo = 'Si le montant est trop bas, la garantie de remboursement de l\'Empereur des mers s\'annule.';
+    const highInfo = 'Une bonne offre attire davantage de clippers. Avec l\'Empereur des mers, il met en avant ton offre auprès des meilleurs.';
+    const infoFor = (g) => (g ? (g.zone === 'low' ? lowInfo : g.zone === 'high' ? highInfo : '') : '');
+    const infoBtnFor = (g) => !!(isEmp && g && g.zone !== 'ok');
+
+    const rows = [
+      { label: 'Transformer sa communauté en machine à vues', roi: true, emp: true },
+      { label: 'Suivi 1-1 des clippers', roi: true, emp: true },
+      { label: 'Différentes manières de récompenser les clippers', roi: true, emp: true },
+      { label: 'Accès à des clippers qualifiés', roi: false, emp: true },
+      { label: 'Une vue totale sur tous les clips et clippers', roi: true, emp: true },
+      { label: 'Garantie de vues', roi: false, emp: true, roiNote: 'On ne peut pas forcer ta communauté à clipper.', empNote: 'Si tu fais moins de 1 million de vues en 2 mois, on te rembourse intégralement.' }
+    ].map((r, i, all) => ({ empCls: i === all.length - 1 ? 'cell ec last' : 'cell ec', label: r.label, roiYes: r.roi, roiNo: !r.roi, empYes: r.emp, empNo: !r.emp, roiNote: r.roiNote || '', empNote: r.empNote || '' }));
+
+    // créneaux
+    const dayLabels = ['Ven. 23 oct.', 'Sam. 24 oct.', 'Lun. 26 oct.'];
+    const timeLabels = ['10:00', '11:30', '14:30', '16:00', '18:30'];
+    const days = dayLabels.map((l, i) => ({ label: l, cls: s.day === i ? 'slot sel' : 'slot', pick: () => this.setState({ day: i }) }));
+    const times = timeLabels.map((l, i) => ({ label: l, cls: s.time === i ? 'slot sel' : 'slot', pick: () => this.setState({ time: i }) }));
+
+    const emailOk = /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(s.email.trim());
+
+    return {
+      showHeader: sc !== 'client' && sc !== 'clipper',
+      showDock: sc !== 'client' && sc !== 'clipper',
+      openClient: () => this.nav('client'),
+      s_client: sc === 'client', s_clipper: sc === 'clipper',
+      goClipper: () => this.nav('clipper'),
+      goHome: () => { this.setState({ screen: 'landing', hist: [], q: 0, info: false }); try { window.scrollTo(0, 0); } catch (e) {} },
+      showClipperLink: sc === 'landing',
+      showBack: sc !== 'landing' && sc !== 'done',
+      goBack: () => this.goBack(),
+      s_landing: sc === 'landing', s_intro: sc === 'intro', s_questions: sc === 'questions', s_offers: sc === 'offers',
+      s_comm: sc === 'comm', s_hasProd: sc === 'hasProd', s_noProd: sc === 'noProd', s_prod: sc === 'prod', s_pros: sc === 'pros',
+      s_argent: sc === 'argent', s_rpm: sc === 'rpm', s_cag: sc === 'cag', s_login: sc === 'login', s_slots: sc === 'slots', s_done: sc === 'done',
+      startFlow: () => this.nav('intro'),
+      typed: s.typed,
+      startQuestions: () => this.nav('questions', 0),
+
+      // questions
+      progress: ((s.q + 1) / 7 * 100) + '%', qNum: s.q + 1,
+      q_name: cur === 'name', q_age: cur === 'age', q_goal: cur === 'goal', q_links: cur === 'links',
+      q_ca: cur === 'metric' && s.goal === 'ventes', q_vues: cur === 'metric' && s.goal !== 'ventes', q_eng: cur === 'eng', q_clip: cur === 'clip',
+      name: s.name, age: s.age, ca: s.ca, vues: s.vues,
+      onName: this.inp('name'), onAge: this.inp('age'), onCa: this.inp('ca'), onVues: this.inp('vues'),
+      goalVuesCls: s.goal === 'vues' ? 'choice sel' : 'choice', goalVentesCls: s.goal === 'ventes' ? 'choice sel' : 'choice',
+      pickVues: () => this.setState({ goal: 'vues' }), pickVentes: () => this.setState({ goal: 'ventes' }),
+      ytList: this.listVals('yt'), ttList: this.listVals('tt'), igList: this.listVals('ig'),
+      addYt: () => this.setState({ yt: s.yt.concat(['']) }), addTt: () => this.setState({ tt: s.tt.concat(['']) }), addIg: () => this.setState({ ig: s.ig.concat(['']) }),
+      engList: this.scale('eng'), clipList: this.scale('clip'),
+      noNext: noNext,
+      qHint: cur === 'links' ? 'Renseigne au moins un compte YouTube pour continuer.' : '',
+      nextQ: () => { if (s.q < 6) this.nav('questions', s.q + 1); else this.nav('offers'); },
+
+      // offres
+      offersTitle: (s.name.trim() ? s.name.trim() + ', ' : '') + 'voici le programme qu\'on te conseille',
+      rows: rows,
+      recoRoi: reco === 'roi', recoEmp: reco === 'emp',
+      roiHead: '',
+      empHead: '',
+      chooseRoi: () => { this.setState({ offer: 'roi' }); this.nav('comm'); },
+      chooseEmp: () => { this.setState({ offer: 'emp' }); this.nav('comm'); },
+
+      // communauté
+      commProduit: () => this.nav('hasProd'),
+      commArgent: () => { this.setState({ pFlow: 'communauté' }); this.nav('argent'); },
+      hasYes: () => this.nav('prod'), hasMaybe: () => this.nav('noProd'), hasNo: () => this.nav('noProd'),
+      foundIdea: () => this.nav('prod'),
+      preferMoney: () => { this.setState({ pFlow: 'communauté' }); this.nav('argent'); },
+
+      // produit
+      pName: s.pName, pSite: s.pSite, pDesc: s.pDesc, pPrice: s.pPrice, pViews: s.pViews,
+      onPName: this.inp('pName'), onPSite: this.inp('pSite'), onPDesc: this.inp('pDesc'), onPPrice: this.inp('pPrice'), onPViews: this.inp('pViews'),
+      reYesCls: s.reob === 'oui' ? 'chip sel' : 'chip', reNoCls: s.reob === 'non' ? 'chip sel' : 'chip',
+      reYes: () => this.setState({ reob: 'oui' }), reNo: () => this.setState({ reob: 'non' }),
+      prodGauge: !!prodG, prodIdeal: this.fr(prodIdealN),
+      prodPos: prodG ? prodG.pos : '0%', prodCls: prodG ? prodG.cls : '', prodLabel: prodG ? prodG.label : '', prodMsg: prodG ? prodG.msg : '',
+      noProdNext: !(s.pName.trim() && pViews > 0 && s.reob),
+      prodNext: () => { if (isEmp) this.nav('pros'); else this.nav('login'); },
+
+      // pros / argent
+      prosNext: () => { this.setState({ pFlow: 'pros' }); this.nav('argent'); },
+      isEmp: isEmp,
+      argentTitle: s.pFlow === 'pros' ? 'Comment rémunérer les clippers qualifiés, en argent ?' : 'Comment veux-tu rémunérer avec de l\'argent ?',
+      pickRpm: () => this.nav('rpm'), pickCag: () => this.nav('cag'),
+
+      // rpm
+      rpmWeekCls: s.rpmPeriod === 'hebdo' ? 'chip sel' : 'chip', rpmMonthCls: s.rpmPeriod === 'mensuel' ? 'chip sel' : 'chip',
+      rpmWeek: () => this.setState({ rpmPeriod: 'hebdo' }), rpmMonth: () => this.setState({ rpmPeriod: 'mensuel' }),
+      rpm: s.rpm, plafond: s.plafond, onRpm: this.inp('rpm'), onPlafond: this.inp('plafond'),
+      plafondWarn: isEmp && this.num(s.plafond) > 0,
+      rpmGauge: !!rpmG, rpmIdeal: this.fr(rpmIdealN, 2),
+      rpmPos: rpmG ? rpmG.pos : '0%', rpmCls: rpmG ? rpmG.cls : '', rpmLabel: rpmG ? rpmG.label : '', rpmMsg: rpmG ? rpmG.msg : '',
+      rpmInfoBtn: infoBtnFor(rpmG), infoOpen: s.info && (infoBtnFor(rpmG) || infoBtnFor(cagG)),
+      infoText: infoFor(sc === 'cag' ? cagG : rpmG),
+      toggleInfo: () => this.setState({ info: !s.info }),
+      noRpmNext: !(rpmV > 0),
+
+      // cagnotte
+      cagWeekCls: s.cagPeriod === 'hebdo' ? 'chip sel' : 'chip', cagMonthCls: s.cagPeriod === 'mensuel' ? 'chip sel' : 'chip',
+      cagWeek: () => this.setState({ cagPeriod: 'hebdo' }), cagMonth: () => this.setState({ cagPeriod: 'mensuel' }),
+      cagViews: s.cagViews, cag: s.cag, onCagViews: this.inp('cagViews'), onCag: this.inp('cag'),
+      cagGauge: !!cagG, cagIdeal: this.fr(cagIdealN), cagPer: s.cagPeriod === 'mensuel' ? 'par mois' : 'par semaine',
+      cagPos: cagG ? cagG.pos : '0%', cagCls: cagG ? cagG.cls : '', cagLabel: cagG ? cagG.label : '', cagMsg: cagG ? cagG.msg : '',
+      cagInfoBtn: infoBtnFor(cagG),
+      noCagNext: !(cagV > 0 && cv > 0),
+      toLogin: () => this.nav('login'),
+
+      // connexion
+      loginStep1: !s.sent, loginStep2: s.sent,
+      email: s.email, onEmail: this.inp('email'), consent: s.consent, onConsent: (e) => this.setState({ consent: e.target.checked }),
+      noSend: !(emailOk && s.consent), sendCode: () => { this.sfx('notif'); this.setState({ sent: true }); },
+      code: s.code, onCode: (e) => this.setState({ code: e.target.value.replace(/\D/g, '').slice(0, 6) }),
+      noVerify: s.code.length !== 6, verify: () => this.nav('slots'),
+
+      // créneaux
+      days: days, times: times, noSlot: s.day < 0 || s.time < 0,
+      confirmSlot: () => { this.sfx('success'); this.setState({ confirmed: true, hist: [], screen: 'done' }); },
+      slotText: s.day >= 0 && s.time >= 0 ? dayLabels[s.day] + ' à ' + timeLabels[s.time] + ', heure de Paris' : ''
+    };
+  }
+}
+</script>
+</body>
+</html>

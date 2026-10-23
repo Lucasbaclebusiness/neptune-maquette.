@@ -1,0 +1,2142 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Espace clipper Neptune</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700&family=Inter:wght@400;500;600&family=Outfit:wght@500;600;700;800&display=swap">
+<style>
+body{margin:0}
+.ecl button{font-family:inherit;cursor:pointer}
+.ecl button:disabled{cursor:not-allowed}
+.ecl nav::-webkit-scrollbar{height:0}
+.ecl button:focus-visible,.ecl input:focus-visible{outline:2px solid #7BE6D6;outline-offset:2px}
+.ecl .da{font-family:'Outfit',system-ui,sans-serif}
+.ecl .fx-stage{position:relative;width:200px;height:226px}
+.ecl .fx-lueur{position:absolute;inset:-12%;border-radius:50%;opacity:0;pointer-events:none}
+.ecl .fx-ombre{position:absolute;left:24%;width:52%;height:11%;bottom:1%;border-radius:50%;background:#5f6c80;opacity:.3}
+.ecl .fx-flamme{position:absolute;left:14%;width:72%;bottom:6%;aspect-ratio:88/110;transform-origin:50% 100%}
+.ecl .fx-flamme svg{width:100%;height:100%;display:block;overflow:visible}
+.ecl .fx-ring{position:absolute;left:18%;width:64%;bottom:4%;aspect-ratio:1;border:4px solid;border-radius:50%;opacity:0;pointer-events:none}
+.ecl .fx-conf{position:absolute;left:50%;top:60%;margin:-5px;width:10px;height:10px;border-radius:3px;opacity:0;pointer-events:none}
+.ecl .fx-chiffre{display:grid;justify-items:center;min-width:2ch;font-size:68px;font-weight:800;line-height:1.05}
+.ecl .fx-n{grid-area:1/1;color:#4d5a6e}
+.ecl .fx-label{min-height:1.4em;font-size:20px;font-weight:700}
+.ecl .fx-carte{min-height:84px;display:flex;gap:10px;justify-content:center;padding:14px 16px;border:1.5px solid #1f3a6b;border-radius:18px;background:#0b1a36}
+.ecl .fx-j{display:grid;gap:6px;justify-items:center;font-size:13px;color:#9fb3d6}
+.ecl .fx-dot{position:relative;width:26px;height:26px;border-radius:50%;background:#1b2f55}
+.ecl .fx-ck{position:absolute;inset:0;border-radius:50%;display:grid;place-items:center;color:#07182b;font-weight:800;font-size:15px}
+.ecl .fx-msg{margin:0;min-height:1.4em;color:#cfdcf5;text-align:center}
+.sfx-tog{position:fixed;right:16px;bottom:20px;z-index:80;width:44px;height:44px;padding:0;border-radius:50%;border:1px solid rgba(255,255,255,.2);background:rgba(8,20,34,.85);color:#cfe3ee;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.sfx-tog:hover{background:rgba(20,44,66,.95)}
+.sfx-tog:focus-visible{outline:2px solid #7BE6D6;outline-offset:2px}
+.sfx-tog[aria-pressed=false]{color:#7d93a3}
+.sfx-tog[aria-pressed=false] .sfx-on{display:none}
+.sfx-tog[aria-pressed=true] .sfx-off{display:none}
+.mus-tog{right:68px}
+@keyframes ecl-ping{0%{transform:scale(1);opacity:.55}100%{transform:scale(2.7);opacity:0}}
+.ecl .watch-dot{position:relative;flex-shrink:0;width:10px;height:10px;border-radius:50%;background:currentColor}
+.ecl .watch-dot::after{content:'';position:absolute;inset:0;border-radius:50%;background:currentColor;animation:ecl-ping 1.9s ease-out infinite}
+.ecl input[type=range]{display:block;width:100%;height:30px;margin:0;cursor:pointer}
+@media (prefers-reduced-motion: reduce){.ecl .watch-dot::after{animation:none;opacity:0}}
+.mus-tog[aria-pressed=false] .m-on{display:none}
+.mus-tog[aria-pressed=true] .m-off{display:none}
+.mus-tog[data-level="1"] .m-d2{display:none}
+@keyframes ecl-ach{0%{transform:translate(-50%,-160%) scale(.7);opacity:0}7%{transform:translate(-50%,0) scale(1);opacity:1}9%{transform:translate(-50%,3px) scale(1)}11%{transform:translate(-50%,0) scale(1)}90%{transform:translate(-50%,0);opacity:1}100%{transform:translate(-50%,-160%);opacity:0}}
+@keyframes ecl-ach-w{0%,10%{width:76px}22%{width:min(410px,calc(100vw - 24px))}82%{width:min(410px,calc(100vw - 24px))}93%,100%{width:76px}}
+@keyframes ecl-ach-t{0%,14%{opacity:0}24%{opacity:1}80%{opacity:1}86%,100%{opacity:0}}
+@keyframes ecl-ach-s{0%,22%{left:-90px}34%,100%{left:110%}}
+@keyframes ecl-ach-rm{0%{opacity:0}8%{opacity:1}90%{opacity:1}100%{opacity:0}}
+.ecl .ach-pop{position:fixed;top:14px;left:50%;z-index:95;animation:ecl-ach 5.6s cubic-bezier(.2,.8,.2,1) forwards}
+.ecl .ach-pill{position:relative;display:flex;align-items:center;gap:12px;height:76px;box-sizing:border-box;padding:0 20px 0 0;overflow:hidden;white-space:nowrap;background:rgba(9,20,33,.95);border:1px solid rgba(255,255,255,.16);border-radius:999px;animation:ecl-ach-w 5.6s cubic-bezier(.3,.8,.2,1) forwards}
+.ecl .ach-txt{opacity:0;animation:ecl-ach-t 5.6s linear forwards}
+.ecl .ach-shine{position:absolute;top:-10px;bottom:-10px;left:-90px;width:64px;background:linear-gradient(100deg,transparent,rgba(255,255,255,.3),transparent);transform:skewX(-18deg);pointer-events:none;animation:ecl-ach-s 5.6s linear forwards}
+@media (prefers-reduced-motion: reduce){.ecl .ach-pop{animation:ecl-ach-rm 5.6s linear forwards}.ecl .ach-pill{width:min(410px,calc(100vw - 24px));animation:none}.ecl .ach-txt{opacity:1;animation:none}.ecl .ach-shine{display:none}}
+</style>
+</helmet>
+<div class="ecl" style="min-height: 1000px; background: #06182A; color: #E6F3F5; font-family: 'Inter', system-ui, sans-serif; font-size: 14px; line-height: 1.5; box-sizing: border-box; position: relative">
+
+<!-- ============ REGLES : a valider a la premiere connexion ============ -->
+<sc-if value="{{ flagGate }}" hint-placeholder-val="{{ true }}">
+<div style="min-height: 1000px; display: flex; align-items: center; justify-content: center; padding: 32px; box-sizing: border-box">
+<div style="width: 100%; max-width: 580px; background: #0B2338; border-radius: 16px; padding: 36px; box-sizing: border-box; display: flex; flex-direction: column; gap: 22px">
+<div style="display: flex; align-items: center; gap: 12px">
+<svg width="36" height="36" viewBox="0 0 36 36" aria-hidden="true"><circle cx="18" cy="18" r="17" style="fill: #0F2C46; stroke: #35D6C8; stroke-width: 1.5"></circle><path d="M11 25V11l14 14V11" style="fill: none; stroke: #35D6C8; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round"></path></svg>
+<span style="font-family: 'Sora', system-ui, sans-serif; font-weight: 700; letter-spacing: 0.22em; font-size: 14px">NEPTUNE</span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<h1 style="margin: 0; font-family: 'Sora', system-ui, sans-serif; font-size: 24px; font-weight: 600">Avant de commencer</h1>
+<p style="margin: 0; color: #8FB0BF; font-size: 15px">Voici les règles de l'équipage. Coche chaque règle pour montrer que tu l'as comprise.</p>
+</div>
+<div style="display: flex; flex-direction: column; gap: 10px">
+<sc-for list="{{ gateRules }}" as="r" hint-placeholder-count="4">
+<button role="checkbox" aria-checked="{{ r.on }}" onClick="{{ r.toggle }}" style="display: flex; align-items: flex-start; gap: 14px; min-height: 56px; padding: 12px 14px; box-sizing: border-box; text-align: left; background: #06182A; border: 1px solid {{ r.border }}; border-radius: 12px; color: #E6F3F5; font-size: 15px">
+<span style="flex-shrink: 0; width: 24px; height: 24px; margin-top: 1px; border-radius: 7px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; {{ r.box }}">{{ r.mark }}</span>
+<span>{{ r.text }}</span>
+</button>
+</sc-for>
+</div>
+<button disabled="{{ gateLocked }}" onClick="{{ gateGo }}" style="min-height: 48px; border-radius: 10px; font-size: 15px; font-weight: 600; {{ gateBtn }}">J'accède à mon espace</button>
+<span style="color: #8FB0BF; font-size: 13px">Tu pourras relire ces règles à tout moment dans l'onglet Tuto. Tes comptes YouTube et TikTok se connectent ensuite dans Paramètres, quand tu veux.</span>
+</div>
+</div>
+</sc-if>
+
+<!-- ============ ESPACE ============ -->
+<sc-if value="{{ flagApp }}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; min-height: 1000px">
+
+<header style="position: relative; z-index: 30; display: flex; align-items: stretch; gap: 28px; padding: 0 24px; height: 64px; box-sizing: border-box; background: #06182A; border-bottom: 1px solid {{ lineColor }}">
+<button onClick="{{ toggleMenu }}" aria-label="Menu Neptune" style="display: flex; align-items: center; gap: 10px; min-height: 44px; align-self: center; padding: 0 8px 0 0; background: transparent; border: 0; color: #E6F3F5">
+<svg width="30" height="30" viewBox="0 0 36 36" aria-hidden="true"><circle cx="18" cy="18" r="17" style="fill: #0F2C46; stroke: #35D6C8; stroke-width: 1.5"></circle><path d="M11 25V11l14 14V11" style="fill: none; stroke: #35D6C8; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round"></path></svg>
+<span style="font-family: 'Sora', system-ui, sans-serif; font-weight: 700; letter-spacing: 0.22em; font-size: 13px">NEPTUNE</span>
+<svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5l3 3 3-3" style="fill: none; stroke: #8FB0BF; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round"></path></svg>
+</button>
+<nav aria-label="Onglets" style="display: flex; flex-wrap: nowrap; align-items: stretch; gap: 8px; flex: 1; min-width: 0; overflow-x: auto">
+<sc-for list="{{ tabs }}" as="t" hint-placeholder-count="6">
+<button onClick="{{ t.go }}" style="flex-shrink: 0; white-space: nowrap; padding: 0 14px; background: transparent; border: 0; font-size: 14px; {{ t.style }}">{{ t.label }}</button>
+</sc-for>
+</nav>
+</header>
+
+<!-- Menu du logo : maquette (voir comme) + deconnexion -->
+<sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
+<button aria-label="Fermer le menu" onClick="{{ closeMenu }}" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 20; background: transparent; border: 0; cursor: default"></button>
+<div role="menu" style="position: absolute; top: 58px; left: 20px; z-index: 40; width: 290px; box-sizing: border-box; background: #0B2338; border: 1px solid #1F4666; border-radius: 14px; padding: 8px; box-shadow: 0 14px 36px rgba(0,0,0,0.5); display: flex; flex-direction: column; gap: 2px">
+<div style="padding: 8px 12px; color: #8FB0BF; font-size: 12px; word-break: break-all">{{ userEmail }}</div>
+<div style="padding: 6px 12px 2px; color: #8FB0BF; font-size: 12px">Maquette : voir comme</div>
+<sc-for list="{{ profileOptions }}" as="v" hint-placeholder-count="4">
+<button role="menuitemradio" onClick="{{ v.pick }}" style="display: flex; align-items: center; gap: 12px; min-height: 44px; padding: 0 12px; border: 0; border-radius: 8px; color: #E6F3F5; text-align: left; font-size: 14px; {{ v.style }}"><span style="width: 8px; height: 8px; border-radius: 50%; box-sizing: border-box; flex-shrink: 0; {{ v.dot }}"></span>{{ v.label }}</button>
+</sc-for>
+<button role="menuitem" onClick="{{ replayAch }}" style="display: flex; align-items: center; min-height: 44px; padding: 0 12px; background: transparent; border: 0; border-radius: 8px; color: #E6F3F5; text-align: left; font-size: 14px">Maquette : revoir l'annonce d'un succès</button>
+<div style="height: 1px; background: #163650; margin: 6px 4px"></div>
+<sc-if value="{{ menuAsk }}" hint-placeholder-val="{{ true }}">
+<button role="menuitem" onClick="{{ askLogout }}" style="display: flex; align-items: center; min-height: 44px; padding: 0 12px; background: transparent; border: 0; border-radius: 8px; color: #E6F3F5; text-align: left; font-size: 14px">Se déconnecter</button>
+</sc-if>
+<sc-if value="{{ menuConfirm }}" hint-placeholder-val="{{ false }}">
+<div style="padding: 6px 12px 10px; display: flex; flex-direction: column; gap: 10px">
+<span>Te déconnecter ?</span>
+<div style="display: flex; gap: 8px">
+<button onClick="{{ logout }}" style="flex: 1; min-height: 44px; border-radius: 8px; font-size: 14px; font-weight: 600; {{ btnStyle }}">Oui</button>
+<button onClick="{{ cancelLogout }}" style="flex: 1; min-height: 44px; background: transparent; color: #E6F3F5; border: 1px solid #1F4666; border-radius: 8px; font-size: 14px">Non</button>
+</div>
+</div>
+</sc-if>
+</div>
+</sc-if>
+
+<main style="width: 100%; max-width: 1080px; margin: 0 auto; box-sizing: border-box; padding: 44px 32px 80px; display: flex; flex-direction: column; gap: 32px">
+
+<!-- Titre de la page -->
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px">
+<div style="display: flex; flex-direction: column; gap: 6px; min-width: 0">
+<span style="font-size: 13px; color: {{ accent }}">{{ overText }}</span>
+<h1 style="margin: 0; font-family: 'Sora', system-ui, sans-serif; font-size: 28px; font-weight: 600">{{ titleText }}</h1>
+<span style="color: #8FB0BF">{{ subText }}</span>
+</div>
+<sc-if value="{{ hasSwitch }}" hint-placeholder-val="{{ false }}">
+<div role="group" aria-label="Choisir le client" style="display: flex; align-items: center; gap: 4px; padding: 3px; background: #0B2338; border-radius: 12px">
+<button aria-label="Client précédent" onClick="{{ prevClient }}" style="width: 44px; height: 44px; background: transparent; border: 0; border-radius: 9px; color: #E6F3F5; font-size: 20px">‹</button>
+<div style="min-width: 110px; display: flex; flex-direction: column; align-items: center; line-height: 1.25"><strong style="font-size: 15px">{{ clientName }}</strong><span style="color: #8FB0BF; font-size: 12px">{{ clientPos }}</span></div>
+<button aria-label="Client suivant" onClick="{{ nextClient }}" style="width: 44px; height: 44px; background: transparent; border: 0; border-radius: 9px; color: #E6F3F5; font-size: 20px">›</button>
+</div>
+</sc-if>
+</div>
+
+<!-- ============ ONGLET : profil (allege) ============ -->
+<sc-if value="{{ pgProfil }}" hint-placeholder-val="{{ true }}">
+
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 24px 36px; padding: 24px; background: #0B2338; border-radius: 16px">
+<div style="display: flex; align-items: center; gap: 20px; flex: 1 1 320px; min-width: 0">
+<div aria-hidden="true" style="flex-shrink: 0; width: 88px; height: 88px; border-radius: 50%; box-sizing: border-box; border: 2px solid {{ accent }}; background: #0F2C46; display: flex; align-items: center; justify-content: center; font-family: 'Sora', system-ui, sans-serif; font-size: 34px; font-weight: 700">{{ initial }}</div>
+<div style="display: flex; flex-direction: column; gap: 4px; min-width: 0">
+<strong style="font-family: 'Sora', system-ui, sans-serif; font-size: 20px; font-weight: 600">{{ pseudo }}</strong>
+<span style="color: #8FB0BF">Photo de profil importée de ton Discord</span>
+<span style="color: #8FB0BF; word-break: break-all">{{ userEmail }}</span>
+</div>
+</div>
+<div style="flex: 1 1 300px; display: flex; flex-direction: column; gap: 8px">
+<span style="color: #8FB0BF; font-size: 13px">Ton rôle</span>
+<div style="display: flex; align-items: center; gap: 10px">
+<strong class="da" style="font-size: 24px; font-weight: 800">{{ role.name }}</strong>
+<span class="da" style="padding: 1px 12px; border-radius: 99px; color: #0A1A2E; font-weight: 800; font-size: 14px; background: {{ role.ring }}">{{ role.rarity }}</span>
+</div>
+<span style="color: #9FB3D6">{{ role.progressText }}</span>
+<div style="height: 10px; border-radius: 999px; background: #163650; overflow: hidden"><div style="height: 10px; border-radius: 999px; background: {{ role.ring }}; width: {{ role.bar }}"></div></div>
+</div>
+</div>
+
+<div style="display: flex; flex-wrap: wrap; gap: 16px">
+<button onClick="{{ goActivite }}" style="flex: 1 1 340px; display: flex; flex-direction: column; align-items: flex-start; gap: 6px; padding: 22px 24px; box-sizing: border-box; background: #0B2338; border: 1px solid #163650; border-radius: 16px; color: #E6F3F5; text-align: left">
+<span style="color: #8FB0BF; font-size: 13px">Activité</span>
+<strong class="da" style="font-size: 30px; font-weight: 800; color: {{ sumColor }}">{{ streak }} {{ streakLabel }}</strong>
+<span style="color: #9FB3D6">{{ streakHint }}</span>
+<span style="margin-top: 6px; color: {{ accent }}; font-weight: 600">Voir mon activité →</span>
+</button>
+<button onClick="{{ goCollection }}" style="flex: 1 1 340px; display: flex; flex-direction: column; align-items: flex-start; gap: 6px; padding: 22px 24px; box-sizing: border-box; background: #0B2338; border: 1px solid #163650; border-radius: 16px; color: #E6F3F5; text-align: left">
+<span style="color: #8FB0BF; font-size: 13px">Collection</span>
+<strong class="da" style="font-size: 30px; font-weight: 800">{{ unlockedCount }} / {{ totalCount }} succès</strong>
+<div style="width: 100%; height: 8px; border-radius: 999px; background: #163650; overflow: hidden"><div style="height: 8px; border-radius: 999px; background: {{ accent }}; width: {{ collBar }}"></div></div>
+<span style="margin-top: 6px; color: {{ accent }}; font-weight: 600">Voir ma collection →</span>
+</button>
+</div>
+</sc-if>
+
+<!-- ============ ONGLET : activite (la serie) ============ -->
+<sc-if value="{{ pgActivite }}" hint-placeholder-val="{{ false }}">
+
+<div class="da" style="display: flex; flex-direction: column; align-items: center; gap: 14px; padding: 28px 20px 24px; background: #10234A; border-radius: 22px">
+<div style="width: 100%; display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 16px">
+<h2 style="margin: 0; font-size: 20px; font-weight: 800">Ta série</h2>
+<span style="color: #9FB3D6">Un clip posté par jour garde ta flamme allumée.</span>
+</div>
+
+<!-- La flamme, le chiffre, la semaine et le message sont dessinés et animés par le script (id ci-dessous) -->
+<div id="{{ rootId }}" ref="{{ setRoot }}" style="display: flex; flex-direction: column; align-items: center; gap: 8px; padding-top: 16px"></div>
+
+<sc-if value="{{ streakDone }}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 10px">
+<button onClick="{{ replay }}" style="min-height: 44px; padding: 0 20px; border-radius: 99px; border: 1.5px solid #1F3A6B; background: transparent; color: #F3F7FF; font: 700 15px 'Outfit', system-ui, sans-serif">Rejouer l'animation (maquette)</button>
+</div>
+</sc-if>
+<sc-if value="{{ streakBusy }}" hint-placeholder-val="{{ false }}">
+<span style="color: #9FB3D6; min-height: 44px; display: flex; align-items: center">Clip détecté, validation de ta série…</span>
+</sc-if>
+<sc-if value="{{ streakOpen }}" hint-placeholder-val="{{ true }}">
+<div style="width: 100%; max-width: 560px; display: flex; flex-direction: column; gap: 12px">
+<sc-if value="{{ hasAccs }}" hint-placeholder-val="{{ true }}">
+<div role="status" style="display: flex; align-items: flex-start; gap: 14px; padding: 16px 18px; background: #0B1A36; border: 1.5px solid #1F3A6B; border-radius: 16px">
+<span class="watch-dot" aria-hidden="true" style="margin-top: 7px; color: {{ accent }}"></span>
+<div style="display: flex; flex-direction: column; gap: 6px; min-width: 0">
+<strong style="font-size: 16px; color: #F3F7FF">Ta série se valide toute seule</strong>
+<span style="color: #CFDCF5; font-size: 15px">Dès que tu postes un clip public sur un de tes comptes connectés, on le détecte et ta flamme s'allume. Rien à coller.</span>
+<div style="display: flex; flex-wrap: wrap; gap: 6px; padding-top: 4px">
+<sc-for list="{{ watchChips }}" as="w" hint-placeholder-count="3">
+<span style="padding: 3px 10px; border-radius: 99px; background: #10234A; border: 1px solid #1F3A6B; color: #CFDCF5; font-size: 13px">{{ w.label }}</span>
+</sc-for>
+</div>
+</div>
+</div>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px">
+<button data-sfx="none" onClick="{{ simClip }}" style="min-height: 48px; padding: 0 22px; border-radius: 99px; font: 800 15px 'Outfit', system-ui, sans-serif; background: #f2c94c; color: #0a1a2e; border: 0; box-shadow: 0 3px 0 #b8912a">Simuler un clip détecté (maquette)</button>
+<button onClick="{{ goParams }}" style="min-height: 44px; padding: 0 6px; background: transparent; border: 0; color: #CFDCF5; font: 700 14px 'Outfit', system-ui, sans-serif; text-decoration: underline">Gérer mes comptes</button>
+</div>
+</sc-if>
+<sc-if value="{{ noAccs }}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; align-items: flex-start; gap: 8px; padding: 18px 20px; background: #0B1A36; border: 1.5px solid #1F3A6B; border-radius: 16px">
+<strong style="font-size: 16px; color: #F3F7FF">Connecte un compte pour lancer ta série</strong>
+<span style="color: #CFDCF5; font-size: 15px">Lie ton compte YouTube ou TikTok : on détecte tes clips tout seuls et tes vues se comptent automatiquement. Tu n'as aucun lien à copier.</span>
+<button onClick="{{ goParams }}" style="margin-top: 6px; min-height: 48px; padding: 0 22px; border-radius: 99px; font: 800 15px 'Outfit', system-ui, sans-serif; {{ btnStyle }}">Connecter un compte</button>
+</div>
+</sc-if>
+<span style="color: #9FB3D6; font-size: 13px">Maquette : la vraie détection sera branchée avec les API officielles des plateformes.</span>
+</div>
+</sc-if>
+</div>
+
+<div class="da" style="display: flex; flex-direction: column; gap: 10px; padding: 22px 24px; background: #10234A; border-radius: 20px">
+<div style="display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 16px">
+<h2 style="margin: 0; font-size: 18px; font-weight: 800">Prochain palier</h2>
+<span style="color: #9FB3D6">{{ nextText }}</span>
+</div>
+<div style="height: 10px; border-radius: 999px; background: #1B2F55; overflow: hidden"><div style="height: 10px; border-radius: 999px; background: {{ nextColor }}; width: {{ nextBar }}"></div></div>
+</div>
+</sc-if>
+
+<!-- ============ ONGLET : collection (succes + roles) ============ -->
+<sc-if value="{{ pgCollection }}" hint-placeholder-val="{{ false }}">
+
+<div role="group" aria-label="Choisir la liste" style="display: flex; flex-wrap: wrap; gap: 8px">
+<sc-for list="{{ collTabs }}" as="c" hint-placeholder-count="2">
+<button aria-pressed="{{ c.on }}" onClick="{{ c.go }}" style="min-height: 44px; padding: 0 20px; border-radius: 99px; font-size: 15px; font-weight: 600; {{ c.style }}">{{ c.label }} <span style="opacity: 0.75">{{ c.count }}</span></button>
+</sc-for>
+</div>
+
+<!-- Les succes -->
+<sc-if value="{{ collSucces }}" hint-placeholder-val="{{ true }}">
+<div class="da" style="display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px">
+<h2 style="margin: 0; font-size: 20px; font-weight: 800">Tes succès</h2>
+<span style="color: #9FB3D6">{{ badgeCount }}</span>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 12px">
+<sc-for list="{{ badgeItems }}" as="b" hint-placeholder-count="12">
+<sc-if value="{{ b.isHead }}" hint-placeholder-val="{{ false }}">
+<div style="flex: 0 0 100%; display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 12px; margin-top: 14px; padding-bottom: 8px; border-bottom: 1px solid #1F3A6B">
+<span style="font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; color: #9FB3D6; font-weight: 700">{{ b.title }}</span>
+<span style="font-size: 13px; color: #9FB3D6">{{ b.note }}</span>
+</div>
+</sc-if>
+<sc-if value="{{ b.isTile }}" hint-placeholder-val="{{ true }}">
+<div style="width: 192px; box-sizing: border-box; padding: 12px 8px 12px; background: #0E1F3F; border: 1.5px solid #1F3A6B; border-radius: 20px; display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center">
+<div style="position: relative; width: 176px; height: 169px">
+<svg viewBox="0 -8 200 192" width="176" height="169" role="img" aria-label="{{ b.label }}" style="{{ b.svgStyle }}">
+<defs>
+<linearGradient id="rg{{ b.uid }}" x1="0.1" y1="0" x2="0.9" y2="1"><stop offset="0" stop-color="{{ b.ringLight }}"></stop><stop offset="1" stop-color="{{ b.ringDark }}"></stop></linearGradient>
+<radialGradient id="dg{{ b.uid }}" cx="0.4" cy="0.32" r="0.8"><stop offset="0" stop-color="{{ b.discHi }}"></stop><stop offset="1" stop-color="{{ b.discLo }}"></stop></radialGradient>
+<linearGradient id="pg{{ b.uid }}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="{{ b.ringLight }}"></stop><stop offset="1" stop-color="{{ b.ringDark }}"></stop></linearGradient>
+<linearGradient id="bg{{ b.uid }}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="{{ b.bladeLight }}"></stop><stop offset="1" stop-color="{{ b.ring }}"></stop></linearGradient>
+</defs>
+<g display="{{ b.dHalo }}"><circle cx="100" cy="88" r="88" fill="{{ b.halo }}"></circle></g>
+<g display="{{ b.dExo }}"><path d="M100 88 L72 2 L96 42 Z M100 88 L128 2 L104 42 Z M100 88 L8 62 L54 76 Z M100 88 L192 62 L146 76 Z M100 88 L36 168 L68 128 Z M100 88 L164 168 L132 128 Z" fill="#3AA6A6" opacity="0.32"></path></g>
+<g display="{{ b.dBlades }}">
+<path d="M17 22 L56 58 L52 84 C40 76 20 52 17 22 Z" fill="url(#bg{{ b.uid }})" stroke="#07182B" stroke-width="4.4" stroke-linejoin="round"></path>
+<path d="M183 22 L144 58 L148 84 C160 76 180 52 183 22 Z" fill="url(#bg{{ b.uid }})" stroke="#07182B" stroke-width="4.4" stroke-linejoin="round"></path>
+</g>
+<g display="{{ b.dBladesX }}">
+<path d="M8 12 L62 60 L58 96 C36 86 10 58 8 12 Z" fill="url(#bg{{ b.uid }})" stroke="#07182B" stroke-width="4.4" stroke-linejoin="round"></path>
+<path d="M192 12 L138 60 L142 96 C164 86 190 58 192 12 Z" fill="url(#bg{{ b.uid }})" stroke="#07182B" stroke-width="4.4" stroke-linejoin="round"></path>
+</g>
+<g display="{{ b.dOars }}">
+<path d="M40 114 L70 140 M160 114 L130 140" stroke="#07182B" stroke-width="8" stroke-linecap="round" fill="none"></path>
+<path d="M40 114 L70 140 M160 114 L130 140" stroke="{{ b.oar }}" stroke-width="4" stroke-linecap="round" fill="none"></path>
+</g>
+<path d="M100 88 V21 M100 88 L52.6 40.6 M100 88 L147.4 40.6 M100 88 H33 M100 88 H167 M100 88 L52.6 135.4 M100 88 L147.4 135.4" stroke="#07182B" stroke-width="5" stroke-linecap="round" fill="none"></path>
+<g display="{{ b.dStars }}">
+<polygon points="{{ b.s1 }}" fill="#fcebb7" stroke="#07182B" stroke-width="3.2" stroke-linejoin="round"></polygon>
+<polygon points="{{ b.s2 }}" fill="#fcebb7" stroke="#07182B" stroke-width="3" stroke-linejoin="round"></polygon>
+<polygon points="{{ b.s3 }}" fill="#fcebb7" stroke="#07182B" stroke-width="3" stroke-linejoin="round"></polygon>
+</g>
+<g fill="{{ b.ring }}" stroke="#07182B" stroke-width="3.2">
+<circle cx="100" cy="21" r="6.2"></circle><circle cx="52.6" cy="40.6" r="6.2"></circle><circle cx="147.4" cy="40.6" r="6.2"></circle><circle cx="33" cy="88" r="6.2"></circle><circle cx="167" cy="88" r="6.2"></circle><circle cx="52.6" cy="135.4" r="6.2"></circle><circle cx="147.4" cy="135.4" r="6.2"></circle>
+</g>
+<circle cx="100" cy="88" r="50" fill="url(#rg{{ b.uid }})" stroke="#07182B" stroke-width="4.4"></circle>
+<circle cx="100" cy="88" r="44.5" fill="none" stroke="{{ b.rim }}" stroke-width="1.6" opacity="0.75"></circle>
+<circle cx="100" cy="88" r="37.5" fill="url(#dg{{ b.uid }})" stroke="#07182B" stroke-width="4.4"></circle>
+
+<g transform="translate(100 88)">
+<g display="{{ b.dSail }}" stroke="#07182B" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round">
+<path d="M-0.5 -26 L9.5 -23 L-0.5 -20 Z" fill="#07182B"></path>
+<path d="M-2 -21 L-23 8 L-2 8 Z" fill="{{ b.iconLight }}"></path>
+<path d="M2.6 -16 L2.6 8 L23 8 Z" fill="{{ b.iconLight }}"></path>
+<path d="M0.4 -24 V12" stroke-width="4.8" fill="none"></path>
+<path d="M0.4 -24 V12" stroke="{{ b.iconLight }}" stroke-width="1.8" fill="none"></path>
+<path d="M-25 10 L25 10 C22 18 12 22 0 22 C-12 22 -22 18 -25 10 Z" fill="{{ b.iconMid }}"></path>
+<path d="M-3 12 H3 L2 20 H-2 Z" fill="{{ b.iconLight }}" stroke-width="1.8"></path>
+</g>
+<g display="{{ b.dSpy }}" transform="rotate(-32) scale(1.12)" stroke="#07182B" stroke-width="2.2" stroke-linejoin="round">
+<rect x="-30" y="-5" width="17" height="10" rx="2.5" fill="{{ b.iconMid }}"></rect>
+<rect x="-15" y="-7" width="5" height="14" rx="1.5" fill="{{ b.iconMid }}"></rect>
+<rect x="-11" y="-7" width="16" height="14" rx="2" fill="{{ b.iconLight }}"></rect>
+<rect x="3" y="-9" width="5" height="18" rx="1.5" fill="{{ b.iconMid }}"></rect>
+<rect x="7" y="-9.5" width="22" height="19" rx="3" fill="{{ b.iconLight }}"></rect>
+<ellipse cx="28" cy="-1" rx="2.4" ry="6" fill="#ffffff" stroke="none"></ellipse>
+</g>
+<g display="{{ b.dGrp }}" stroke="#07182B" stroke-width="2.4" stroke-linejoin="round">
+<circle cx="13" cy="-8" r="6.4" fill="{{ b.iconMid }}"></circle>
+<path d="M4 16 C4 7 8 2 13 2 C19 2 23 7 23 16 Z" fill="{{ b.iconMid }}"></path>
+<circle cx="-8.5" cy="-11.5" r="7.6" fill="{{ b.iconLight }}"></circle>
+<path d="M-23 16 C-23 3 -16 -1 -8.5 -1 C-1 -1 6 3 6 16 Z" fill="{{ b.iconLight }}"></path>
+</g>
+<g display="{{ b.dFlame }}" stroke="#07182B" stroke-width="2.6" stroke-linejoin="round">
+<path d="M-3 -28 C-2 -22 -19 -12 -19 4 C-19 16 -10 24 1 24 C12 24 21 16 21 4 C21 -6 14 -12 11 -20 C8 -14 5 -13 1 -12 C3 -18 1 -24 -3 -28 Z" fill="{{ b.iconLight }}"></path>
+<path d="M1 4 C5 9 7 12 7 15 C7 19 4 21 1 21 C-2 21 -5 19 -5 15 C-5 12 -3 9 1 4 Z" fill="{{ b.iconMid }}" stroke="none"></path>
+</g>
+<g display="{{ b.dHour }}" stroke="#07182B" stroke-width="2.4" stroke-linejoin="round">
+<path d="M-12 -22 L12 -22 C12 -10 3 -4 3 0 C3 4 12 10 12 22 L-12 22 C-12 10 -3 4 -3 0 C-3 -4 -12 -10 -12 -22 Z" fill="{{ b.iconLight }}"></path>
+<path d="M-8 -18 L8 -18 C7 -11 3 -7 0 -4 C-3 -7 -7 -11 -8 -18 Z" fill="{{ b.iconMid }}" stroke="none"></path>
+<path d="M-9 19 L9 19 C8 14 4 11 0 8 C-4 11 -8 14 -9 19 Z" fill="{{ b.iconMid }}" stroke="none"></path>
+<rect x="-17" y="-28" width="34" height="6" rx="3" fill="{{ b.iconMid }}"></rect>
+<rect x="-17" y="22" width="34" height="6" rx="3" fill="{{ b.iconMid }}"></rect>
+</g>
+<g display="{{ b.dKey }}" stroke="#07182B" stroke-width="2.4" stroke-linejoin="round">
+<rect x="-18" y="-18" width="36" height="36" rx="8" fill="{{ b.iconLight }}"></rect>
+<circle cx="0" cy="-4" r="5.6" fill="#07182B" stroke="none"></circle>
+<path d="M-3.4 -1 L3.4 -1 L6.5 13 L-6.5 13 Z" fill="#07182B" stroke="none"></path>
+</g>
+</g>
+
+<g display="{{ b.dExo }}">
+<path d="M100 59 L125.5 73.5 V102.5 L100 117 L74.5 102.5 V73.5 Z" fill="none" stroke="{{ b.rim }}" stroke-width="1.2" opacity="0.4" stroke-linejoin="round"></path>
+<circle cx="100" cy="88" r="29.5" fill="none" stroke="{{ b.rim }}" stroke-width="2.2" stroke-dasharray="0.1 5.6" stroke-linecap="round"></circle>
+<g fill="{{ b.iconLight }}" stroke="#07182B" stroke-width="2.2" stroke-linejoin="round">
+<rect x="96" y="39.5" width="8" height="8" rx="2" transform="rotate(22.5 100 88)"></rect>
+<rect x="96" y="39.5" width="8" height="8" rx="2" transform="rotate(67.5 100 88)"></rect>
+<rect x="96" y="39.5" width="8" height="8" rx="2" transform="rotate(112.5 100 88)"></rect>
+<rect x="96" y="39.5" width="8" height="8" rx="2" transform="rotate(157.5 100 88)"></rect>
+<rect x="96" y="39.5" width="8" height="8" rx="2" transform="rotate(202.5 100 88)"></rect>
+<rect x="96" y="39.5" width="8" height="8" rx="2" transform="rotate(247.5 100 88)"></rect>
+<rect x="96" y="39.5" width="8" height="8" rx="2" transform="rotate(292.5 100 88)"></rect>
+<rect x="96" y="39.5" width="8" height="8" rx="2" transform="rotate(337.5 100 88)"></rect>
+</g>
+<circle cx="117.0" cy="46.9" r="1.6" fill="{{ b.ring }}"></circle>
+<circle cx="141.1" cy="71.0" r="1.6" fill="{{ b.ring }}"></circle>
+<circle cx="141.1" cy="105.0" r="1.6" fill="{{ b.ring }}"></circle>
+<circle cx="117.0" cy="129.1" r="1.6" fill="{{ b.ring }}"></circle>
+<circle cx="83.0" cy="129.1" r="1.6" fill="{{ b.ring }}"></circle>
+<circle cx="58.9" cy="105.0" r="1.6" fill="{{ b.ring }}"></circle>
+<circle cx="58.9" cy="71.0" r="1.6" fill="{{ b.ring }}"></circle>
+<circle cx="83.0" cy="46.9" r="1.6" fill="{{ b.ring }}"></circle>
+<path d="M82 28 C82 10 118 10 118 28 C118 34 115 37 112 39 V43 C112 45 110 46 108 46 H92 C90 46 88 45 88 43 V39 C85 37 82 34 82 28 Z" fill="{{ b.iconLight }}" stroke="#07182B" stroke-width="3.2" stroke-linejoin="round"></path>
+<ellipse cx="92.5" cy="28.5" rx="4.8" ry="4.2" transform="rotate(14 92.5 28.5)" fill="#ffffff" stroke="#07182B" stroke-width="1.8"></ellipse>
+<ellipse cx="107.5" cy="28.5" rx="4.8" ry="4.2" transform="rotate(-14 107.5 28.5)" fill="#ffffff" stroke="#07182B" stroke-width="1.8"></ellipse>
+<circle cx="93.6" cy="29.3" r="2" fill="#07182B"></circle><circle cx="106.4" cy="29.3" r="2" fill="#07182B"></circle>
+<path d="M85.5 21.5 L97 26.5 M114.5 21.5 L103 26.5" stroke="#07182B" stroke-width="2.8" stroke-linecap="round" fill="none"></path>
+<path d="M100 33 L97.6 37.4 H102.4 Z" fill="#07182B" stroke="#07182B" stroke-width="1" stroke-linejoin="round"></path>
+<path d="M95.5 40.5 V44.5 M100 40.5 V44.5 M104.5 40.5 V44.5" stroke="#07182B" stroke-width="1.6" stroke-linecap="round" fill="none"></path>
+<path d="M88 14 C86 -4 114 -4 112 14 Z" fill="{{ b.ring }}" stroke="#07182B" stroke-width="3.2" stroke-linejoin="round"></path>
+<ellipse cx="100" cy="14" rx="27" ry="5.8" fill="{{ b.ring }}" stroke="#07182B" stroke-width="3.2"></ellipse>
+<circle cx="100" cy="5.5" r="1.8" fill="{{ b.iconLight }}"></circle>
+<path d="M2 88 H24 M176 88 H198" stroke="{{ b.rim }}" stroke-width="1.2" stroke-linecap="round" opacity="0.55" fill="none"></path>
+<circle cx="19" cy="68" r="4.4" fill="none" stroke="{{ b.rim }}" stroke-width="1.6"></circle>
+<circle cx="182" cy="86" r="4.4" fill="none" stroke="{{ b.rim }}" stroke-width="1.6"></circle>
+<circle cx="170" cy="14" r="3.4" fill="none" stroke="{{ b.rim }}" stroke-width="1.6"></circle>
+</g>
+
+<g display="{{ b.dSparkle }}"><path d="M26 13 Q27.5 19.5 34 21 Q27.5 22.5 26 29 Q24.5 22.5 18 21 Q24.5 19.5 26 13 Z" fill="#eef3ff"></path></g>
+
+<path d="{{ b.tails }}" fill="{{ b.tail }}" stroke="#07182B" stroke-width="3.2" stroke-linejoin="round"></path>
+<rect x="33" y="143" width="134" height="32" rx="7" fill="url(#pg{{ b.uid }})" stroke="#07182B" stroke-width="3.6"></rect>
+<path d="M42 147 H158" stroke="#ffffff" stroke-width="1.6" stroke-linecap="round" opacity="0.55" fill="none"></path>
+<g display="{{ b.dExo }}">
+<path d="M100 134 L104 140 L100 146 L96 140 Z" fill="{{ b.ring }}" stroke="#07182B" stroke-width="2.4" stroke-linejoin="round"></path>
+<polygon points="{{ b.e1 }}" fill="#ffffff" stroke="#07182B" stroke-width="2.4" stroke-linejoin="round"></polygon>
+<polygon points="{{ b.e2 }}" fill="#ffffff" stroke="#07182B" stroke-width="2.4" stroke-linejoin="round"></polygon>
+</g>
+</svg>
+<span style="position: absolute; left: 29px; top: 133px; width: 118px; height: 28px; display: flex; align-items: center; justify-content: center; pointer-events: none"><span style="{{ b.nameStyle }}">{{ b.name }}</span></span>
+</div>
+<span style="color: #CFDCF5; font-size: 16px; line-height: 1.25; min-height: 20px">{{ b.req }}</span>
+<span style="font-size: 13px; color: {{ b.progColor }}; min-height: 18px">{{ b.prog }}</span>
+<span style="padding: 1px 12px; border-radius: 99px; color: #0A1A2E; font-weight: 800; font-size: 14px; background: {{ b.pillBg }}">{{ b.pill }}</span>
+</div>
+</sc-if>
+</sc-for>
+</div>
+<span style="color: #9FB3D6; font-size: 13px">Maquette : les succès se débloquent d'après les chiffres de démonstration du profil choisi. Seuls les vrais clips comptent pour les succès de volume.</span>
+</div>
+</sc-if>
+
+<!-- Les roles -->
+<sc-if value="{{ collRoles }}" hint-placeholder-val="{{ false }}">
+<div class="da" style="display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px">
+<h2 style="margin: 0; font-size: 20px; font-weight: 800">Les rôles</h2>
+<span style="color: #9FB3D6">Ton rôle change avec tes vues totales.</span>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 12px">
+<sc-for list="{{ roles }}" as="r" hint-placeholder-count="6">
+<div style="width: 160px; box-sizing: border-box; padding: 14px 8px 12px; background: #0E1F3F; border: 1.5px solid {{ r.border }}; border-radius: 20px; display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; {{ r.tileStyle }}">
+<svg viewBox="0 0 100 100" width="84" height="84" role="img" aria-label="{{ r.name }}">
+<rect x="3" y="3" width="94" height="94" rx="26" fill="#10213D" stroke="{{ r.ring }}" stroke-width="5"></rect>
+<circle cx="50" cy="52" r="33" fill="{{ r.dark }}"></circle>
+<g display="{{ r.dBarbe }}">
+<path d="M24 76 L76 56 M24 56 L76 76" stroke="#07182B" stroke-width="14" stroke-linecap="round" fill="none"></path>
+<path d="M24 76 L76 56 M24 56 L76 76" stroke="{{ r.light }}" stroke-width="7" stroke-linecap="round" fill="none"></path>
+<rect x="41" y="62" width="18" height="13" rx="3" fill="{{ r.ring }}" stroke="#07182B" stroke-width="4"></rect>
+<circle cx="50" cy="52" r="17" fill="{{ r.ring }}" stroke="#07182B" stroke-width="4"></circle>
+<ellipse cx="43.5" cy="52" rx="4.5" ry="5.5" fill="#07182B"></ellipse><ellipse cx="56.5" cy="52" rx="4.5" ry="5.5" fill="#07182B"></ellipse>
+<path d="M30 38 C30 16 70 16 70 38 Z" fill="{{ r.ring }}" stroke="#07182B" stroke-width="4" stroke-linejoin="round"></path>
+<ellipse cx="50" cy="38" rx="31" ry="7" fill="{{ r.ring }}" stroke="#07182B" stroke-width="4"></ellipse>
+<circle cx="50" cy="27" r="2.8" fill="{{ r.light }}"></circle>
+</g>
+<g display="{{ r.dCors }}">
+<path d="M24 58 C16 72 20 84 30 90 L40 86 C38 78 40 70 48 62 Z" fill="{{ r.rib }}" stroke="#07182B" stroke-width="4" stroke-linejoin="round"></path>
+<circle cx="31" cy="87" r="5.5" fill="{{ r.light }}" stroke="#07182B" stroke-width="3.5"></circle>
+<path d="M34 52 C26 44 30 34 40 38" stroke="#07182B" stroke-width="8" stroke-linecap="round" fill="none"></path>
+<path d="M34 52 C26 44 30 34 40 38" stroke="{{ r.light }}" stroke-width="3.5" stroke-linecap="round" fill="none"></path>
+<path d="M46 66 C50 78 60 76 60 66" stroke="#07182B" stroke-width="7" stroke-linecap="round" fill="none"></path>
+<path d="M46 66 C50 78 60 76 60 66" stroke="{{ r.light }}" stroke-width="3" stroke-linecap="round" fill="none"></path>
+<path d="M30 58 L76 33" stroke="#07182B" stroke-width="15" stroke-linecap="round" fill="none"></path>
+<path d="M30 58 L76 33" stroke="{{ r.light }}" stroke-width="8" stroke-linecap="round" fill="none"></path>
+<path d="M46 44 L52 54 M58 38 L64 48" stroke="{{ r.ring }}" stroke-width="4.5" stroke-linecap="round" fill="none"></path>
+<path d="M72 24 L88 30 L84 42 L68 34 Z" fill="{{ r.ring }}" stroke="#07182B" stroke-width="4" stroke-linejoin="round"></path>
+</g>
+<g display="{{ r.dCap }}">
+<path d="M82 18 C62 22 46 40 40 60 L48 64 C58 50 72 36 86 26 Z" fill="{{ r.light }}" stroke="#07182B" stroke-width="4" stroke-linejoin="round"></path>
+<path d="M44 58 C54 42 66 30 80 22" fill="none" stroke="{{ r.ring }}" stroke-width="3" stroke-linecap="round"></path>
+<path d="M32 56 L54 72" stroke="#07182B" stroke-width="11" stroke-linecap="round" fill="none"></path>
+<path d="M32 56 L54 72" stroke="{{ r.ring }}" stroke-width="5" stroke-linecap="round" fill="none"></path>
+<path d="M42 68 L30 80" stroke="#07182B" stroke-width="9" stroke-linecap="round" fill="none"></path>
+<path d="M42 68 L30 80" stroke="{{ r.rib }}" stroke-width="4" stroke-linecap="round" fill="none"></path>
+<circle cx="27" cy="83" r="5.5" fill="{{ r.ring }}" stroke="#07182B" stroke-width="4"></circle>
+</g>
+<g display="{{ r.dMait }}">
+<path d="M18 62 L26 50 L34 62 Z M66 62 L74 50 L82 62 Z" fill="{{ r.light }}" stroke="#07182B" stroke-width="4" stroke-linejoin="round"></path>
+<path d="M50 32 V76 M37 42 H63 M26 58 C28 76 40 82 50 82 C60 82 72 76 74 58" stroke="#07182B" stroke-width="11" stroke-linecap="round" stroke-linejoin="round" fill="none"></path>
+<path d="M50 32 V76 M37 42 H63 M26 58 C28 76 40 82 50 82 C60 82 72 76 74 58" stroke="{{ r.ring }}" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none"></path>
+<circle cx="50" cy="26" r="7" fill="none" stroke="#07182B" stroke-width="11"></circle>
+<circle cx="50" cy="26" r="7" fill="none" stroke="{{ r.ring }}" stroke-width="5"></circle>
+</g>
+<g display="{{ r.dMouss }}">
+<path d="M22 58 C22 34 78 34 78 58 Z" fill="{{ r.ring }}" stroke="#07182B" stroke-width="4" stroke-linejoin="round"></path>
+<rect x="19" y="56" width="62" height="13" rx="4" fill="{{ r.rib }}" stroke="#07182B" stroke-width="4"></rect>
+<circle cx="37" cy="47" r="3.2" fill="{{ r.light }}"></circle><circle cx="50" cy="42" r="3.2" fill="{{ r.light }}"></circle><circle cx="63" cy="47" r="3.2" fill="{{ r.light }}"></circle>
+<circle cx="83" cy="64" r="6.5" fill="{{ r.light }}" stroke="#07182B" stroke-width="4"></circle>
+<path d="M84 69 L93 81 L82 77 Z" fill="{{ r.rib }}" stroke="#07182B" stroke-width="3.5" stroke-linejoin="round"></path>
+</g>
+<g display="{{ r.dMousse }}">
+<path d="M72 20 L46 64" stroke="#07182B" stroke-width="11" stroke-linecap="round" fill="none"></path>
+<path d="M72 20 L46 64" stroke="{{ r.light }}" stroke-width="5" stroke-linecap="round" fill="none"></path>
+<path d="M34 62 L54 72 L48 90 L24 80 Z" fill="{{ r.ring }}" stroke="#07182B" stroke-width="4" stroke-linejoin="round"></path>
+<path d="M30 82 L36 71 M38 85 L43 75" stroke="#07182B" stroke-width="3" stroke-linecap="round" fill="none"></path>
+<path d="M24 30 L27 37 L34 40 L27 43 L24 50 L21 43 L14 40 L21 37 Z" fill="{{ r.light }}"></path>
+<path d="M78 66 L80 71 L85 73 L80 75 L78 80 L76 75 L71 73 L76 71 Z" fill="{{ r.light }}"></path>
+</g>
+</svg>
+<strong style="font-size: 15px; font-weight: 800; color: #F3F7FF; line-height: 1.2">{{ r.name }}</strong>
+<span style="padding: 1px 12px; border-radius: 99px; color: #0A1A2E; font-weight: 800; font-size: 13px; background: {{ r.ring }}">{{ r.rarity }}</span>
+<span style="color: #9FB3D6; font-size: 13px; line-height: 1.3">{{ r.cond }}</span>
+<sc-if value="{{ r.isCurrent }}" hint-placeholder-val="{{ false }}"><span style="color: {{ r.ring }}; font-size: 13px; font-weight: 800">Ton rôle</span></sc-if>
+</div>
+</sc-for>
+</div>
+</div>
+</sc-if>
+</sc-if>
+
+<!-- ONGLET : boutique fan (clipper commu) -->
+<sc-if value="{{ pgBoutique }}" hint-placeholder-val="{{ false }}">
+<div style="background: #FAF9F2; color: #111111; border-radius: 18px; padding: 28px; display: flex; flex-direction: column; gap: 28px">
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px">
+<span style="font-family: 'Sora', system-ui, sans-serif; font-weight: 700; font-size: 18px; text-transform: uppercase">{{ shop.name }}</span>
+<span style="background: #FFD43B; border-radius: 999px; padding: 6px 16px; font-weight: 700">{{ shop.coins }} coins</span>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 16px">
+<sc-for list="{{ shop.rewards }}" as="r" hint-placeholder-count="3">
+<div style="flex: 1 1 200px; max-width: 260px; background: #FFFFFF; border: 1px solid #E5E2D6; border-radius: 18px; padding: 16px; display: flex; flex-direction: column; gap: 8px">
+<div style="height: 96px; border-radius: 12px; background: #FFF1B8; display: flex; align-items: center; justify-content: center; font-family: 'Sora', system-ui, sans-serif; font-weight: 700; font-size: 26px">{{ r.badge }}</div>
+<strong style="font-size: 16px">{{ r.name }}</strong>
+<span style="color: #555555; font-size: 13px">{{ r.note }}</span>
+<span style="font-weight: 700">{{ r.price }} coins</span>
+<button disabled="{{ r.locked }}" onClick="{{ r.buy }}" style="min-height: 44px; border: 0; border-radius: 12px; font-weight: 700; {{ r.btnStyle }}">{{ r.btnLabel }}</button>
+</div>
+</sc-for>
+</div>
+<span style="color: #555555; font-size: 13px">Les coins servent uniquement à acheter les produits de {{ clientName }}. Tu en gagnes avec tes vues.</span>
+</div>
+</sc-if>
+
+<!-- ONGLET : cagnotte -->
+<sc-if value="{{ pgCagnotte }}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-wrap: wrap; gap: 20px 64px">
+<sc-for list="{{ cagKpis }}" as="k" hint-placeholder-count="3">
+<div style="display: flex; flex-direction: column; gap: 2px"><span style="color: #8FB0BF; font-size: 13px">{{ k.label }}</span><span style="font-family: 'Sora', system-ui, sans-serif; font-size: 30px; font-weight: 600">{{ k.value }}</span></div>
+</sc-for>
+</div>
+<div style="display: flex; flex-direction: column; gap: 12px; padding: 24px; background: #0B2338; border-radius: 16px">
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px"><span>Tes vues sur cette période&nbsp;: <strong>{{ cag.mine }}</strong></span><span style="color: #8FB0BF">sur {{ cag.total }} vues au total</span></div>
+<div style="height: 10px; border-radius: 999px; background: #163650; overflow: hidden"><div style="height: 10px; border-radius: 999px; background: {{ accent }}; width: {{ cag.bar }}"></div></div>
+<span style="color: #8FB0BF">Plus tu fais de vues, plus ta part de la cagnotte grandit. Le montant affiché est une estimation.</span>
+</div>
+<sc-if value="{{ hasReserved }}" hint-placeholder-val="{{ false }}">
+<div style="padding: 16px 20px; border: 1px solid {{ accent }}; border-radius: 12px; color: #E6F3F5">{{ reservedNote }}</div>
+</sc-if>
+</sc-if>
+
+<!-- ONGLET : RPM -->
+<sc-if value="{{ pgRpm }}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-wrap: wrap; gap: 20px 64px">
+<sc-for list="{{ rpmKpis }}" as="k" hint-placeholder-count="3">
+<div style="display: flex; flex-direction: column; gap: 2px"><span style="color: #8FB0BF; font-size: 13px">{{ k.label }}</span><span style="font-family: 'Sora', system-ui, sans-serif; font-size: 30px; font-weight: 600">{{ k.value }}</span></div>
+</sc-for>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px; padding: 24px; background: #0B2338; border-radius: 16px">
+<span>{{ rpmLine }}</span>
+<span style="color: #8FB0BF">{{ rpmPay }}</span>
+</div>
+</sc-if>
+
+<!-- Solde : cagnotte et RPM -->
+<sc-if value="{{ hasBalance }}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; gap: 14px; padding: 24px; background: #0B2338; border-radius: 16px">
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px">
+<div style="display: flex; flex-direction: column; gap: 2px"><span style="color: #8FB0BF; font-size: 13px">Ton solde</span><span style="font-family: 'Sora', system-ui, sans-serif; font-size: 30px; font-weight: 600">{{ balance }}</span></div>
+<button onClick="{{ toggleWd }}" style="min-height: 44px; padding: 0 18px; border-radius: 10px; font-size: 14px; font-weight: 600; {{ btnStyle }}">Retirer mon argent</button>
+</div>
+<sc-if value="{{ wdOpen }}" hint-placeholder-val="{{ false }}">
+<div role="status" style="padding: 14px 16px; border: 1px solid {{ accent }}; border-radius: 12px">Maquette&nbsp;: le moyen de retrait n'est pas encore défini. Ton argent s'accumule sur ton compte et tu pourras le retirer quand tu veux.</div>
+</sc-if>
+</div>
+</sc-if>
+
+<!-- ONGLET : tracker -->
+<sc-if value="{{ pgTracker }}" hint-placeholder-val="{{ false }}">
+
+<!-- Comptes suivis -->
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 20px; padding: 18px 24px; background: #0B2338; border-radius: 16px">
+<div style="display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1 1 260px">
+<span style="color: #8FB0BF; font-size: 13px">Comptes suivis</span>
+<strong style="font-size: 15px; font-weight: 600">{{ trackSources }}</strong>
+</div>
+<button onClick="{{ goParams }}" style="min-height: 44px; padding: 0 18px; border-radius: 10px; font-size: 14px; font-weight: 600; background: transparent; color: #E6F3F5; border: 1px solid #1F4666">Gérer mes comptes</button>
+</div>
+
+<div style="display: flex; flex-wrap: wrap; gap: 20px 64px">
+<sc-for list="{{ kpis }}" as="k" hint-placeholder-count="3">
+<div style="display: flex; flex-direction: column; gap: 2px"><span style="color: #8FB0BF; font-size: 13px">{{ k.label }}</span><span style="font-family: 'Sora', system-ui, sans-serif; font-size: 30px; font-weight: 600">{{ k.value }}</span></div>
+</sc-for>
+</div>
+<div style="display: flex; flex-direction: column; gap: 14px; padding: 24px; background: #0B2338; border-radius: 16px">
+<span style="color: #8FB0BF; font-size: 13px">Tes vues sur les 7 derniers jours</span>
+<div role="img" aria-label="Vues par jour sur les 7 derniers jours" style="height: 170px; display: flex; align-items: flex-end; gap: 10px">
+<sc-for list="{{ bars }}" as="b" hint-placeholder-count="7">
+<div style="flex: 1; min-width: 0; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 6px">
+<span style="font-size: 11px; color: #8FB0BF">{{ b.value }}</span>
+<div style="width: 100%; max-width: 48px; border-radius: 8px 8px 4px 4px; height: {{ b.h }}; background: {{ b.bg }}"></div>
+<span style="font-size: 12px; color: {{ b.lc }}">{{ b.label }}</span>
+</div>
+</sc-for>
+</div>
+</div>
+<div style="display: flex; flex-direction: column">
+<span style="padding-bottom: 10px; color: #8FB0BF; font-size: 13px">Tes derniers clips</span>
+<sc-for list="{{ clips }}" as="c" hint-placeholder-count="3">
+<div style="display: flex; align-items: center; gap: 16px; min-height: 56px; padding: 0 4px; border-top: 1px solid #163650">
+<span style="flex: 1 1 200px; min-width: 0">{{ c.title }}</span>
+<span style="width: 80px; color: #8FB0BF">{{ c.platform }}</span>
+<span style="width: 100px; text-align: right; font-weight: 600">{{ c.views }} vues</span>
+</div>
+</sc-for>
+<span style="padding-top: 12px; color: #8FB0BF; font-size: 13px">Maquette : chiffres et clips fictifs.</span>
+</div>
+</sc-if>
+
+<!-- ONGLET : parametres -->
+<sc-if value="{{ pgParams }}" hint-placeholder-val="{{ false }}">
+
+<div role="group" aria-label="Rubriques des paramètres" style="align-self: flex-start; display: flex; flex-wrap: wrap; gap: 2px; padding: 3px; background: #0B2338; border-radius: 12px">
+<sc-for list="{{ paramTabs }}" as="s" hint-placeholder-count="3">
+<button aria-pressed="{{ s.on }}" onClick="{{ s.go }}" style="min-height: 40px; padding: 0 16px; border: 0; border-radius: 9px; font-size: 13px; font-weight: 500; {{ s.style }}">{{ s.label }}</button>
+</sc-for>
+</div>
+
+<sc-if value="{{ psSons }}" hint-placeholder-val="{{ true }}">
+
+<div style="display: flex; flex-direction: column; gap: 24px; padding: 24px; background: #0B2338; border-radius: 16px">
+<div style="display: flex; flex-direction: column; gap: 4px">
+<h2 style="margin: 0; font-family: 'Sora', system-ui, sans-serif; font-size: 18px; font-weight: 600">Sons</h2>
+<span style="color: #8FB0BF; font-size: 13px">Ces réglages sont gardés sur cet appareil.</span>
+</div>
+
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 20px">
+<div style="display: flex; flex-direction: column; gap: 2px; flex: 1 1 260px; min-width: 0">
+<strong style="font-size: 15px; font-weight: 600">Bruitages</strong>
+<span style="color: #8FB0BF; font-size: 13px">Les petits sons quand tu touches un bouton ou débloques un succès.</span>
+</div>
+<button role="switch" aria-checked="{{ sound }}" aria-label="Bruitages" onClick="{{ toggleSound }}" style="position: relative; flex-shrink: 0; width: 54px; height: 32px; padding: 0; border-radius: 99px; border: 1px solid #1F4666; {{ swStyle }}"><span style="position: absolute; top: 4px; width: 22px; height: 22px; border-radius: 50%; {{ knobStyle }}"></span></button>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 8px; {{ volDim }}">
+<div style="display: flex; align-items: baseline; justify-content: space-between; gap: 12px">
+<label for="sfx-vol" style="font-size: 15px; font-weight: 600">Volume des bruitages</label>
+<span style="color: {{ accent }}; font-weight: 600">{{ volText }}</span>
+</div>
+<input id="sfx-vol" type="range" min="0" max="100" step="1" value="{{ vol }}" onInput="{{ onVol }}" data-sfx="none" style="accent-color: {{ accent }}">
+<div style="display: flex; justify-content: space-between; color: #8FB0BF; font-size: 12px"><span>Muet</span><span>Normal</span><span>Fort</span></div>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; flex-direction: column; gap: 2px">
+<strong style="font-size: 15px; font-weight: 600">Musique d'ambiance</strong>
+<span style="color: #8FB0BF; font-size: 13px">Un fond sonore discret. Tu peux aussi la régler avec la note en bas à droite.</span>
+</div>
+<div role="radiogroup" aria-label="Niveau de la musique" style="display: flex; flex-wrap: wrap; gap: 8px">
+<sc-for list="{{ musicOpts }}" as="m" hint-placeholder-count="3">
+<button role="radio" aria-checked="{{ m.on }}" onClick="{{ m.go }}" style="min-height: 44px; padding: 0 20px; border-radius: 99px; font-size: 15px; font-weight: 600; {{ m.style }}">{{ m.label }}</button>
+</sc-for>
+</div>
+</div>
+</div>
+
+</sc-if>
+
+<sc-if value="{{ psComptes }}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; gap: 6px; padding: 24px; background: #0B2338; border-radius: 16px">
+<div style="display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 16px">
+<h2 style="margin: 0; font-family: 'Sora', system-ui, sans-serif; font-size: 18px; font-weight: 600">Mes comptes</h2>
+<span style="color: {{ accent }}; font-size: 13px">{{ accTotal }}</span>
+</div>
+<span style="color: #8FB0BF; font-size: 13px">Connecte les comptes où tu postes tes clips, en un clic : aucun lien à copier. Neptune lit tes clips publics et leurs vues pour valider ta série et compter ton argent. Un compte clip par créateur.</span>
+<div style="display: flex; flex-direction: column; padding-top: 4px">
+<sc-for list="{{ acctItems }}" as="a" hint-placeholder-count="8">
+<sc-if value="{{ a.isHead }}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px; margin-top: 14px; padding: 14px 0 10px; border-top: 1px solid #163650">
+<div style="display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1 1 200px">
+<strong style="font-size: 16px; font-weight: 600">{{ a.name }}</strong>
+<span style="color: #8FB0BF; font-size: 13px">{{ a.note }}</span>
+</div>
+<button onClick="{{ a.add }}" style="min-height: 44px; padding: 0 18px; border-radius: 10px; font-size: 14px; font-weight: 600; {{ a.addStyle }}">{{ a.addLabel }}</button>
+</div>
+</sc-if>
+<sc-if value="{{ a.isRow }}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; min-height: 56px; margin-bottom: 6px; padding: 0 6px 0 16px; box-sizing: border-box; background: #06182A; border-radius: 12px">
+<span aria-hidden="true" style="flex-shrink: 0; width: 8px; height: 8px; border-radius: 50%; background: {{ a.dot }}"></span>
+<span style="flex: 1 1 160px; min-width: 0; word-break: break-all; font-weight: 600">{{ a.handle }}</span>
+<span style="color: #8FB0BF; font-size: 13px">Connecté</span>
+<button aria-label="{{ a.removeLabel }}" onClick="{{ a.remove }}" style="min-height: 44px; padding: 0 16px; border-radius: 10px; font-size: 14px; font-weight: 600; background: transparent; color: #E6F3F5; border: 1px solid #1F4666">Retirer</button>
+</div>
+</sc-if>
+<sc-if value="{{ a.isEmpty }}" hint-placeholder-val="{{ false }}">
+<div style="margin-bottom: 6px; padding: 12px 16px; color: #8FB0BF; border: 1px dashed #1F4666; border-radius: 12px">Aucun compte {{ a.name }} connecté.</div>
+</sc-if>
+</sc-for>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px; margin-top: 12px; padding: 14px 16px; border: 1px solid #163650; border-radius: 12px; color: #9FB3D6; font-size: 13px">
+<strong style="color: #E6F3F5; font-size: 14px; font-weight: 600">Comment ça marche</strong>
+<span>1. Tu autorises Neptune sur la page officielle de la plateforme. Neptune ne voit jamais ton mot de passe.</span>
+<span>2. Neptune lit seulement tes clips publics et leurs vues (lecture seule).</span>
+<span>3. Tu peux retirer l'accès à tout moment, ici ou dans les réglages de la plateforme.</span>
+</div>
+<span style="padding-top: 6px; color: #8FB0BF; font-size: 13px">Maquette : la fenêtre d'autorisation officielle sera branchée avec les API de YouTube et TikTok.</span>
+</div>
+</sc-if>
+
+<sc-if value="{{ psDiscord }}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; gap: 14px; padding: 24px; background: #0B2338; border-radius: 16px">
+<div style="display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 16px">
+<h2 style="margin: 0; font-family: 'Sora', system-ui, sans-serif; font-size: 18px; font-weight: 600">Discord</h2>
+<span style="color: {{ dcColor }}; font-size: 13px">{{ dcStatus }}</span>
+</div>
+<span style="color: #8FB0BF; font-size: 13px">Connecte ton Discord en un clic : ta photo de profil et ton pseudo viennent de là, sans rien copier.</span>
+<div>
+<button onClick="{{ toggleDc }}" style="min-height: 44px; padding: 0 18px; border-radius: 10px; font-size: 14px; font-weight: 600; {{ dcBtnStyle }}">{{ dcBtnLabel }}</button>
+</div>
+</div>
+</sc-if>
+</sc-if>
+
+<!-- ONGLET : tuto -->
+<sc-if value="{{ pgTuto }}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-wrap: wrap; gap: 16px">
+<sc-for list="{{ tutos }}" as="t" hint-placeholder-count="3">
+<div style="flex: 1 1 240px; display: flex; flex-direction: column; gap: 14px; padding: 22px; box-sizing: border-box; background: #0B2338; border-radius: 16px">
+<strong style="font-family: 'Sora', system-ui, sans-serif; font-size: 16px; font-weight: 600">{{ t.title }}</strong>
+<div style="min-height: 84px; display: flex; align-items: center; justify-content: center; text-align: center; padding: 12px; border: 1px dashed #1F4666; border-radius: 12px; color: #8FB0BF">Contenu à venir</div>
+</div>
+</sc-for>
+</div>
+<div style="display: flex; flex-direction: column; gap: 14px; padding: 24px; background: #0B2338; border-radius: 16px">
+<div style="display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px">
+<h2 style="margin: 0; font-family: 'Sora', system-ui, sans-serif; font-size: 20px; font-weight: 600">Les règles</h2>
+<span style="color: {{ accent }}">✓ Règles validées à ta première connexion</span>
+</div>
+<div style="display: flex; flex-direction: column">
+<sc-for list="{{ ruleList }}" as="r" hint-placeholder-count="4">
+<div style="display: flex; align-items: flex-start; gap: 14px; padding: 14px 0; border-top: 1px solid #163650">
+<span style="flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%; box-sizing: border-box; border: 1px solid {{ accent }}; color: {{ accent }}; display: flex; align-items: center; justify-content: center; font-weight: 600">{{ r.n }}</span>
+<span style="font-size: 15px; padding-top: 3px">{{ r.text }}</span>
+</div>
+</sc-for>
+</div>
+</div>
+</sc-if>
+
+</main>
+</div>
+
+<sc-if value="{{ hasAch }}" hint-placeholder-val="{{ false }}">
+<div class="ach-pop" aria-live="polite" style="pointer-events: none">
+<div class="ach-pill" style="border-color: {{ achColor }}; box-shadow: 0 14px 38px rgba(0,0,0,0.5), 0 0 26px {{ achGlow }}">
+<sc-for list="{{ achList }}" as="b" hint-placeholder-count="1">
+<div style="position: relative; width: 76px; height: 76px; flex-shrink: 0"><div style="position: absolute; left: 0; top: 0; width: 176px; height: 169px; transform: scale(0.43); transform-origin: top left">
+<div style="position: relative; width: 176px; height: 169px">
+<svg viewBox="0 -8 200 192" width="176" height="169" role="img" aria-label="{{ b.label }}" style="{{ b.svgStyle }}">
+<defs>
+<linearGradient id="rg{{ b.uid }}" x1="0.1" y1="0" x2="0.9" y2="1"><stop offset="0" stop-color="{{ b.ringLight }}"></stop><stop offset="1" stop-color="{{ b.ringDark }}"></stop></linearGradient>
+<radialGradient id="dg{{ b.uid }}" cx="0.4" cy="0.32" r="0.8"><stop offset="0" stop-color="{{ b.discHi }}"></stop><stop offset="1" stop-color="{{ b.discLo }}"></stop></radialGradient>
+<linearGradient id="pg{{ b.uid }}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="{{ b.ringLight }}"></stop><stop offset="1" stop-color="{{ b.ringDark }}"></stop></linearGradient>
+<linearGradient id="bg{{ b.uid }}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="{{ b.bladeLight }}"></stop><stop offset="1" stop-color="{{ b.ring }}"></stop></linearGradient>
+</defs>
+<g display="{{ b.dHalo }}"><circle cx="100" cy="88" r="88" fill="{{ b.halo }}"></circle></g>
+<g display="{{ b.dExo }}"><path d="M100 88 L72 2 L96 42 Z M100 88 L128 2 L104 42 Z M100 88 L8 62 L54 76 Z M100 88 L192 62 L146 76 Z M100 88 L36 168 L68 128 Z M100 88 L164 168 L132 128 Z" fill="#3AA6A6" opacity="0.32"></path></g>
+<g display="{{ b.dBlades }}">
+<path d="M17 22 L56 58 L52 84 C40 76 20 52 17 22 Z" fill="url(#bg{{ b.uid }})" stroke="#07182B" stroke-width="4.4" stroke-linejoin="round"></path>
+<path d="M183 22 L144 58 L148 84 C160 76 180 52 183 22 Z" fill="url(#bg{{ b.uid }})" stroke="#07182B" stroke-width="4.4" stroke-linejoin="round"></path>
+</g>
+<g display="{{ b.dBladesX }}">
+<path d="M8 12 L62 60 L58 96 C36 86 10 58 8 12 Z" fill="url(#bg{{ b.uid }})" stroke="#07182B" stroke-width="4.4" stroke-linejoin="round"></path>
+<path d="M192 12 L138 60 L142 96 C164 86 190 58 192 12 Z" fill="url(#bg{{ b.uid }})" stroke="#07182B" stroke-width="4.4" stroke-linejoin="round"></path>
+</g>
+<g display="{{ b.dOars }}">
+<path d="M40 114 L70 140 M160 114 L130 140" stroke="#07182B" stroke-width="8" stroke-linecap="round" fill="none"></path>
+<path d="M40 114 L70 140 M160 114 L130 140" stroke="{{ b.oar }}" stroke-width="4" stroke-linecap="round" fill="none"></path>
+</g>
+<path d="M100 88 V21 M100 88 L52.6 40.6 M100 88 L147.4 40.6 M100 88 H33 M100 88 H167 M100 88 L52.6 135.4 M100 88 L147.4 135.4" stroke="#07182B" stroke-width="5" stroke-linecap="round" fill="none"></path>
+<g display="{{ b.dStars }}">
+<polygon points="{{ b.s1 }}" fill="#fcebb7" stroke="#07182B" stroke-width="3.2" stroke-linejoin="round"></polygon>
+<polygon points="{{ b.s2 }}" fill="#fcebb7" stroke="#07182B" stroke-width="3" stroke-linejoin="round"></polygon>
+<polygon points="{{ b.s3 }}" fill="#fcebb7" stroke="#07182B" stroke-width="3" stroke-linejoin="round"></polygon>
+</g>
+<g fill="{{ b.ring }}" stroke="#07182B" stroke-width="3.2">
+<circle cx="100" cy="21" r="6.2"></circle><circle cx="52.6" cy="40.6" r="6.2"></circle><circle cx="147.4" cy="40.6" r="6.2"></circle><circle cx="33" cy="88" r="6.2"></circle><circle cx="167" cy="88" r="6.2"></circle><circle cx="52.6" cy="135.4" r="6.2"></circle><circle cx="147.4" cy="135.4" r="6.2"></circle>
+</g>
+<circle cx="100" cy="88" r="50" fill="url(#rg{{ b.uid }})" stroke="#07182B" stroke-width="4.4"></circle>
+<circle cx="100" cy="88" r="44.5" fill="none" stroke="{{ b.rim }}" stroke-width="1.6" opacity="0.75"></circle>
+<circle cx="100" cy="88" r="37.5" fill="url(#dg{{ b.uid }})" stroke="#07182B" stroke-width="4.4"></circle>
+
+<g transform="translate(100 88)">
+<g display="{{ b.dSail }}" stroke="#07182B" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round">
+<path d="M-0.5 -26 L9.5 -23 L-0.5 -20 Z" fill="#07182B"></path>
+<path d="M-2 -21 L-23 8 L-2 8 Z" fill="{{ b.iconLight }}"></path>
+<path d="M2.6 -16 L2.6 8 L23 8 Z" fill="{{ b.iconLight }}"></path>
+<path d="M0.4 -24 V12" stroke-width="4.8" fill="none"></path>
+<path d="M0.4 -24 V12" stroke="{{ b.iconLight }}" stroke-width="1.8" fill="none"></path>
+<path d="M-25 10 L25 10 C22 18 12 22 0 22 C-12 22 -22 18 -25 10 Z" fill="{{ b.iconMid }}"></path>
+<path d="M-3 12 H3 L2 20 H-2 Z" fill="{{ b.iconLight }}" stroke-width="1.8"></path>
+</g>
+<g display="{{ b.dSpy }}" transform="rotate(-32) scale(1.12)" stroke="#07182B" stroke-width="2.2" stroke-linejoin="round">
+<rect x="-30" y="-5" width="17" height="10" rx="2.5" fill="{{ b.iconMid }}"></rect>
+<rect x="-15" y="-7" width="5" height="14" rx="1.5" fill="{{ b.iconMid }}"></rect>
+<rect x="-11" y="-7" width="16" height="14" rx="2" fill="{{ b.iconLight }}"></rect>
+<rect x="3" y="-9" width="5" height="18" rx="1.5" fill="{{ b.iconMid }}"></rect>
+<rect x="7" y="-9.5" width="22" height="19" rx="3" fill="{{ b.iconLight }}"></rect>
+<ellipse cx="28" cy="-1" rx="2.4" ry="6" fill="#ffffff" stroke="none"></ellipse>
+</g>
+<g display="{{ b.dGrp }}" stroke="#07182B" stroke-width="2.4" stroke-linejoin="round">
+<circle cx="13" cy="-8" r="6.4" fill="{{ b.iconMid }}"></circle>
+<path d="M4 16 C4 7 8 2 13 2 C19 2 23 7 23 16 Z" fill="{{ b.iconMid }}"></path>
+<circle cx="-8.5" cy="-11.5" r="7.6" fill="{{ b.iconLight }}"></circle>
+<path d="M-23 16 C-23 3 -16 -1 -8.5 -1 C-1 -1 6 3 6 16 Z" fill="{{ b.iconLight }}"></path>
+</g>
+<g display="{{ b.dFlame }}" stroke="#07182B" stroke-width="2.6" stroke-linejoin="round">
+<path d="M-3 -28 C-2 -22 -19 -12 -19 4 C-19 16 -10 24 1 24 C12 24 21 16 21 4 C21 -6 14 -12 11 -20 C8 -14 5 -13 1 -12 C3 -18 1 -24 -3 -28 Z" fill="{{ b.iconLight }}"></path>
+<path d="M1 4 C5 9 7 12 7 15 C7 19 4 21 1 21 C-2 21 -5 19 -5 15 C-5 12 -3 9 1 4 Z" fill="{{ b.iconMid }}" stroke="none"></path>
+</g>
+<g display="{{ b.dHour }}" stroke="#07182B" stroke-width="2.4" stroke-linejoin="round">
+<path d="M-12 -22 L12 -22 C12 -10 3 -4 3 0 C3 4 12 10 12 22 L-12 22 C-12 10 -3 4 -3 0 C-3 -4 -12 -10 -12 -22 Z" fill="{{ b.iconLight }}"></path>
+<path d="M-8 -18 L8 -18 C7 -11 3 -7 0 -4 C-3 -7 -7 -11 -8 -18 Z" fill="{{ b.iconMid }}" stroke="none"></path>
+<path d="M-9 19 L9 19 C8 14 4 11 0 8 C-4 11 -8 14 -9 19 Z" fill="{{ b.iconMid }}" stroke="none"></path>
+<rect x="-17" y="-28" width="34" height="6" rx="3" fill="{{ b.iconMid }}"></rect>
+<rect x="-17" y="22" width="34" height="6" rx="3" fill="{{ b.iconMid }}"></rect>
+</g>
+<g display="{{ b.dKey }}" stroke="#07182B" stroke-width="2.4" stroke-linejoin="round">
+<rect x="-18" y="-18" width="36" height="36" rx="8" fill="{{ b.iconLight }}"></rect>
+<circle cx="0" cy="-4" r="5.6" fill="#07182B" stroke="none"></circle>
+<path d="M-3.4 -1 L3.4 -1 L6.5 13 L-6.5 13 Z" fill="#07182B" stroke="none"></path>
+</g>
+</g>
+
+<g display="{{ b.dExo }}">
+<path d="M100 59 L125.5 73.5 V102.5 L100 117 L74.5 102.5 V73.5 Z" fill="none" stroke="{{ b.rim }}" stroke-width="1.2" opacity="0.4" stroke-linejoin="round"></path>
+<circle cx="100" cy="88" r="29.5" fill="none" stroke="{{ b.rim }}" stroke-width="2.2" stroke-dasharray="0.1 5.6" stroke-linecap="round"></circle>
+<g fill="{{ b.iconLight }}" stroke="#07182B" stroke-width="2.2" stroke-linejoin="round">
+<rect x="96" y="39.5" width="8" height="8" rx="2" transform="rotate(22.5 100 88)"></rect>
+<rect x="96" y="39.5" width="8" height="8" rx="2" transform="rotate(67.5 100 88)"></rect>
+<rect x="96" y="39.5" width="8" height="8" rx="2" transform="rotate(112.5 100 88)"></rect>
+<rect x="96" y="39.5" width="8" height="8" rx="2" transform="rotate(157.5 100 88)"></rect>
+<rect x="96" y="39.5" width="8" height="8" rx="2" transform="rotate(202.5 100 88)"></rect>
+<rect x="96" y="39.5" width="8" height="8" rx="2" transform="rotate(247.5 100 88)"></rect>
+<rect x="96" y="39.5" width="8" height="8" rx="2" transform="rotate(292.5 100 88)"></rect>
+<rect x="96" y="39.5" width="8" height="8" rx="2" transform="rotate(337.5 100 88)"></rect>
+</g>
+<circle cx="117.0" cy="46.9" r="1.6" fill="{{ b.ring }}"></circle>
+<circle cx="141.1" cy="71.0" r="1.6" fill="{{ b.ring }}"></circle>
+<circle cx="141.1" cy="105.0" r="1.6" fill="{{ b.ring }}"></circle>
+<circle cx="117.0" cy="129.1" r="1.6" fill="{{ b.ring }}"></circle>
+<circle cx="83.0" cy="129.1" r="1.6" fill="{{ b.ring }}"></circle>
+<circle cx="58.9" cy="105.0" r="1.6" fill="{{ b.ring }}"></circle>
+<circle cx="58.9" cy="71.0" r="1.6" fill="{{ b.ring }}"></circle>
+<circle cx="83.0" cy="46.9" r="1.6" fill="{{ b.ring }}"></circle>
+<path d="M82 28 C82 10 118 10 118 28 C118 34 115 37 112 39 V43 C112 45 110 46 108 46 H92 C90 46 88 45 88 43 V39 C85 37 82 34 82 28 Z" fill="{{ b.iconLight }}" stroke="#07182B" stroke-width="3.2" stroke-linejoin="round"></path>
+<ellipse cx="92.5" cy="28.5" rx="4.8" ry="4.2" transform="rotate(14 92.5 28.5)" fill="#ffffff" stroke="#07182B" stroke-width="1.8"></ellipse>
+<ellipse cx="107.5" cy="28.5" rx="4.8" ry="4.2" transform="rotate(-14 107.5 28.5)" fill="#ffffff" stroke="#07182B" stroke-width="1.8"></ellipse>
+<circle cx="93.6" cy="29.3" r="2" fill="#07182B"></circle><circle cx="106.4" cy="29.3" r="2" fill="#07182B"></circle>
+<path d="M85.5 21.5 L97 26.5 M114.5 21.5 L103 26.5" stroke="#07182B" stroke-width="2.8" stroke-linecap="round" fill="none"></path>
+<path d="M100 33 L97.6 37.4 H102.4 Z" fill="#07182B" stroke="#07182B" stroke-width="1" stroke-linejoin="round"></path>
+<path d="M95.5 40.5 V44.5 M100 40.5 V44.5 M104.5 40.5 V44.5" stroke="#07182B" stroke-width="1.6" stroke-linecap="round" fill="none"></path>
+<path d="M88 14 C86 -4 114 -4 112 14 Z" fill="{{ b.ring }}" stroke="#07182B" stroke-width="3.2" stroke-linejoin="round"></path>
+<ellipse cx="100" cy="14" rx="27" ry="5.8" fill="{{ b.ring }}" stroke="#07182B" stroke-width="3.2"></ellipse>
+<circle cx="100" cy="5.5" r="1.8" fill="{{ b.iconLight }}"></circle>
+<path d="M2 88 H24 M176 88 H198" stroke="{{ b.rim }}" stroke-width="1.2" stroke-linecap="round" opacity="0.55" fill="none"></path>
+<circle cx="19" cy="68" r="4.4" fill="none" stroke="{{ b.rim }}" stroke-width="1.6"></circle>
+<circle cx="182" cy="86" r="4.4" fill="none" stroke="{{ b.rim }}" stroke-width="1.6"></circle>
+<circle cx="170" cy="14" r="3.4" fill="none" stroke="{{ b.rim }}" stroke-width="1.6"></circle>
+</g>
+
+<g display="{{ b.dSparkle }}"><path d="M26 13 Q27.5 19.5 34 21 Q27.5 22.5 26 29 Q24.5 22.5 18 21 Q24.5 19.5 26 13 Z" fill="#eef3ff"></path></g>
+
+<path d="{{ b.tails }}" fill="{{ b.tail }}" stroke="#07182B" stroke-width="3.2" stroke-linejoin="round"></path>
+<rect x="33" y="143" width="134" height="32" rx="7" fill="url(#pg{{ b.uid }})" stroke="#07182B" stroke-width="3.6"></rect>
+<path d="M42 147 H158" stroke="#ffffff" stroke-width="1.6" stroke-linecap="round" opacity="0.55" fill="none"></path>
+<g display="{{ b.dExo }}">
+<path d="M100 134 L104 140 L100 146 L96 140 Z" fill="{{ b.ring }}" stroke="#07182B" stroke-width="2.4" stroke-linejoin="round"></path>
+<polygon points="{{ b.e1 }}" fill="#ffffff" stroke="#07182B" stroke-width="2.4" stroke-linejoin="round"></polygon>
+<polygon points="{{ b.e2 }}" fill="#ffffff" stroke="#07182B" stroke-width="2.4" stroke-linejoin="round"></polygon>
+</g>
+</svg>
+<span style="position: absolute; left: 29px; top: 133px; width: 118px; height: 28px; display: flex; align-items: center; justify-content: center; pointer-events: none"><span style="{{ b.nameStyle }}">{{ b.name }}</span></span>
+</div>
+</div></div>
+</sc-for>
+<div class="ach-txt" style="display: flex; flex-direction: column; gap: 1px; min-width: 0">
+<span style="font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: #9FB3C8">Succès débloqué</span>
+<strong style="font-family: 'Sora', system-ui, sans-serif; font-size: 18px; font-weight: 600; color: #F2F7FA">{{ achName }}</strong>
+<span style="font-size: 12.5px; color: {{ achColor }}">{{ achRar }} · {{ achReq }}</span>
+</div>
+<span class="ach-shine"></span>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ hasToast }}" hint-placeholder-val="{{ false }}">
+<div role="status" style="position: absolute; left: 50%; bottom: 28px; transform: translateX(-50%); z-index: 50; background: #0B2338; border: 1px solid {{ accent }}; color: #E6F3F5; padding: 12px 20px; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.4)">{{ toast }}</div>
+</sc-if>
+</sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"onExit":{"editor":null},"email":{"editor":"text","default":"lena@exemple.fr"},"pseudo":{"editor":"text","default":""},"joined":{"editor":"text","default":""},"yt":{"editor":"text","default":""},"tt":{"editor":"text","default":""},"dc":{"editor":"text","default":""},"$preview":{"width":1440,"height":1000}}'>
+class Component extends DCLogic {
+  data() {
+    // Profils de demonstration : chiffres fictifs
+    const PROFILES = {
+      boutique: { label: 'Clipper commu · boutique', type: 'commu', fresh: ['Flammèche'], pseudo: 'lena.clips', clients: ['nova'], balance: 0, stats: { clips: 27, views: 36400, subs: 85, days: 40, founder: false, staff: false }, streak: 12, done: false, acc: { yt: false, tt: true, ig: true } },
+      cagnotte: { label: 'Clipper commu · cagnotte', type: 'commu', fresh: ['Usine à clips', 'Tout feu tout flamme'], pseudo: 'maxime_cut', clients: ['zed'], balance: 37.4, stats: { clips: 118, views: 112000, subs: 640, days: 100, founder: false, staff: false }, streak: 34, done: true, acc: { yt: true, tt: true, ig: false } },
+      rpm: { label: 'Clipper commu · RPM', type: 'commu', fresh: ['Il y a un début à tout'], pseudo: 'sacha.rl', clients: ['ayla'], balance: 54.2, stats: { clips: 8, views: 6800, subs: 9, days: 12, founder: false, staff: false }, streak: 4, done: false, acc: { yt: false, tt: true, ig: false } },
+      spe: { label: 'Clipper spécialisé · 3 clients', type: 'spe', fresh: ['Brasier', 'Fondateur'], pseudo: 'nolan.pro', clients: ['nova', 'zed', 'ayla'], balance: 212.8, stats: { clips: 340, views: 1300000, subs: 12000, days: 120, founder: true, staff: false }, streak: 104, done: true, acc: { yt: true, tt: true, ig: true } }
+    };
+    return { PROFILES: PROFILES };
+  }
+  constructor(props) {
+    super(props);
+    const p = this.data().PROFILES.boutique;
+    let sound = true, mlv = 1, vol = 50;
+    try { sound = localStorage.getItem('son') !== '0'; } catch (e) { sound = true; }
+    try { const x = localStorage.getItem('musique'); mlv = x === null ? 1 : (+x === 0 ? 0 : (+x === 2 ? 2 : 1)); } catch (e) { mlv = 1; }
+    try { const x = localStorage.getItem('sfxvol'); vol = x === null ? 50 : Math.max(0, Math.min(100, Math.round(+x || 0))); } catch (e) { vol = 50; }
+    this._uid = 'fx' + Math.random().toString(36).slice(2, 8);
+    this._tok = 0;
+    this._fx = null;
+    this._force = false;
+    this.state = { rulesOk: false, checks: [false, false, false, false], profile: 'boutique', tab: 'profil', cIdx: 0, menu: '', coins: 1240, toast: '', wd: false, streak: p.streak, done: p.done, accs: this.mkAccs(p, true), dc: this.props.joined ? !!this.props.dc : true, ps: 'sons', busy: false, sound: sound, mlv: mlv, vol: vol, coll: 'succes', ach: '' };
+  }
+
+  // comptes connectes par profil (maquette) : un compte clip par createur pour le clipper specialise
+  // clipper qui vient de s'inscrire : son pseudo et les comptes connectes pendant l'inscription remplacent ceux du profil de demonstration
+  ov(p) { const P = this.props || {}; return P.joined && (P.pseudo || '').trim() ? Object.assign({}, p, { pseudo: P.pseudo.trim() }) : p; }
+  mkAccs(p0, init) {
+    const p = this.ov(p0);
+    if (init && this.props.joined) return { yt: this.props.yt ? [p.pseudo] : [], tt: this.props.tt ? [p.pseudo] : [] };
+    const base = (p.pseudo || 'clipper').split('.')[0];
+    const one = (on, plat) => {
+      if (!on) return [];
+      if (plat === 'tt' && p.type === 'spe') return p.clients.map((c) => base + '.' + c);
+      return [p.pseudo];
+    };
+    return { yt: one(p.acc.yt, 'yt'), tt: one(p.acc.tt, 'tt') };
+  }
+
+  // ---------- Flamme de serie : animation + sons (repris du site des flammes) ----------
+  getFx() {
+    if (this._fx) return this._fx;
+    const DARK = '#07182b';
+    const STOPS = [[1, '#d3dce9', '#ffffff'], [5, '#86c9a3', '#e6f8ee'], [10, '#5b8ee0', '#dde9fc'], [30, '#8a5fd6', '#e9defb'], [50, '#ee9a4a', '#fee9d2'], [100, '#f2c94c', '#fff4cf']];
+    const PALIERS = { 5: 'Commun', 10: 'Rare', 30: 'Épique', 50: 'Légendaire', 100: 'Mythique' };
+    const GRIS = ['#5f6c80', '#97a3b5'];
+    const JOURS = ['Di', 'Lu', 'Ma', 'Me', 'Je', 'Ve', 'Sa'];
+    const LAND = 880;
+    const hx = (c) => [1, 3, 5].map((i) => parseInt(c.slice(i, i + 2), 16));
+    const mix = (a, b, t) => '#' + hx(a).map((x, i) => Math.round(x + (hx(b)[i] - x) * t).toString(16).padStart(2, '0')).join('');
+    const couleurs = (j) => {
+      const d = Math.max(1, Math.min(100, j));
+      for (let i = 0; i < STOPS.length - 1; i++) {
+        const a = STOPS[i], b = STOPS[i + 1];
+        if (d <= b[0]) { const t = (d - a[0]) / (b[0] - a[0]); return [mix(a[1], b[1], t), mix(a[2], b[2], t)]; }
+      }
+      return [STOPS[5][1], STOPS[5][2]];
+    };
+    const flammeSVG = (jours, eteinte, id) => {
+      const m = eteinte ? GRIS[0] : couleurs(jours)[0], l = eteinte ? GRIS[1] : couleurs(jours)[1];
+      const eye = eteinte ? '#8d99ab' : '#fff6d8';
+      const fumee = eteinte ? '<path d="M62 6C57 1 66 -2 61 -6" fill="none" stroke="#7f8ca0" stroke-width="4.5" stroke-linecap="round"/>' : '';
+      return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="16 4 88 110" role="img" aria-label="' + (eteinte ? 'Flamme éteinte' : 'Flamme de série, ' + jours + ' jours') + '">' +
+        '<defs><linearGradient id="g' + id + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="' + l + '"/><stop offset="1" stop-color="' + m + '"/></linearGradient></defs>' +
+        '<g class="f"><g transform="translate(0 0)">' + fumee +
+        '<path d="M62 12C70 32 98 50 98 78C98 98 82 110 60 110C38 110 22 98 22 78C22 64 30 54 38 46C42 52 46 58 52 58C52 44 56 26 62 12Z" fill="url(#g' + id + ')" stroke="' + DARK + '" stroke-width="7" stroke-linejoin="round"/>' +
+        '<path d="M34 80C34 90 38 96 44 100" fill="none" stroke="#fff" stroke-opacity=".55" stroke-width="3.5" stroke-linecap="round"/>' +
+        '<circle cx="60" cy="86" r="9.5" fill="' + DARK + '"/><rect x="54" y="91" width="12" height="9" rx="2.5" fill="' + DARK + '"/>' +
+        '<circle cx="56.3" cy="86" r="2.6" fill="' + eye + '"/><circle cx="63.7" cy="86" r="2.6" fill="' + eye + '"/></g></g></svg>';
+    };
+    const reduit = () => { try { return window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) { return false; } };
+    const arreter = (el) => { if (el && el._stop) el._stop(); if (el) el._stop = null; };
+    const forme = (t, k) => {
+      const a = (f, p) => Math.sin(t * f + p), n = (x) => x.toFixed(1);
+      const o = 62 + k * (2.2 * a(5.1, 0) + 1.2 * a(9.7, 1)), r = 12 + 1.6 * k * a(6.3, 2), s = 38 + 1.6 * k * a(7.2, 3), i = 46 + 2.4 * k * a(8.4, 1), l = 58 + 1.2 * k * a(6.8, 4);
+      return 'M' + n(o) + ' ' + n(r) + 'C' + n(70 + 1.5 * k * a(4.3, 5)) + ' 32 98 50 98 78C98 98 82 110 60 110C38 110 22 98 22 78C22 64 30 54 ' + n(s) + ' ' + n(i) + 'C42 52 46 ' + n(l) + ' 52 ' + n(l) + 'C' + n(52 + 1.5 * k * a(5.5, 2)) + ' 44 ' + n(56 + o - 62) + ' 26 ' + n(o) + ' ' + n(r) + 'Z';
+    };
+    const braise = (stage, coul) => {
+      const el = document.createElement('span'), n = 4 + 5 * Math.random();
+      el.className = 'fx-conf';
+      el.style.cssText = 'width:' + n + 'px;height:' + n + 'px;border-radius:50%;margin:0;left:' + (42 + 16 * Math.random()) + '%;top:62%;background:' + coul[Math.floor(Math.random() * coul.length)];
+      stage.append(el);
+      const dx = 50 * (Math.random() - 0.5), dy = 80 + 90 * Math.random();
+      el.animate([{ transform: 'translate(0,0) scale(1)', opacity: 0.9 }, { transform: 'translate(' + 0.5 * dx + 'px,' + 0.5 * -dy + 'px) scale(.8)', opacity: 0.8, offset: 0.5 }, { transform: 'translate(' + dx + 'px,' + -dy + 'px) scale(.2)', opacity: 0 }], { duration: 1100 + 900 * Math.random(), easing: 'ease-out' }).onfinish = () => el.remove();
+    };
+    const vivante = (stage, flamme, o) => {
+      const opt = o || {}, k = opt.k == null ? 1 : opt.k, braises = !!opt.braises, coul = opt.coul || ['#ffffff'];
+      arreter(stage);
+      if (reduit()) return;
+      const corps = flamme.querySelector('path[stroke-width="7"]'), grp = flamme.querySelector('.f');
+      if (!corps || !grp) return;
+      let on = true, last = 0;
+      const t0 = performance.now();
+      const tick = (now) => {
+        if (!on) return;
+        if (!stage.isConnected) { on = false; return; }
+        const t = (now - t0) / 1000;
+        corps.setAttribute('d', forme(t, k));
+        grp.setAttribute('transform', 'translate(60 110) rotate(' + (2.4 * k * Math.sin(2.4 * t)).toFixed(2) + ') scale(' + (1 + 0.015 * k * Math.sin(5.2 * t)).toFixed(3) + ' ' + (1 + 0.03 * k * Math.sin(6.1 * t + 1)).toFixed(3) + ') translate(-60 -110)');
+        if (braises && now - last > 260 / k) { last = now; braise(stage, coul); }
+        requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+      stage._stop = () => { on = false; };
+    };
+    // sons de la série : mêmes moments que sur le site des flammes, mais en bols et cloches douces
+    const jouerSon = (jours, palier, coches) => {
+      const N = window.__nsfx;
+      if (!N || !N.voice) return;
+      N.ac();
+      const P = N.PENTA, base = P[Math.min(Math.max(jours, 1) - 1, 14)];
+      N.voice('soft', 220, 0.04, 0.5, 0.05);
+      N.air('bandpass', 300, 1800, 0.12, 0.5, 0.03, 0.8);
+      N.voice('soft', 440, 0.5, 0.35, 0.035);
+      N.voice('bowl', 146.83, 0.88, 3.0, 0.1);
+      N.air('lowpass', 700, 120, 0.88, 0.3, 0.04, 0.7);
+      for (let i = 0; i < 5; i++) N.voice('soft', P[8 + Math.floor(Math.random() * 7)], 0.92 + 0.12 * i + 0.05 * Math.random(), 0.5, 0.012);
+      N.voice('bowl', base, 0.98, 2.4, 0.07);
+      N.voice('bowl', base * 1.5, 1.07, 2.6, 0.05);
+      if (palier) [1, 1.25, 1.5, 2].forEach((m, i) => N.voice('chime', base * m, 1.33 + 0.12 * i, 2.4, 0.045));
+      for (let i = 0; i < coches; i++) N.voice('chime', P[5 + (i % 8)], 2.6 + 0.1 * i, 0.9, 0.03);
+    };
+    const semaine = (jours, allume, couleur) => {
+      const auj = new Date().getDay(), n = allume ? Math.min(jours, 7) : Math.min(jours, 6);
+      return Array.from({ length: 7 }, (_, i) => {
+        const on = allume ? i >= 7 - n : (i < 6 && i >= 6 - n);
+        return '<div class="fx-j">' + JOURS[(auj - 6 + i + 7) % 7] + '<span class="fx-dot">' + (on ? '<span class="fx-ck" style="background:' + couleur + '">✓</span>' : '') + '</span></div>';
+      }).join('');
+    };
+    // « Tu postes, ta serie continue » : de = jours avant le clip
+    const animer = (E, de, son) => {
+      const stage = E.stage, flamme = E.flamme, ombre = E.ombre, chiffre = E.chiffre, label = E.label, carte = E.carte, message = E.message;
+      const g = de + 1, palier = PALIERS[g], cc = couleurs(g), m1 = cc[0], l1 = cc[1];
+      const k = 0.7 + 0.8 * Math.min(g, 100) / 100;
+      const svg = flamme.querySelector('svg'), stops = svg.querySelectorAll('stop'), yeux = svg.querySelectorAll('circle[r="2.6"]');
+      const apres = (ms, f) => setTimeout(f, ms);
+      const fumee = svg.querySelector('path[stroke="#7f8ca0"]');
+      if (fumee) { if (!reduit()) fumee.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 320, delay: 420, fill: 'forwards' }); apres(reduit() ? 0 : 760, () => fumee.remove()); }
+      const teinte = (t) => {
+        stops[0].setAttribute('stop-color', mix(GRIS[1], l1, t)); stops[1].setAttribute('stop-color', mix(GRIS[0], m1, t));
+        yeux.forEach((y) => y.setAttribute('fill', mix('#8d99ab', '#fff6d8', t)));
+        ombre.style.background = mix(GRIS[0], m1, t);
+      };
+      const texteFin = palier ? 'Palier atteint : série de ' + g + ' jours (' + palier + ')' : 'Série prolongée !';
+      const ancien = chiffre.firstElementChild, nouveau = document.createElement('span');
+      nouveau.className = 'fx-n'; nouveau.textContent = g; nouveau.style.color = m1; chiffre.append(nouveau);
+      label.textContent = g > 1 ? 'jours de série' : 'jour de série'; label.style.color = m1;
+      const coches = Math.min(g, 7);
+      carte.innerHTML = semaine(g, true, m1);
+      if (reduit()) {
+        teinte(1); if (ancien) ancien.remove(); label.style.opacity = 1; carte.style.opacity = 1; message.textContent = texteFin;
+        return Promise.resolve();
+      }
+      if (son) { try { jouerSon(g, palier, coches); } catch (e) {} }
+      const T = 1300;
+      const tr = (sx, sy, ty, rot) => 'scale(' + sx + ',' + sy + ') translateY(' + ty + '%) rotate(' + rot + 'deg)';
+      const kf = (ms, sx, sy, ty, rot, easing) => ({ offset: ms / T, transform: tr(sx, sy, ty, rot), easing: easing || 'ease-in-out' });
+      flamme.animate([kf(0, 1, 1, 0, 0), kf(55, 1.03, 0.97, 0, -3), kf(110, 0.97, 1.03, 0, 3), kf(190, 1.3, 0.6, 0, 0), kf(420, 1.36, 0.55, 0, 0, 'cubic-bezier(.2,.9,.3,1)'), kf(520, 0.86, 1.4, -20, -6), kf(640, 0.9, 1.34, -30, 4), kf(780, 0.95, 1.25, -26, -3, 'cubic-bezier(.6,0,1,.7)'), kf(LAND, 1.38, 0.68, 0, 0), kf(1010, 1.04, 1.18, -6, 2), kf(1110, 1.06, 0.94, 0, 0), kf(1210, 0.98, 1.04, 0, 0), kf(T, 1, 1, 0, 0)], { duration: T });
+      apres(150, () => { const t0 = performance.now(); const tick = (now) => { const t = Math.min(1, (now - t0) / 330); teinte(t); if (t < 1) requestAnimationFrame(tick); }; requestAnimationFrame(tick); });
+      ombre.animate([{ transform: 'scaleX(1)', opacity: 0.3 }, { transform: 'scaleX(1)', opacity: 0.3, offset: 480 / T }, { transform: 'scaleX(.7)', opacity: 0.2, offset: 560 / T }, { transform: 'scaleX(.6)', opacity: 0.2, offset: 0.6 }, { transform: 'scaleX(1.2)', opacity: 0.45, offset: LAND / T }, { transform: 'scaleX(1)', opacity: 0.3 }], { duration: T });
+      apres(10, () => vivante(stage, flamme, { k: 0.5 }));
+      // lueur
+      const lueur = document.createElement('div'); lueur.className = 'fx-lueur'; lueur.style.background = 'radial-gradient(circle,' + m1 + '77 0%,transparent 65%)'; stage.prepend(lueur);
+      lueur.animate([{ opacity: 0, transform: 'scale(.5)' }, { opacity: 0.9, transform: 'scale(1.15)', offset: 0.3 }, { opacity: 0.45, transform: 'scale(1)' }], { duration: 800, delay: 800, fill: 'forwards' });
+      lueur.animate([{ opacity: 0.35 }, { opacity: 0.65 }], { duration: 900, delay: 1600, direction: 'alternate', iterations: Infinity, easing: 'ease-in-out' });
+      // ondes
+      const onde = (delai) => { const a = document.createElement('div'); a.className = 'fx-ring'; a.style.borderColor = m1; stage.append(a); a.animate([{ transform: 'scale(.4)', opacity: 0.9 }, { transform: 'scale(1.7)', opacity: 0 }], { duration: 750, delay: delai, easing: 'ease-out' }).onfinish = () => a.remove(); };
+      onde(LAND); if (palier) onde(1010);
+      stage.animate([{ transform: 'translate(0,0)' }, { transform: 'translate(-5px,4px)' }, { transform: 'translate(4px,-3px)' }, { transform: 'translate(-2px,2px)' }, { transform: 'translate(0,0)' }], { duration: 280, delay: LAND });
+      // confettis
+      const coul = [m1, l1, mix(m1, '#ffffff', 0.45)];
+      const confetti = (nb, delai, portee, duree) => {
+        for (let i = 0; i < nb; i++) {
+          const c = document.createElement('span'); c.className = 'fx-conf'; c.style.background = coul[i % 3]; c.style.width = c.style.height = 6 + 6 * Math.random() + 'px'; stage.append(c);
+          const a = Math.random() * Math.PI * 2, d = portee * (0.5 + 0.6 * Math.random()), r = (Math.random() < 0.5 ? 45 : 0) + 90 * Math.random();
+          c.animate([{ transform: 'translate(0,0) rotate(0deg) scale(1)', opacity: 1 }, { transform: 'translate(' + Math.cos(a) * d + 'px,' + (Math.sin(a) * d - 30) + 'px) rotate(' + r + 'deg) scale(.5)', opacity: 0 }], { duration: duree * (0.7 + 0.6 * Math.random()), delay: delai, easing: 'cubic-bezier(.1,.8,.3,1)' }).onfinish = () => c.remove();
+        }
+      };
+      confetti(12 + Math.round(10 * Math.min(g, 100) / 100) + (palier ? 14 : 0), LAND, 130 + (palier ? 30 : 0), 1000);
+      confetti(1, 1100, 40, 2200);
+      // chiffre, legende, semaine
+      if (ancien) ancien.animate([{ transform: 'translateY(0)', opacity: 1 }, { transform: 'translateY(70%)', opacity: 0 }], { duration: 260, delay: 900, easing: 'ease-in', fill: 'both' });
+      nouveau.animate([{ transform: 'translateY(-70%) scale(.8) rotate(-8deg)', opacity: 0 }, { transform: 'translateY(6%) scale(1.25) rotate(4deg)', opacity: 1, offset: 0.6 }, { transform: 'translateY(0) scale(1) rotate(0)', opacity: 1 }], { duration: 460, delay: 980, easing: 'ease-out', fill: 'both' });
+      label.animate([{ opacity: 0, transform: 'translateY(6px)' }, { opacity: 1, transform: 'none' }], { duration: 400, delay: 1750, fill: 'both' });
+      carte.animate([{ opacity: 0, transform: 'translateY(14px)' }, { opacity: 1, transform: 'none' }], { duration: 450, delay: 2250, fill: 'both' });
+      carte.querySelectorAll('.fx-ck').forEach((c, i) => c.animate([{ opacity: 0, transform: 'scale(.3)' }, { opacity: 1, transform: 'scale(1.2)', offset: 0.6 }, { opacity: 1, transform: 'scale(1)' }], { duration: 350, delay: 2600 + 80 * i, fill: 'both' }));
+      apres(LAND, () => { message.textContent = 'Série prolongée !'; });
+      apres(1000, () => vivante(stage, flamme, { k: k, braises: true, coul: [m1, l1] }));
+      return new Promise((fini) => apres(2600 + 80 * coches + 350, () => { message.textContent = texteFin; fini(); }));
+    };
+    this._fx = { DARK: DARK, GRIS: GRIS, mix: mix, couleurs: couleurs, flammeSVG: flammeSVG, vivante: vivante, arreter: arreter, semaine: semaine, animer: animer, reduit: reduit };
+    return this._fx;
+  }
+
+  // dessine l'etat de repos de la flamme dans le conteneur (allumee ou eteinte)
+  initStage(root) {
+    const fx = this.getFx(), s = this.state, days = s.streak, lit = s.done;
+    const old = root.querySelector('.fx-stage');
+    if (old) fx.arreter(old);
+    const cc = fx.couleurs(Math.max(1, days));
+    const m = lit ? cc[0] : fx.GRIS[0];
+    const id = 'f' + Math.random().toString(36).slice(2, 7);
+    root.innerHTML = '<div class="fx-stage"><div class="fx-ombre"></div><div class="fx-flamme"></div></div><div class="fx-chiffre"></div><div class="fx-label"></div><div class="fx-carte"></div><p class="fx-msg" aria-live="polite"></p>';
+    const q = (c) => root.querySelector('.' + c);
+    const E = { stage: q('fx-stage'), flamme: q('fx-flamme'), ombre: q('fx-ombre'), chiffre: q('fx-chiffre'), label: q('fx-label'), carte: q('fx-carte'), message: q('fx-msg') };
+    E.flamme.innerHTML = fx.flammeSVG(Math.max(1, days), !lit, id);
+    E.ombre.style.background = m;
+    E.chiffre.innerHTML = '<span class="fx-n" style="color:' + (lit ? m : '#4d5a6e') + '">' + days + '</span>';
+    E.label.textContent = days > 1 ? 'jours de série' : 'jour de série';
+    E.label.style.color = lit ? m : '#9fb3d6';
+    E.carte.innerHTML = fx.semaine(days, lit, cc[0]);
+    E.message.textContent = lit ? 'Série du jour validée ✓ Reviens demain pour la continuer.' : (days ? "Tu es là aujourd'hui : poste un clip pour allumer ta flamme." : 'Poste ton premier clip pour allumer la flamme.');
+    if (lit) {
+      const lueur = document.createElement('div');
+      lueur.className = 'fx-lueur'; lueur.style.background = 'radial-gradient(circle,' + cc[0] + '77 0%,transparent 65%)'; lueur.style.opacity = 0.5;
+      E.stage.prepend(lueur);
+      if (!fx.reduit()) lueur.animate([{ opacity: 0.35 }, { opacity: 0.65 }], { duration: 900, direction: 'alternate', iterations: Infinity, easing: 'ease-in-out' });
+      fx.vivante(E.stage, E.flamme, { k: 0.7 + 0.8 * Math.min(days, 100) / 100, braises: true, coul: [cc[0], cc[1]] });
+    } else {
+      fx.vivante(E.stage, E.flamme, { k: 0.3 });
+    }
+  }
+  findRoot() {
+    let root = null;
+    try { root = document.getElementById(this._uid); } catch (e) { root = null; }
+    if (!root && this._rootEl && this._rootEl.isConnected) root = this._rootEl;
+    return root;
+  }
+  syncStage() {
+    const root = this.findRoot();
+    if (!root) return;
+    if (this._force || !root.firstChild) { this._force = false; try { this.initStage(root); } catch (e) {} }
+  }
+  componentDidMount() {
+    this.installSfx();
+    this._onSfx = (e) => { try { const d = e.detail || {}; this.setState({ sound: !!d.on, mlv: d.level === undefined ? this.state.mlv : d.level, vol: d.vol === undefined ? this.state.vol : d.vol }); } catch (x) {} };
+    try { window.addEventListener('nsfx-change', this._onSfx); } catch (x) {}
+    this.syncStage();
+  }
+  componentDidUpdate() { this.syncStage(); }
+  // annonce « Succès débloqué » façon trophée : une carte qui descend du haut, une par succès
+  showAch(names) {
+    const q = (names || []).slice(), tok = (this._achTok = (this._achTok || 0) + 1);
+    const next = () => {
+      if (tok !== this._achTok) return;
+      const n = q.shift();
+      if (!n) return;
+      this.setState({ ach: n });
+      const rk = (this._rar || {})[n], big = ['epique', 'legendaire', 'mythique', 'exotique'].indexOf(rk) >= 0;
+      setTimeout(() => { if (tok === this._achTok) this.sfx(big ? 'unlockBig' : 'unlock'); }, 380);
+      setTimeout(() => { if (tok !== this._achTok) return; this.setState({ ach: '' }); setTimeout(next, 500); }, 5600);
+    };
+    next();
+  }
+  componentWillUnmount() {
+    this._achTok = (this._achTok || 0) + 1;
+    try { window.removeEventListener('nsfx-change', this._onSfx); } catch (e) {}
+    try { const root = this.findRoot(); const st = root && root.querySelector('.fx-stage'); if (st) this.getFx().arreter(st); } catch (e) {}
+  }
+  // l'utilisateur colle un lien valide : la serie continue (animation + sons), puis l'etat se met a jour
+  playStreak() {
+    const de = this.state.streak, tok = ++this._tok, son = (window.__nsfx ? window.__nsfx.isOn() : this.state.sound);
+    const MILE = { 5: 'Étincelle', 10: 'Flammèche', 30: 'Tout feu tout flamme', 50: 'Pyromane', 100: 'Brasier' };
+    const fin = () => {
+      if (tok !== this._tok) return;
+      this.setState({ streak: de + 1, done: true, busy: false });
+      if (MILE[de + 1]) setTimeout(() => { if (tok === this._tok) this.showAch([MILE[de + 1]]); }, 1500);
+    };
+    this.setState({ busy: true });
+    setTimeout(() => {
+      if (tok !== this._tok) return;
+      const root = this.findRoot();
+      if (!root) { fin(); return; }
+      if (!root.firstChild) { try { this.initStage(root); } catch (e) {} }
+      const q = (c) => root.querySelector('.' + c);
+      const E = { stage: q('fx-stage'), flamme: q('fx-flamme'), ombre: q('fx-ombre'), chiffre: q('fx-chiffre'), label: q('fx-label'), carte: q('fx-carte'), message: q('fx-msg') };
+      if (!E.stage || !E.flamme) { fin(); return; }
+      try { this.getFx().animer(E, de, son).then(() => fin()); } catch (e) { fin(); }
+    }, 60);
+  }
+
+  // ---------- Bruitages et musique de l'interface : sobres et doux, façon bols tibétains (partagés par toutes les maquettes) ----------
+  sfx(name) { try { if (typeof window !== 'undefined' && window.__nsfx) window.__nsfx.play(name); } catch (e) {} }
+  installSfx() {
+    if (typeof window === 'undefined' || typeof document === 'undefined') return;
+    if (window.__nsfx) { window.__nsfx.scan(); return; }
+    const W = window, D = document, mem = { off: false };
+    let ctx = null, bus = null, nbuf = null, mst = null, cv = null, unlocked = false, lastDown = 0, lastHover = null, lastMove = 0, px = -1, py = -1;
+    const born = Date.now(), last = {};
+    // gamme pentatonique de ré : toutes les notes vont bien ensemble
+    const PENTA = [293.66, 329.63, 369.99, 440, 493.88, 587.33, 659.25, 739.99, 880, 987.77, 1174.66, 1318.51, 1479.98, 1760, 1975.53];
+    const isOn = () => {
+      if (mem.off) return false;
+      try { return W.localStorage.getItem('son') !== '0'; } catch (e) { return true; }
+    };
+    const ac = () => {
+      try {
+        if (!ctx) {
+          ctx = new (W.AudioContext || W.webkitAudioContext)();
+          const master = mst = ctx.createGain(); master.gain.value = 0.5;
+          const comp = ctx.createDynamicsCompressor();
+          master.connect(comp); comp.connect(ctx.destination);
+          bus = ctx.createGain(); bus.gain.value = svGain(sfxVol()); bus.connect(master);
+          // une longue réverbération douce donne l'effet « salle calme »
+          const conv = cv = ctx.createConvolver(), len = Math.floor(ctx.sampleRate * 2.6), ir = ctx.createBuffer(2, len, ctx.sampleRate);
+          for (let ch = 0; ch < 2; ch++) { const d = ir.getChannelData(ch); for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 3); }
+          conv.buffer = ir;
+          const send = ctx.createGain(); send.gain.value = 0.35;
+          const wet = ctx.createGain(); wet.gain.value = 0.7;
+          bus.connect(send); send.connect(conv); conv.connect(wet); wet.connect(master);
+        }
+        if (ctx.state === 'suspended') ctx.resume();
+      } catch (e) { ctx = null; bus = null; mst = null; cv = null; }
+      return ctx;
+    };
+    // [rapport de fréquence, volume relatif, durée relative, attaque]
+    const PARTS = {
+      soft: [[1, 1, 1, 0.02], [2, 0.16, 0.55, 0.02]],
+      bowl: [[1, 1, 1, 0.05], [1.004, 0.7, 1, 0.05], [2.71, 0.2, 0.5, 0.04], [5.1, 0.06, 0.28, 0.03]],
+      chime: [[1, 1, 1, 0.008], [2.76, 0.26, 0.42, 0.008], [5.4, 0.09, 0.2, 0.008]]
+    };
+    const voice = (kind, f, at, dur, vol) => {
+      const c = ac(); if (!c || !bus) return;
+      const t = c.currentTime + at;
+      PARTS[kind].forEach((p) => {
+        const o = c.createOscillator(), g = c.createGain(), d = dur * p[2], pk = Math.max(vol * p[1], 0.0002);
+        o.type = 'sine'; o.frequency.setValueAtTime(f * p[0], t);
+        g.gain.setValueAtTime(0.0001, t);
+        g.gain.exponentialRampToValueAtTime(pk, t + p[3]);
+        g.gain.exponentialRampToValueAtTime(0.0001, t + d);
+        o.connect(g); g.connect(bus); o.start(t); o.stop(t + d + 0.05);
+      });
+    };
+    const air = (ft, f0, f1, at, dur, vol, q) => {
+      const c = ac(); if (!c || !bus) return;
+      const t = c.currentTime + at, src = c.createBufferSource(), f = c.createBiquadFilter(), g = c.createGain();
+      if (!nbuf) { nbuf = c.createBuffer(1, c.sampleRate, c.sampleRate); const d = nbuf.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1; }
+      src.buffer = nbuf; f.type = ft; f.Q.value = q || 1;
+      f.frequency.setValueAtTime(f0, t); f.frequency.exponentialRampToValueAtTime(Math.max(f1, 20), t + dur);
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(Math.max(vol, 0.0002), t + dur * 0.4);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      src.connect(f); f.connect(g); g.connect(bus); src.start(t); src.stop(t + dur + 0.05);
+    };
+    const rnd = (a) => a[Math.floor(Math.random() * a.length)];
+    // f = 1 : son complet ; f = 0.5 : le même son déjà entendu il y a peu, joué plus court et plus bas
+    const S = {
+      tap: (f) => voice('soft', rnd([587.33, 659.25, 739.99, 880]), 0, 0.28, 0.034 * f),
+      hover: () => voice('soft', 1174.66, 0, 0.12, 0.008),
+      key: () => voice('soft', rnd([880, 987.77, 1174.66, 1318.51]), 0, 0.09, 0.01),
+      tick: () => voice('soft', rnd(PENTA.slice(5, 10)), 0, 0.12, 0.025),
+      confirm: (f) => { voice('bowl', rnd([587.33, 659.25]), 0, 0.6, 0.04 * f); if (f > 0.9) voice('bowl', 880, 0.12, 0.8, 0.028); },
+      back: (f) => { voice('bowl', 880, 0, 0.5, 0.036 * f); if (f > 0.9) voice('bowl', 587.33, 0.11, 0.7, 0.032); },
+      tab: (f) => voice('chime', 739.99, 0, 0.4, 0.024 * f),
+      open: (f) => { voice('soft', 587.33, 0, 0.4, 0.032 * f); if (f > 0.9) voice('soft', 739.99, 0.09, 0.5, 0.032); },
+      close: (f) => { voice('soft', 739.99, 0, 0.38, 0.03 * f); if (f > 0.9) voice('soft', 587.33, 0.09, 0.5, 0.03); },
+      check: (f) => voice('chime', 880, 0, 0.7, 0.036 * f),
+      uncheck: (f) => voice('soft', 587.33, 0, 0.4, 0.028 * f),
+      success: (f) => {
+        voice('bowl', 146.83, 0, 2.4, 0.045 * f);
+        [587.33, 739.99, 880].forEach((n, i) => { if (f > 0.9 || i < 2) voice('chime', n, 0.1 + i * 0.14, 1.5, 0.036 * f); });
+      },
+      error: (f) => { voice('bowl', 293.66, 0, 0.7, 0.042 * f); if (f > 0.9) voice('bowl', 220, 0.18, 1.0, 0.036); },
+      notif: (f) => voice('chime', 880, 0, 1.1, 0.036 * f),
+      coin: (f) => { voice('chime', 880, 0, 0.9, 0.032 * f); if (f > 0.9) voice('chime', 1318.51, 0.1, 1.2, 0.028); },
+      swish: (f) => air('bandpass', 380, 1500, 0, 0.4, 0.016 * f, 0.7),
+      swishBack: (f) => air('bandpass', 1500, 380, 0, 0.36, 0.014 * f, 0.7),
+      // succès débloqué : nappe grave + trois cloches qui montent + quelques étincelles
+      unlock: () => {
+        voice('bowl', 220, 0, 3.4, 0.055);
+        [587.33, 880, 1174.66].forEach((f, i) => voice('chime', f, 0.18 + i * 0.2, 2.4, 0.05));
+        [1760, 1975.53, 2349.32].forEach((f, i) => voice('soft', f, 0.75 + i * 0.12, 0.7, 0.011));
+      },
+      unlockBig: () => {
+        voice('bowl', 146.83, 0, 4.4, 0.07);
+        voice('bowl', 220, 0.1, 4, 0.045);
+        [587.33, 739.99, 880, 1174.66, 1479.98].forEach((f, i) => voice('chime', f, 0.2 + i * 0.18, 2.8, 0.05));
+        [1760, 1975.53, 2349.32, 2637.02].forEach((f, i) => voice('soft', f, 1.0 + i * 0.1, 0.8, 0.011));
+      }
+    };
+    // le même son entendu plusieurs fois de suite devient plus court et plus discret
+    const WIN = { tap: 1200, confirm: 15000, back: 8000, tab: 3000, open: 4000, close: 4000, check: 3000, uncheck: 3000, success: 15000, error: 8000, notif: 15000, coin: 15000, swish: 6000, swishBack: 6000 };
+    const GAP = { key: 30, hover: 90, tick: 50 };
+    const play = (name) => {
+      if (!unlocked || !isOn() || !S[name]) return;
+      const now = Date.now(), prev = last[name];
+      if (prev && now - prev < (GAP[name] || 45)) return;
+      const f = prev && now - prev < (WIN[name] || 0) ? 0.5 : 1;
+      last[name] = now;
+      if (W.__nsfxLog) W.__nsfxLog.push(f < 1 ? name + '~' : name);
+      if (name !== 'hover' && name !== 'key' && name !== 'tick') mduck();
+      try { S[name](f); } catch (e) {}
+    };
+    const SEL = 'button, a[href], [role=button], [role=checkbox], [role=menuitem], [role=menuitemradio], [role=tab], summary, select, input[type=checkbox], input[type=radio]';
+    const OK = /(continuer|suivant|valider|envoyer|confirmer|r[ée]server|acc[eèé]d|devenir|se connecter|connexion|commencer|rejoindre|terminer|g[ée]n[ée]rer|calculer|inviter|connecter|c'est parti|\boui\b|ajouter|enregistrer|choisir|recevoir)/;
+    const BACK = /(retour|annuler|\bnon\b|fermer|pr[ée]c[ée]dent|d[ée]connecter|‹)/;
+    const target = (e) => (e.composedPath && e.composedPath()[0]) || e.target;
+    const pick = (el) => {
+      if (!el || !el.closest) return null;
+      const b = el.closest(SEL);
+      if (b) return b;
+      const lab = el.closest('label');
+      return lab && lab.control && lab.control.matches(SEL) ? lab.control : null;
+    };
+    const muted = (b) => { const f = b.closest('[data-sfx]'); return !!f && f.getAttribute('data-sfx') === 'none'; };
+    const kindOf = (b, viaClick) => {
+      const f = b.closest('[data-sfx]');
+      if (f) { const v = f.getAttribute('data-sfx'); if (v === 'none') return null; if (v) return v; }
+      if (b.disabled || b.getAttribute('aria-disabled') === 'true') return null;
+      const role = b.getAttribute('role');
+      if (b.tagName === 'SELECT') return null;
+      if (b.type === 'checkbox') return (b.checked !== !!viaClick) ? 'uncheck' : 'check';
+      if (b.type === 'radio') return 'check';
+      if (role === 'checkbox') return b.getAttribute('aria-checked') === 'true' ? 'uncheck' : 'check';
+      if (b.tagName === 'SUMMARY') return b.parentElement && b.parentElement.open ? 'close' : 'open';
+      const txt = ((b.getAttribute('aria-label') || '') + ' ' + (b.textContent || '')).trim().toLowerCase().slice(0, 90);
+      if (/acheter|retirer mon argent/.test(txt)) return 'coin';
+      if (b.closest('nav') || role === 'tab' || b.closest('[role=tablist]')) return 'tab';
+      if (b.getAttribute('aria-label') && /menu/.test(txt)) return 'open';
+      if (BACK.test(txt)) return 'back';
+      if (OK.test(txt)) return 'confirm';
+      return 'tap';
+    };
+    const unlock = (e) => { unlocked = true; musicGesture(e); };
+    const toggler = (e) => { const t = target(e); const b = t && t.closest ? t.closest('[data-sfx-toggle],[data-music-toggle]') : null; return b; };
+    const sync = () => {
+      const on = isOn(), lv = musicLevel(), mo = lv > 0;
+      D.querySelectorAll('[data-sfx-toggle]').forEach((b) => {
+        const v = on ? 'true' : 'false';
+        if (b.getAttribute('aria-pressed') !== v) b.setAttribute('aria-pressed', v);
+        const ti = on ? 'Couper les bruitages' : 'Activer les bruitages';
+        if (b.getAttribute('title') !== ti) b.setAttribute('title', ti);
+        if (b.getAttribute('aria-label') !== ti) b.setAttribute('aria-label', ti);
+      });
+      D.querySelectorAll('[data-music-toggle]').forEach((b) => {
+        const v = mo ? 'true' : 'false';
+        if (b.getAttribute('aria-pressed') !== v) b.setAttribute('aria-pressed', v);
+        const ti = lv === 0 ? 'Musique coupée (cliquer pour l’activer)' : lv === 1 ? 'Musique douce (cliquer pour l’augmenter un peu)' : 'Musique plus présente (cliquer pour la couper)';
+        if (b.getAttribute('data-level') !== String(lv)) b.setAttribute('data-level', String(lv));
+        if (b.getAttribute('title') !== ti) b.setAttribute('title', ti);
+        if (b.getAttribute('aria-label') !== ti) b.setAttribute('aria-label', ti);
+      });
+    };
+    const setOn = (v, silent) => {
+      mem.off = !v;
+      try { W.localStorage.setItem('son', v ? '1' : '0'); } catch (e) {}
+      sync();
+      announce();
+      if (v && !silent) play('tap');
+    };
+    D.addEventListener('pointerdown', (e) => {
+      unlock(e);
+      if (e.pointerType !== 'mouse' || e.button !== 0) return;
+      lastDown = Date.now();
+      if (toggler(e)) return;
+      const b = pick(target(e)); if (!b) return;
+      const k = kindOf(b, false); if (k) play(k);
+    }, true);
+    D.addEventListener('click', (e) => {
+      unlock(e);
+      const tg = toggler(e);
+      if (tg) { if (tg.hasAttribute('data-music-toggle')) setMusic((musicLevel() + 1) % 3); else setOn(!isOn(), false); return; }
+      if (e.detail > 0 && Date.now() - lastDown < 700) return;
+      const b = pick(target(e)); if (!b) return;
+      const k = kindOf(b, true); if (k) play(k);
+    }, true);
+    D.addEventListener('keydown', (e) => unlock(e), true);
+    D.addEventListener('touchend', (e) => unlock(e), true);
+    D.addEventListener('pointermove', (e) => {
+      if (e.screenX !== px || e.screenY !== py) { px = e.screenX; py = e.screenY; lastMove = Date.now(); }
+    }, true);
+    D.addEventListener('pointerover', (e) => {
+      if (e.pointerType !== 'mouse') return;
+      const b = pick(target(e));
+      if (!b || b === lastHover) return;
+      lastHover = b;
+      if (Date.now() - lastMove > 400) return;
+      if (b.disabled || muted(b) || b.hasAttribute('data-sfx-toggle')) return;
+      play('hover');
+    }, true);
+    D.addEventListener('pointerout', (e) => {
+      if (!lastHover) return;
+      const rel = e.relatedTarget;
+      if (!rel || !lastHover.contains(rel)) lastHover = null;
+    }, true);
+    D.addEventListener('input', (e) => {
+      const t = target(e);
+      if (!t || !t.tagName || (t.closest && t.closest('[data-sfx=none]'))) return;
+      if (t.tagName === 'TEXTAREA' || (t.tagName === 'INPUT' && /^(text|email|url|tel|search|number|password)$/.test(t.type || 'text'))) play('key');
+      else if (t.type === 'range') play('tick');
+    }, true);
+    D.addEventListener('change', (e) => {
+      const t = target(e);
+      if (t && t.tagName === 'SELECT' && !(t.closest && t.closest('[data-sfx=none]'))) play('tap');
+    }, true);
+    try {
+      new MutationObserver((muts) => {
+        sync();
+        if (Date.now() - born < 1200) return;
+        const txt = (n) => ((n.textContent || '').trim());
+        const gone = {};
+        for (let i = 0; i < muts.length; i++) {
+          const rem = muts[i].removedNodes;
+          for (let j = 0; j < rem.length; j++) {
+            const n = rem[j];
+            if (n.nodeType !== 1) continue;
+            if (n.matches && n.matches('[role=alert],[role=status]')) gone[txt(n)] = 1;
+            if (n.querySelectorAll) n.querySelectorAll('[role=alert],[role=status]').forEach((x) => { gone[txt(x)] = 1; });
+          }
+        }
+        for (let i = 0; i < muts.length; i++) {
+          const add = muts[i].addedNodes;
+          for (let j = 0; j < add.length; j++) {
+            const n = add[j];
+            if (n.nodeType !== 1) continue;
+            const list = [];
+            if (n.matches && n.matches('[role=alert],[role=status]')) list.push(n);
+            if (n.querySelectorAll) n.querySelectorAll('[role=alert],[role=status]').forEach((x) => list.push(x));
+            for (let k = 0; k < list.length; k++) {
+              if (gone[txt(list[k])]) continue;
+              play(list[k].getAttribute('role') === 'alert' ? 'error' : 'notif');
+              return;
+            }
+          }
+        }
+      }).observe(D.body || D.documentElement, { childList: true, subtree: true });
+    } catch (e) {}
+    // ---------- Musique d'ambiance : générée en direct par le navigateur (aucun fichier, aucun droit d'auteur) ----------
+    // Style « corporate inspirant » : piano qui égrène l'accord en croches, cordes qui se gonflent, basse ronde, kick doux,
+    // claquements sur 2 et 4, shaker, 112 pulsations/min, en ré majeur (ré · la · si mineur · sol). Dans la deuxième moitié
+    // de chaque cycle de 8 mesures, une petite ligne de piano s'élève au-dessus ; une vague de mer porte le passage au cycle suivant.
+    // Même arrangement du début à la fin. Tout se calcule depuis l'horloge murale : deux maquettes ouvertes ensemble
+    // jouent la même mesure (relais sans coupure).
+    const MU = { id: Math.random().toString(36).slice(2), yielded: false, paused: false, G: null, timer: 0, hideT: 0, hideMs: 45000, bar: 0, barT: 0, first: false, sea: null, bc: null };
+    const BEAT = 60 / 112, S16 = BEAT / 4, BAR = BEAT * 4, EP = 1700000000, FADE = 2.2;
+    const MVOLS = [0, 0.042, 0.089];
+    const LV = { pad: 0.08, sea: 0.1, foam: 0.03, kick: 0.1, clap: 0.2, hat: 0.12, bass: 0.06, keys: 0.22, lead: 0.2 };
+    // 0 = coupée, 1 = douce (par défaut), 2 = un peu plus présente
+    const musicLevel = () => {
+      let v = mem.mlv;
+      try { const x = W.localStorage.getItem('musique'); if (x !== null) v = +x; } catch (e) {}
+      return v === 0 || v === 1 || v === 2 ? v : 1;
+    };
+    const musicOn = () => musicLevel() > 0;
+    // volume des bruitages : 0 à 100, 50 = niveau d'origine
+    const sfxVol = () => {
+      let v = mem.sv;
+      try { const x = W.localStorage.getItem('sfxvol'); if (x !== null) v = +x; } catch (e) {}
+      return v >= 0 && v <= 100 ? v : 50;
+    };
+    const svGain = (v) => (v <= 0 ? 0 : Math.pow(v / 50, 1.6));
+    const rng = (a) => () => { let t = (a += 0x6D2B79F5); t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+    // accords (2 mesures chacun) : ré · la · si mineur · sol. r = racine de la basse, pad = cordes, pn = notes du piano (grave vers aigu)
+    const CH = [
+      { r: 73.42, pad: [146.83, 220, 293.66, 369.99], pn: [220, 293.66, 369.99, 440, 587.33, 739.99] },
+      { r: 55, pad: [110, 164.81, 220, 277.18, 329.63], pn: [164.81, 220, 277.18, 329.63, 440, 554.37] },
+      { r: 61.74, pad: [123.47, 185, 246.94, 293.66], pn: [185, 246.94, 293.66, 369.99, 493.88, 587.33] },
+      { r: 49, pad: [98, 146.83, 196, 246.94, 293.66], pn: [146.83, 196, 246.94, 293.66, 392, 493.88] }
+    ];
+    // croches du piano (indices dans pn) et leur force ; ligne qui s'élève sur les mesures 5 à 8 : [temps en double-croches, note, durée en temps]
+    const PAT = [1, 2, 3, 2, 4, 2, 3, 2], VEL = [1, 0.55, 0.72, 0.55, 0.88, 0.55, 0.72, 0.55];
+    const LEAD = [
+      [[0, 739.99, 3], [12, 659.25, 1]],
+      [[0, 587.33, 2], [8, 739.99, 2]],
+      [[0, 587.33, 3], [12, 493.88, 1]],
+      [[0, 493.88, 2], [8, 440, 2]]
+    ];
+    const bellCurve = (n, pk, amp) => {
+      const a = new Float32Array(n);
+      for (let i = 0; i < n; i++) { const x = i / (n - 1); a[i] = amp * Math.pow(Math.sin((x < pk ? x / pk : 1 - (x - pk) / (1 - pk)) * Math.PI / 2), 2); }
+      return a;
+    };
+    // fondus en puissance égale : deux maquettes qui se relaient se croisent sans trou ni bosse
+    const mcurve = (n, to, up) => {
+      const a = new Float32Array(n);
+      for (let i = 0; i < n; i++) { const x = i / (n - 1); a[i] = Math.max(to * (up ? Math.sin(x * Math.PI / 2) : Math.cos(x * Math.PI / 2)), 0.0001); }
+      return a;
+    };
+    const mhold = (g, t) => { if (g.cancelAndHoldAtTime) g.cancelAndHoldAtTime(t); else { g.cancelScheduledValues(t); g.setValueAtTime(g.value, t); } };
+    const seaBuffer = (c) => {
+      if (MU.sea && MU.sea.sampleRate === c.sampleRate) return MU.sea;
+      const b = c.createBuffer(1, Math.floor(c.sampleRate * 10), c.sampleRate), d = b.getChannelData(0);
+      let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
+      for (let i = 0; i < d.length; i++) {
+        const w = Math.random() * 2 - 1;
+        b0 = 0.99886 * b0 + w * 0.0555179; b1 = 0.99332 * b1 + w * 0.0750759; b2 = 0.969 * b2 + w * 0.153852;
+        b3 = 0.8665 * b3 + w * 0.3104856; b4 = 0.55 * b4 + w * 0.5329522; b5 = -0.7616 * b5 - w * 0.016898;
+        d[i] = (b0 + b1 + b2 + b3 + b4 + b5 + b6 + w * 0.5362) * 0.11; b6 = w * 0.115926;
+      }
+      MU.sea = b; return b;
+    };
+    const noiseSrc = (c) => {
+      if (!nbuf) { nbuf = c.createBuffer(1, c.sampleRate, c.sampleRate); const d = nbuf.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1; }
+      const s = c.createBufferSource(); s.buffer = nbuf; return s;
+    };
+    const mbuild = (c) => {
+      const G = { c: c, sends: [] };
+      G.out = c.createGain(); G.out.gain.value = 0.0001; G.duck = c.createGain(); G.mix = c.createGain(); G.pump = c.createGain();
+      G.mix.connect(G.duck); G.duck.connect(G.out); G.out.connect(mst); G.pump.connect(G.mix);
+      // réverbération propre à la musique : elle passe par le même fondu et le même réglage de volume que le reste
+      G.rv = c.createConvolver(); G.rv.buffer = cv.buffer;
+      const wet = c.createGain(); wet.gain.value = 0.7; G.rv.connect(wet); wet.connect(G.duck);
+      const bus = (to, amount) => {
+        const b = c.createGain(); b.connect(to);
+        if (amount > 0) { const s = c.createGain(); s.gain.value = amount; b.connect(s); s.connect(G.rv); G.sends.push(s); }
+        return b;
+      };
+      G.padB = bus(G.pump, 0.5); G.seaB = bus(G.pump, 0.06);
+      G.lowB = bus(G.mix, 0); G.drmB = bus(G.mix, 0.15); G.keyB = bus(G.mix, 0.45);
+      return G;
+    };
+    // cordes : quatre ou cinq notes tenues, deux dents de scie désaccordées par note, filtre qui s'ouvre puis se referme, attaque lente
+    const mpad = (G, t, dur, ch) => {
+      const c = G.c, f = c.createBiquadFilter(), A = 1.1, R = 1.6, v = LV.pad / Math.sqrt(ch.pad.length);
+      f.type = 'lowpass'; f.Q.value = 0.4;
+      f.frequency.setValueAtTime(500, t); f.frequency.linearRampToValueAtTime(1400, t + dur * 0.8); f.frequency.linearRampToValueAtTime(650, t + dur + R);
+      f.connect(G.padB);
+      ch.pad.forEach((hz, i) => {
+        const g = c.createGain(), pn = c.createStereoPanner();
+        pn.pan.value = ((i % 4) - 1.5) * 0.3;
+        g.gain.setValueAtTime(0.0001, t); g.gain.linearRampToValueAtTime(v, t + A); g.gain.setValueAtTime(v, t + dur); g.gain.linearRampToValueAtTime(0.0001, t + dur + R);
+        [-6, 6].forEach((dt) => { const o = c.createOscillator(); o.type = 'sawtooth'; o.frequency.value = hz; o.detune.value = dt; o.connect(g); o.start(t); o.stop(t + dur + R + 0.05); });
+        g.connect(pn); pn.connect(f);
+      });
+    };
+    // vague : souffle grave qui monte puis retombe, écume plus aiguë, d'une oreille à l'autre
+    const mwave = (G, t, side, amp, D2, pk) => {
+      const c = G.c, buf = seaBuffer(c), off = Math.random() * 1.5;
+      const s1 = c.createBufferSource(), lp = c.createBiquadFilter(), g1 = c.createGain(), pn = c.createStereoPanner();
+      s1.buffer = buf; lp.type = 'lowpass'; lp.Q.value = 0.5;
+      lp.frequency.setValueAtTime(240, t); lp.frequency.exponentialRampToValueAtTime(900, t + D2 * pk); lp.frequency.exponentialRampToValueAtTime(260, t + D2);
+      g1.gain.setValueCurveAtTime(bellCurve(96, pk, LV.sea * amp), t, D2);
+      pn.pan.setValueAtTime(side ? 0.5 : -0.5, t); pn.pan.linearRampToValueAtTime(side ? -0.35 : 0.35, t + D2);
+      s1.connect(lp); lp.connect(g1); g1.connect(pn); pn.connect(G.seaB); s1.start(t, off); s1.stop(t + D2 + 0.1);
+      const s2 = c.createBufferSource(), bp = c.createBiquadFilter(), g2 = c.createGain(), p2 = c.createStereoPanner();
+      s2.buffer = buf; bp.type = 'bandpass'; bp.frequency.value = 2600; bp.Q.value = 0.7;
+      g2.gain.setValueCurveAtTime(bellCurve(96, Math.min(0.9, pk + 0.03), LV.foam * amp), t + 0.8, D2 - 1.6);
+      p2.pan.value = side ? 0.3 : -0.3;
+      s2.connect(bp); bp.connect(g2); g2.connect(p2); p2.connect(G.seaB); s2.start(t + 0.8, off + 1.5); s2.stop(t + D2 - 0.7);
+    };
+    const mkick = (G, t, v) => {
+      const c = G.c, o = c.createOscillator(), g = c.createGain();
+      o.type = 'sine'; o.frequency.setValueAtTime(130, t); o.frequency.exponentialRampToValueAtTime(50, t + 0.1);
+      g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(v, t + 0.005); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.3);
+      o.connect(g); g.connect(G.lowB); o.start(t); o.stop(t + 0.34);
+    };
+    const mclap = (G, t, v) => {
+      [0, 0.011, 0.023].forEach((dt, k) => {
+        const c = G.c, s = noiseSrc(c), bp = c.createBiquadFilter(), g = c.createGain();
+        bp.type = 'bandpass'; bp.frequency.value = 1500; bp.Q.value = 0.8;
+        g.gain.setValueAtTime(0.0001, t + dt); g.gain.exponentialRampToValueAtTime(v * (k === 2 ? 1 : 0.6), t + dt + 0.002); g.gain.exponentialRampToValueAtTime(0.0001, t + dt + (k === 2 ? 0.16 : 0.05));
+        s.connect(bp); bp.connect(g); g.connect(G.drmB); s.start(t + dt, Math.random() * 0.8); s.stop(t + dt + 0.2);
+      });
+    };
+    // shaker : bruit filtré très court, en croches régulières
+    const mhat = (G, t, v, len) => {
+      const c = G.c, s = noiseSrc(c), bp = c.createBiquadFilter(), g = c.createGain();
+      bp.type = 'bandpass'; bp.frequency.value = 6200; bp.Q.value = 0.7;
+      g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(v, t + 0.006); g.gain.exponentialRampToValueAtTime(0.0001, t + len);
+      s.connect(bp); bp.connect(g); g.connect(G.drmB); s.start(t, Math.random() * 0.8); s.stop(t + len + 0.03);
+    };
+    // basse ronde : triangle + sinus, sans mordant
+    const mbass = (G, t, hz, dur, v) => {
+      const c = G.c, o = c.createOscillator(), o2 = c.createOscillator(), lp = c.createBiquadFilter(), g = c.createGain(), g2 = c.createGain();
+      o.type = 'triangle'; o.frequency.value = hz; o2.type = 'sine'; o2.frequency.value = hz; g2.gain.value = 0.7;
+      lp.type = 'lowpass'; lp.Q.value = 0.5; lp.frequency.value = 520;
+      g.gain.setValueAtTime(0.0001, t); g.gain.linearRampToValueAtTime(v, t + 0.02); g.gain.setValueAtTime(v, t + Math.max(dur - 0.12, 0.03)); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      o.connect(lp); lp.connect(g); o2.connect(g2); g2.connect(g); g.connect(G.lowB); o.start(t); o2.start(t); o.stop(t + dur + 0.05); o2.stop(t + dur + 0.05);
+    };
+    // piano : partiels sinus à décroissance rapide, attaque marteau, filtre qui se ferme ; assez sourd pour rester un instrument d'ambiance
+    const mpiano = (G, t, hz, dur, v, pan) => {
+      const c = G.c, g = c.createGain(), lp = c.createBiquadFilter(), pn = c.createStereoPanner();
+      lp.type = 'lowpass'; lp.Q.value = 0.3;
+      lp.frequency.setValueAtTime(Math.min(7000, hz * 8), t); lp.frequency.exponentialRampToValueAtTime(Math.max(1000, hz * 2.4), t + Math.min(dur, 1) * 0.7);
+      g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(v, t + 0.005); g.gain.exponentialRampToValueAtTime(v * 0.3, t + 0.25); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      pn.pan.value = Math.max(-1, Math.min(1, pan || 0));
+      [[1, 1, 0], [2, 0.38, 3], [3, 0.16, -4], [4, 0.07, 5]].forEach((p) => {
+        const o = c.createOscillator(), og = c.createGain();
+        o.type = 'sine'; o.frequency.value = hz * p[0]; o.detune.value = p[2]; og.gain.value = p[1];
+        o.connect(og); og.connect(g); o.start(t); o.stop(t + dur + 0.05);
+      });
+      const s = noiseSrc(c), bp = c.createBiquadFilter(), hg = c.createGain();
+      bp.type = 'bandpass'; bp.frequency.value = Math.min(4500, hz * 5); bp.Q.value = 1.1;
+      hg.gain.setValueAtTime(v * 0.5, t); hg.gain.exponentialRampToValueAtTime(0.0001, t + 0.035);
+      s.connect(bp); bp.connect(hg); hg.connect(g); s.start(t, Math.random() * 0.8); s.stop(t + 0.06);
+      g.connect(lp); lp.connect(pn); pn.connect(G.keyB);
+    };
+    // une mesure entière (2,1 s) : tout ce qui joue pendant cette mesure est planifié d'avance
+    const mbar = (G, b, T, first) => {
+      const c = G.c, now = c.currentTime + 0.03, bi = b % 8, ch = CH[bi >> 1], last = bi === 7;
+      const at = (sb) => T + sb * S16, ok = (t) => t >= now;
+      if (bi % 2 === 0) { const t0 = Math.max(at(0), now); mpad(G, t0, 2 * BAR - (t0 - T), ch); }
+      else if (first && T + BAR - now > 0.8) mpad(G, now, T + BAR - now, ch);
+      // vagues : une petite au milieu du cycle, une grande qui culmine sur le temps 1 du cycle suivant
+      if (bi === 2 && ok(at(0))) mwave(G, at(0), 0, 0.55, 2 * BAR + 3.2, (2 * BAR) / (2 * BAR + 3.2));
+      if (bi === 6 && ok(at(0))) mwave(G, at(0), 1, 1, 2 * BAR + 3.6, (2 * BAR) / (2 * BAR + 3.6));
+      // rythme : kick sur 1 et 3, claquement sur 2 et 4, shaker en croches ; la dernière mesure se resserre avant la vague
+      [0, 8].forEach((sb) => { if (ok(at(sb))) mkick(G, at(sb), LV.kick * (sb === 0 ? 1 : 0.8)); });
+      if (last) [4, 10, 12, 14, 15].forEach((sb, k) => { if (ok(at(sb))) mclap(G, at(sb), LV.clap * (k === 0 ? 1 : 0.55 + k * 0.1)); });
+      else [4, 12].forEach((sb) => { if (ok(at(sb))) mclap(G, at(sb), LV.clap); });
+      const Rh = rng(77 + b * 13);
+      for (let sb = 0; sb < 16; sb += 2) { const t = at(sb) + (Rh() - 0.5) * 0.006; if (ok(t)) mhat(G, t, LV.hat * (sb % 4 ? 0.95 : 0.7) * (0.85 + Rh() * 0.3), 0.06); }
+      // basse : la racine puis la quinte, en blanches (volume corrigé selon la hauteur : les notes très graves paraissent plus faibles)
+      const bv = LV.bass * Math.pow(73.42 / ch.r, 0.7);
+      [[0, 1], [8, 1.5]].forEach((n) => { if (ok(at(n[0]))) mbass(G, at(n[0]), ch.r * n[1], BEAT * 1.9, bv * (n[0] ? 0.85 : 1)); });
+      // piano : la basse de l'accord une octave plus haut (mesures paires), puis le motif en croches
+      if (bi % 2 === 0 && ok(at(0))) mpiano(G, at(0), ch.r * 2, BAR * 1.8, LV.keys * 0.9, -0.15);
+      const Rp = rng(4242 + b * 7);
+      PAT.forEach((ix, k) => {
+        const t = at(k * 2) + (Rp() - 0.5) * 0.008;
+        if (ok(t)) mpiano(G, t, ch.pn[ix], 1.15, LV.keys * VEL[k] * (0.92 + Rp() * 0.16), (k % 2 ? 0.14 : -0.14) + (ix - 3) * 0.04);
+      });
+      // la ligne qui s'élève (deuxième moitié du cycle)
+      if (bi >= 4) LEAD[bi - 4].forEach((n) => { if (ok(at(n[0]))) mpiano(G, at(n[0]), n[1], n[2] * BEAT + 0.8, LV.lead, 0.1); });
+    };
+    const mtick = (ahead) => {
+      const G = MU.G; if (!G) return;
+      const c = G.c, lim = c.currentTime + (ahead || 3);
+      if (c.state === 'suspended') { try { const p = c.resume(); if (p && p.catch) p.catch(() => {}); } catch (e) {} }
+      // le planificateur a pris trop de retard (onglet figé) : on se recale sur l'horloge murale
+      if (MU.barT < c.currentTime - 4) { const k = (Date.now() / 1000 - EP) / BAR; MU.bar = Math.floor(k); MU.barT = c.currentTime - (k - MU.bar) * BAR; MU.first = true; }
+      while (MU.barT < lim) {
+        try { mbar(G, MU.bar, MU.barT, MU.first); } catch (e) { if (W.__nsfxLog) W.__nsfxLog.push('music-error: ' + (e && e.message)); }
+        MU.first = false; MU.bar++; MU.barT += BAR;
+      }
+    };
+    const mannounce = () => {
+      try { W.localStorage.setItem('nmusic-owner', MU.id + '|' + Date.now()); } catch (e) {}
+      try { if (MU.bc) MU.bc.postMessage({ take: MU.id }); } catch (e) {}
+    };
+    const mstart = () => {
+      const c = ac(); if (!c || !mst || !cv) return;
+      const G = mbuild(c), k = (Date.now() / 1000 - EP) / BAR, b = Math.floor(k), t = c.currentTime;
+      MU.G = G; MU.bar = b; MU.barT = t - (k - b) * BAR; MU.first = true;
+      G.out.gain.setValueCurveAtTime(mcurve(48, MVOLS[musicLevel()], true), t, FADE);
+      mtick();
+      MU.timer = setInterval(() => mtick(), 250);
+      mannounce();
+    };
+    const mstop = () => {
+      const G = MU.G; if (!G) return;
+      MU.G = null; clearInterval(MU.timer); MU.timer = 0;
+      try { const g = G.out.gain, t = G.c.currentTime; mhold(g, t); g.setValueCurveAtTime(mcurve(48, Math.max(+g.value || 0, 0.0001), false), t, FADE); } catch (e) {}
+      setTimeout(() => { try { G.out.disconnect(); G.sends.forEach((s) => s.disconnect()); } catch (e) {} }, FADE * 1000 + 400);
+    };
+    const musicSync = () => {
+      const should = musicOn() && unlocked && !MU.yielded && !MU.paused;
+      if (should && !MU.G) mstart(); else if (!should && MU.G) mstop();
+    };
+    // sous un bruitage la musique s'efface un instant pour laisser passer le son
+    const mduck = () => {
+      const G = MU.G; if (!G) return;
+      try {
+        const g = G.duck.gain, t = G.c.currentTime;
+        mhold(g, t);
+        g.setTargetAtTime(0.62, t, 0.03); g.setTargetAtTime(1, t + 0.45, 0.35);
+      } catch (e) {}
+    };
+    // premier geste dans cette maquette : la musique démarre (les navigateurs interdisent le son avant)
+    const musicGesture = (e) => {
+      const t = e && target(e);
+      if (t && t.closest && t.closest('[data-music-toggle],[data-sfx-toggle]')) return;
+      MU.yielded = false; musicSync();
+    };
+    // le volume suit le réglage tout de suite (fondu de 0,8 s) quand la musique joue déjà
+    const mlevel = () => {
+      const G = MU.G; if (!G) return;
+      try {
+        const g = G.out.gain, t = G.c.currentTime;
+        mhold(g, t);
+        g.linearRampToValueAtTime(Math.max(MVOLS[musicLevel()], 0.0001), t + 0.8);
+      } catch (e) {}
+    };
+    const announce = () => { try { W.dispatchEvent(new CustomEvent('nsfx-change', { detail: { on: isOn(), music: musicOn(), level: musicLevel(), vol: sfxVol() } })); } catch (e) {} };
+    const setMusic = (v) => {
+      const lv = v === true ? 1 : v === false ? 0 : (+v || 0);
+      mem.mlv = lv;
+      try { W.localStorage.setItem('musique', String(lv)); } catch (e) {}
+      if (lv > 0) MU.yielded = false;
+      sync(); musicSync(); mlevel(); announce();
+    };
+    const setSfxVol = (v, preview) => {
+      const n = Math.max(0, Math.min(100, Math.round(+v || 0)));
+      mem.sv = n;
+      try { W.localStorage.setItem('sfxvol', String(n)); } catch (e) {}
+      if (bus && ctx) { try { bus.gain.setTargetAtTime(svGain(n), ctx.currentTime, 0.03); } catch (e) {} }
+      announce();
+      if (preview) play('tap');
+    };
+    // une seule maquette joue à la fois : la dernière touchée reprend la même mesure, l'autre s'éteint en fondu enchaîné
+    try {
+      if (W.BroadcastChannel) {
+        MU.bc = new W.BroadcastChannel('neptune-musique');
+        MU.bc.onmessage = (e) => { if (e.data && e.data.take && e.data.take !== MU.id) { MU.yielded = true; musicSync(); } };
+      }
+    } catch (e) {}
+    W.addEventListener('storage', (e) => {
+      if (e.key === 'nmusic-owner' && e.newValue && e.newValue.split('|')[0] !== MU.id) { MU.yielded = true; musicSync(); }
+      else if (e.key === 'musique' || e.key === 'son' || e.key === 'sfxvol') {
+        sync(); musicSync(); mlevel();
+        if (e.key === 'sfxvol' && bus && ctx) { try { bus.gain.setTargetAtTime(svGain(sfxVol()), ctx.currentTime, 0.03); } catch (x) {} }
+        announce();
+      }
+    });
+    // onglet masqué : la musique continue un moment (aller-retour rapide = aucun blanc), puis se met en pause en fondu
+    D.addEventListener('visibilitychange', () => {
+      clearTimeout(MU.hideT);
+      if (D.hidden) MU.hideT = setTimeout(() => { if (D.hidden) { MU.paused = true; musicSync(); } }, MU.hideMs);
+      else if (MU.paused) { MU.paused = false; musicSync(); }
+    });
+    W.addEventListener('pagehide', mstop);
+    W.__nsfx = { play: play, setOn: setOn, isOn: isOn, scan: sync, voice: voice, air: air, ac: ac, PENTA: PENTA, musicOn: musicOn, musicLevel: musicLevel, setMusic: setMusic, sfxVol: sfxVol, setSfxVol: setSfxVol, music: { state: MU, tick: mtick, start: mstart, stop: mstop, LV: LV } };
+    sync();
+  }
+
+  renderVals() {
+    const s = this.state;
+    const set = (o) => this.setState(o);
+    const flash = (t) => { set({ toast: t }); clearTimeout(this._tt); this._tt = setTimeout(() => this.setState({ toast: '' }), 2600); };
+    const GOLD = '#E3B84F', GOLD_TXT = '#1A1405', TEAL = '#35D6C8', TEAL_TXT = '#06182A', MUTED = '#8FB0BF', TXT = '#E6F3F5';
+    const DARK = '#07182B';
+    const fr = (n, d) => Number(n).toLocaleString('fr-FR', { minimumFractionDigits: d || 0, maximumFractionDigits: d || 0 });
+    const hx = (c) => [1, 3, 5].map((i) => parseInt(c.slice(i, i + 2), 16));
+    const mix = (a, b, t) => '#' + hx(a).map((x, i) => Math.round(x + (hx(b)[i] - x) * t).toString(16).padStart(2, '0')).join('');
+    const starPts = (cx, cy, r) => Array.from({ length: 10 }, (_, i) => {
+      const a = -Math.PI / 2 + (i * Math.PI) / 5, k = i % 2 ? r * 0.45 : r;
+      return (cx + k * Math.cos(a)).toFixed(1) + ',' + (cy + k * Math.sin(a)).toFixed(1);
+    }).join(' ');
+    const STOPS = [[1, '#d3dce9'], [5, '#86c9a3'], [10, '#5b8ee0'], [30, '#8a5fd6'], [50, '#ee9a4a'], [100, '#f2c94c']];
+    const flameColor = (j) => {
+      const d = Math.max(1, Math.min(100, j));
+      for (let i = 0; i < STOPS.length - 1; i++) { const a = STOPS[i], b = STOPS[i + 1]; if (d <= b[0]) return mix(a[1], b[1], (d - a[0]) / (b[0] - a[0])); }
+      return STOPS[5][1];
+    };
+
+    // Clients fictifs : chacun choisit comment payer sa communaute et ses clippers specialises
+    const CLIENTS = {
+      nova: { name: 'Nova', commuMode: 'boutique', speMode: 'cagnotte' },
+      zed: { name: 'Zed', commuMode: 'cagnotte', speMode: 'rpm' },
+      ayla: { name: 'Ayla', commuMode: 'rpm', speMode: 'cagnotte' }
+    };
+    const PROFILES = this.data().PROFILES;
+    const TRACK = {
+      nova: { days: [3200, 5400, 4100, 7800, 6900, 9200, 8400], month: 48200, clips: [{ t: 'Le fou rire en plein live', p: 'TikTok', v: 21400 }, { t: 'La réaction à la grosse surprise', p: 'Shorts', v: 15800 }, { t: 'Le moment le plus chaotique de la soirée', p: 'Reels', v: 6200 }] },
+      zed: { days: [2100, 2600, 3900, 3300, 4800, 5100, 4400], month: 31500, clips: [{ t: 'Le conseil qui change tout', p: 'TikTok', v: 12900 }, { t: 'La phrase qui a fait réagir le chat', p: 'Reels', v: 9700 }, { t: 'Le clutch de la fin de partie', p: 'Shorts', v: 5200 }] },
+      ayla: { days: [1500, 1900, 2800, 2200, 3600, 3100, 2900], month: 22800, clips: [{ t: 'Sa meilleure astuce de la semaine', p: 'Shorts', v: 8800 }, { t: 'Le passage qui a fait rire tout le monde', p: 'TikTok', v: 7300 }, { t: 'La story time en 30 secondes', p: 'Reels', v: 3900 }] }
+    };
+    const CAG = { nova: { pot: 800, total: 2100000 }, zed: { pot: 500, total: 1200000 }, ayla: { pot: 300, total: 900000 } };
+    const RPM = { nova: { rate: 1.0, pay: 'Paiement chaque fin de mois' }, zed: { rate: 0.8, pay: 'Paiement chaque fin de mois' }, ayla: { rate: 0.6, pay: 'Paiement chaque semaine' } };
+    const SHOP = [
+      { name: 'Hoodie Nova', note: 'Édition clippers', price: 2000, badge: 'H' },
+      { name: 'Pack de stickers', note: '12 stickers', price: 300, badge: 'S' },
+      { name: 'Casquette Nova', note: 'Taille unique', price: 900, badge: 'C' }
+    ];
+    const RULES = [
+      'Faire un compte clip par créateur.',
+      "Ne pas utiliser de compte personnel, ni le compte d'une autre personne (créateur ou clipper).",
+      'Ne pas clipper de moments sortis de leur contexte ou trop violents, qui feraient passer le créateur pour une mauvaise personne.',
+      "Ne pas faire d'edit."
+    ];
+
+    // Raretes : memes couleurs que les flammes et les roles
+    const RAR = {
+      commun: { n: 'Commun', c: '#86C9A3', halo: '' },
+      rare: { n: 'Rare', c: '#5B8EE0', halo: '' },
+      epique: { n: 'Épique', c: '#8A5FD6', halo: '#28356B' },
+      legendaire: { n: 'Légendaire', c: '#EE9A4A', halo: '#323D4F' },
+      mythique: { n: 'Mythique', c: '#F2C94C', halo: '#323D4F' },
+      exotique: { n: 'Exotique', c: '#5EE0C8', halo: '#1B5663' }
+    };
+    const TIERS = ['commun', 'rare', 'epique', 'legendaire', 'mythique'];
+    const st = PROFILES[s.profile].stats;
+    const views = st.views;
+    const viewsTxt = (n) => (n >= 1000000 ? fr(n / 1000000) + ' M de vues' : fr(n) + ' vues');
+
+    // Succes : volume de clips, vues totales, abonnes, regularite, anciennete, secret
+    const CATS = [
+      { title: 'Volume de clips', note: 'Seuls les vrais clips comptent.', icon: 'sail', value: st.clips, items: [['Et de 1', 1], ['Ça se compte sur les doigts', 10], ['Machine à clips', 50], ['Usine à clips', 100], ['Clip farm', 300]], req: (n) => (n === 1 ? '1 clip posté' : fr(n) + ' clips postés') },
+      { title: 'Vues totales', note: '', icon: 'spy', value: views, items: [['Un village', 1000], ['Une petite ville', 10000], ['Une grande ville', 100000], ['Une mégalopole', 1000000], ['Un pays', 10000000]], req: (n) => viewsTxt(n) },
+      { title: 'Abonnés', note: '', icon: 'grp', value: st.subs, items: [['Il y a un début à tout', 1], ['Grande famille', 10], ['Aimant à buzz', 100], ['Star du quartier', 1000], ['Fanatique', 10000]], req: (n) => (n === 1 ? '1 abonné' : fr(n) + ' abonnés') },
+      { title: 'Régularité', note: 'Une série par jour de clip posté.', icon: 'flame', value: s.streak, items: [['Étincelle', 5], ['Flammèche', 10], ['Tout feu tout flamme', 30], ['Pyromane', 50], ['Brasier', 100]], req: (n) => n + " jours d'affilée" }
+    ];
+    const blank = { isHead: false, isTile: false, title: '', note: '', uid: '', label: '', name: '', nameStyle: '', req: '', prog: '', progColor: MUTED, pill: '', pillBg: '', ring: '', ringLight: '', ringDark: '', rim: '', tail: '', discHi: '', discLo: '', iconLight: '', iconMid: '', bladeLight: '', halo: '', oar: '', tails: '', s1: '', s2: '', s3: '', e1: '', e2: '', svgStyle: '', dHalo: 'none', dBlades: 'none', dBladesX: 'none', dOars: 'none', dStars: 'none', dSparkle: 'none', dExo: 'none', dSail: 'none', dSpy: 'none', dGrp: 'none', dFlame: 'none', dHour: 'none', dKey: 'none' };
+    const badgeItems = [], byName = {};
+    this._rar = {};
+    let unlockedCount = 0, totalCount = 0, uidN = 0;
+    const pushBadge = (name, req, rarKey, icon, on, prog) => {
+      const R = RAR[rarKey], c = R.c;
+      totalCount += 1; if (on) unlockedCount += 1; uidN += 1;
+      const len = name.length, WMAX = 106, est = (f) => len * 0.56 * f;
+      let fpx = 15.5;
+      if (est(fpx) > WMAX) fpx = Math.max(11.5, WMAX / (len * 0.56));
+      const kx = Math.min(1, WMAX / est(fpx));
+      const O = '#07182B';
+      const outline = [[-1.4, 0], [1.4, 0], [0, -1.4], [0, 1.4], [-1, -1], [1, -1], [-1, 1], [1, 1]].map((d) => d[0] + 'px ' + d[1] + 'px 0 ' + O).join(',');
+      const nameStyle = "display: inline-block; white-space: nowrap; font: 800 " + fpx.toFixed(1) + "px/1 'Outfit', system-ui, sans-serif; color: #ffffff; transform: scaleX(" + kx.toFixed(3) + "); transform-origin: center; text-shadow: " + outline + ";";
+      const strong = rarKey === 'legendaire' || rarKey === 'mythique' || rarKey === 'exotique';
+      const obj = Object.assign({}, blank, {
+        isTile: true, uid: 'b' + uidN, label: name + ', ' + R.n + (on ? ', débloqué' : ', verrouillé'),
+        name: name, nameStyle: nameStyle,
+        req: req, prog: on ? 'Débloqué ✓' : prog, progColor: on ? c : '#9FB3D6', pill: R.n, pillBg: c,
+        ring: c, ringLight: mix(c, '#ffffff', 0.34), ringDark: mix(c, DARK, 0.16), rim: mix(c, '#ffffff', 0.52), tail: mix(c, DARK, 0.3),
+        discHi: mix(c, '#0b1d2c', 0.64), discLo: mix(c, '#0b1d2c', 0.88), iconLight: mix(c, '#ffffff', 0.58), iconMid: mix(c, '#ffffff', 0.04),
+        bladeLight: mix(c, '#ffffff', 0.5), halo: R.halo, oar: mix(c, DARK, 0.3),
+        tails: 'M36 147 L21 147 L28.5 159.5 L21 172 L36 172 Z M164 147 L179 147 L171.5 159.5 L179 172 L164 172 Z',
+        s1: starPts(100, 13, 16), s2: starPts(75.5, 29, 10.5), s3: starPts(124.5, 29, 10.5),
+        e1: starPts(48, 159, 8.5), e2: starPts(152, 159, 8.5),
+        svgStyle: on ? '' : 'filter: saturate(0.3) brightness(0.8);',
+        dHalo: R.halo ? 'inline' : 'none', dBlades: rarKey === 'legendaire' || rarKey === 'mythique' ? 'inline' : 'none', dBladesX: rarKey === 'exotique' ? 'inline' : 'none', dOars: strong ? 'inline' : 'none',
+        dStars: rarKey === 'mythique' ? 'inline' : 'none', dSparkle: rarKey !== 'commun' ? 'inline' : 'none', dExo: rarKey === 'exotique' ? 'inline' : 'none'
+      });
+      obj[icon] = 'inline';
+      badgeItems.push(obj);
+      byName[name] = obj; this._rar[name] = rarKey;
+    };
+    const ICON_FLAG = { sail: 'dSail', spy: 'dSpy', grp: 'dGrp', flame: 'dFlame', hour: 'dHour', key: 'dKey' };
+    CATS.forEach((cat) => {
+      badgeItems.push(Object.assign({}, blank, { isHead: true, title: cat.title, note: cat.note }));
+      cat.items.forEach((it, i) => pushBadge(it[0], cat.req(it[1]), TIERS[i], ICON_FLAG[cat.icon], cat.value >= it[1], fr(cat.value) + ' / ' + fr(it[1])));
+    });
+    badgeItems.push(Object.assign({}, blank, { isHead: true, title: 'Ancienneté', note: '' }));
+    pushBadge('OG', 'Présent depuis 3 mois', 'epique', ICON_FLAG.hour, st.days >= 90, st.days + ' / 90 jours');
+    pushBadge('Fondateur', 'Présent depuis la première semaine', 'legendaire', ICON_FLAG.hour, st.founder, 'Réservé aux premiers');
+    badgeItems.push(Object.assign({}, blank, { isHead: true, title: 'Secret', note: '' }));
+    pushBadge('?????', 'Condition secrète', 'exotique', ICON_FLAG.key, st.staff, '');
+
+    // Roles (selon les vues totales ; Barbe noire = clipper staff)
+    const ROLES = [
+      { id: 'mousse', name: 'Mousse', rar: 'commun', cond: 'Moins de 10 k vues' },
+      { id: 'mouss', name: 'Moussaillon', rar: 'rare', cond: 'Plus de 10 k vues', min: 10000 },
+      { id: 'mait', name: "Maître d'équipage", rar: 'epique', cond: 'Plus de 100 k vues', min: 100000 },
+      { id: 'cap', name: 'Capitaine', rar: 'legendaire', cond: 'Plus de 1 M de vues', min: 1000000 },
+      { id: 'cors', name: 'Corsaire', rar: 'mythique', cond: 'Plus de 10 M de vues', min: 10000000 },
+      { id: 'barbe', name: 'Barbe noire', rar: 'exotique', cond: 'Clipper staff' }
+    ];
+    let cur = 0;
+    for (let i = 1; i <= 4; i++) { if (views > ROLES[i].min) cur = i; }
+    if (st.staff) cur = 5;
+    const roleCur = ROLES[cur];
+    const roleNext = cur < 4 ? ROLES[cur + 1] : null;
+    const prevMin = cur === 0 ? 0 : ROLES[cur].min;
+    const roleProgress = st.staff ? "Rôle réservé à l'équipe Neptune." : (roleNext ? 'Encore ' + fr(roleNext.min - views) + ' vues pour devenir ' + roleNext.name + '.' : 'Tu as atteint le plus haut rôle.');
+    const roleBar = st.staff || !roleNext ? '100%' : Math.max(3, Math.min(100, ((views - prevMin) / (roleNext.min - prevMin)) * 100)) + '%';
+    const roles = ROLES.map((r, i) => {
+      const R = RAR[r.rar];
+      const reached = i <= cur;
+      const isCur = i === cur;
+      const dk = (id) => (r.id === id ? 'inline' : 'none');
+      return {
+        name: r.name, rarity: R.n, cond: r.cond, ring: R.c, light: mix(R.c, '#ffffff', 0.62), dark: mix(R.c, DARK, 0.7), rib: mix(R.c, DARK, 0.4),
+        dBarbe: dk('barbe'), dCors: dk('cors'), dCap: dk('cap'), dMait: dk('mait'), dMouss: dk('mouss'), dMousse: dk('mousse'),
+        isCurrent: isCur, border: isCur ? R.c : '#1F3A6B',
+        tileStyle: isCur ? 'box-shadow: 0 0 0 3px ' + R.c + '33;' : (reached ? '' : 'opacity: 0.45;')
+      };
+    });
+    const rolesReached = st.staff ? 6 : cur + 1;
+
+    // Serie
+    const days = s.streak;
+    const lit = s.done;
+    const PAL = [[5, 'Étincelle'], [10, 'Flammèche'], [30, 'Tout feu tout flamme'], [50, 'Pyromane'], [100, 'Brasier']];
+    const nextPal = PAL.find((p) => p[0] > days);
+    const prevPal = PAL.slice().reverse().find((p) => p[0] <= days);
+    const nextText = nextPal ? 'Encore ' + (nextPal[0] - days) + (nextPal[0] - days > 1 ? ' jours' : ' jour') + ' pour « ' + nextPal[1] + ' ».' : 'Tous les succès de régularité sont débloqués.';
+    const nextBar = nextPal ? Math.max(3, Math.min(100, ((days - (prevPal ? prevPal[0] : 0)) / (nextPal[0] - (prevPal ? prevPal[0] : 0))) * 100)) + '%' : '100%';
+    const fcol = flameColor(days);
+
+    const prof = this.ov(PROFILES[s.profile]);
+    const isSpe = prof.type === 'spe';
+    const idx = Math.min(s.cIdx, prof.clients.length - 1);
+    const cid = prof.clients[idx];
+    const cl = CLIENTS[cid];
+    const mode = isSpe ? cl.speMode : cl.commuMode;
+    const modeName = mode === 'boutique' ? 'Boutique' : mode === 'cagnotte' ? 'Cagnotte' : 'RPM';
+    const accent = isSpe ? GOLD : TEAL;
+    const btnStyle = isSpe ? 'background: ' + GOLD + '; color: ' + GOLD_TXT + '; border: 0;' : 'background: ' + TEAL + '; color: ' + TEAL_TXT + '; border: 0;';
+    const userEmail = this.props.email || 'lena@exemple.fr';
+    const tr = TRACK[cid];
+
+    // Onglets : Profil | Activite | Collection | Boutique-Cagnotte-RPM (Argent) | Tracker | Tuto
+    const moneyLabel = isSpe ? 'Argent' : modeName;
+    const tabDefs = [{ id: 'profil', label: 'Profil' }, { id: 'activite', label: 'Activité' }, { id: 'collection', label: 'Collection' }, { id: 'argent', label: moneyLabel }, { id: 'tracker', label: 'Tracker' }, { id: 'tuto', label: 'Tuto' }, { id: 'parametres', label: 'Paramètres' }];
+    const goTab = (id) => () => { set({ tab: id, menu: '', wd: false }); setTimeout(() => this.syncStage(), 60); };
+    const tabs = tabDefs.map((t) => ({
+      label: t.label,
+      go: goTab(t.id),
+      style: s.tab === t.id ? 'color: ' + TXT + '; font-weight: 600; box-shadow: inset 0 -2px 0 ' + accent + ';' : 'color: ' + MUTED + '; box-shadow: inset 0 -2px 0 transparent;'
+    }));
+
+    // Titres
+    const hints = { boutique: 'Échange tes coins contre les produits de ' + cl.name + '.', cagnotte: 'Plus tu fais de vues, plus ta part grandit.', rpm: 'Tu es payé selon tes vues.' };
+    let titleText = '', subText = '';
+    if (s.tab === 'profil') { titleText = 'Ton profil'; subText = 'Qui tu es sur Neptune.'; }
+    else if (s.tab === 'activite') { titleText = 'Ton activité'; subText = 'Ta série et ton prochain palier.'; }
+    else if (s.tab === 'collection') { titleText = 'Ta collection'; subText = 'Tous tes succès et les rôles à débloquer.'; }
+    else if (s.tab === 'argent') { titleText = isSpe ? cl.name + ' · ' + modeName : modeName; subText = hints[mode]; }
+    else if (s.tab === 'tracker') { titleText = 'Tes vues'; subText = 'Pour ' + cl.name + '.'; }
+    else if (s.tab === 'parametres') { titleText = 'Paramètres'; subText = 'Les sons, la musique et tes comptes connectés.'; }
+    else { titleText = 'Tuto'; subText = 'Tout pour bien démarrer.'; }
+    const overText = isSpe ? 'Clipper spécialisé' : 'Clipper de la communauté de ' + cl.name;
+
+    // Boutique
+    const rewards = SHOP.map((r) => {
+      const ok = s.coins >= r.price;
+      return {
+        name: r.name, note: r.note, price: fr(r.price), badge: r.badge, locked: !ok,
+        btnLabel: ok ? 'Acheter' : 'Il te manque ' + fr(r.price - s.coins) + ' coins',
+        btnStyle: ok ? 'background: #FFD43B; color: #111111;' : 'background: #E9E6D8; color: #555555;',
+        buy: () => {
+          if (this.state.coins >= r.price) {
+            const left = this.state.coins - r.price;
+            set({ coins: left });
+            flash('Maquette : achat simulé. Il te reste ' + fr(left) + ' coins.');
+          }
+        }
+      };
+    });
+
+    // Cagnotte
+    const cg = CAG[cid];
+    const share = tr.month / cg.total;
+    const cagKpis = [
+      { label: 'Cagnotte à partager', value: fr(cg.pot) + ' €' },
+      { label: 'Distribution', value: 'dans 8 jours' },
+      { label: 'Ta part estimée', value: '≈ ' + fr(cg.pot * share, 2) + ' €' }
+    ];
+    const reserved = isSpe && mode === 'cagnotte' && cl.commuMode === 'boutique';
+
+    // RPM
+    const rp = RPM[cid];
+    const rpmKpis = [
+      { label: 'Tarif', value: fr(rp.rate, 2) + ' € / 1 000 vues' },
+      { label: 'Tes vues ce mois', value: fr(tr.month) },
+      { label: 'Gagné ce mois', value: fr((tr.month / 1000) * rp.rate, 2) + ' €' }
+    ];
+
+    // Tracker
+    const max = Math.max.apply(null, tr.days);
+    const letters = ['S', 'D', 'L', 'M', 'M', 'J', 'V'];
+    const bars = tr.days.map((v, i) => ({ value: fr(v), h: Math.max(6, Math.round((v / max) * 110)) + 'px', label: letters[i], bg: i === 6 ? accent : '#2A6286', lc: i === 6 ? TXT : MUTED }));
+    const week = tr.days.reduce((a, b) => a + b, 0);
+    const kpis = [{ label: "Aujourd'hui", value: fr(tr.days[6]) }, { label: 'Cette semaine', value: fr(week) }, { label: 'Ce mois', value: fr(tr.month) }];
+    const clips = tr.clips.map((c) => ({ title: c.t, platform: c.p, views: fr(c.v) }));
+    const ACH_TIERS = { 'Commun': ['Bronze', '#D08A4A'], 'Rare': ['Argent', '#C9D2DC'], 'Épique': ['Or', '#F2C94C'], 'Légendaire': ['Or', '#F2C94C'], 'Mythique': ['Platine', '#A8E6F7'], 'Exotique': ['Platine', '#A8E6F7'] };
+    const PLATS = [
+      { id: 'yt', name: 'YouTube', note: 'Ta chaîne, pour tes Shorts.' },
+      { id: 'tt', name: 'TikTok', note: 'Ton compte clip TikTok.' },
+    ];
+    const accs = s.accs || { yt: [], tt: [] };
+    const noop = () => {};
+    const acctBase = { isHead: false, isRow: false, isEmpty: false, name: '', note: '', add: noop, addStyle: '', addLabel: '', handle: '', dot: '', remove: noop, removeLabel: '' };
+    const acctItems = [];
+    let accN = 0;
+    const watchAll = [];
+    PLATS.forEach((p) => {
+      const list = accs[p.id] || [];
+      accN += list.length;
+      acctItems.push(Object.assign({}, acctBase, {
+        isHead: true, name: p.name, note: p.note,
+        addLabel: list.length ? 'Ajouter un compte' : 'Se connecter avec ' + p.name,
+        addStyle: list.length ? 'background: transparent; color: ' + TXT + '; border: 1px solid #1F4666;' : btnStyle,
+        add: () => {
+          const cur = this.state.accs || {};
+          const l = (cur[p.id] || []).slice();
+          let h = prof.pseudo, k = 1;
+          while (l.indexOf(h) >= 0) { k++; h = prof.pseudo + '_' + k; }
+          l.push(h);
+          set({ accs: Object.assign({}, cur, { [p.id]: l }) });
+          flash('Maquette : compte ' + p.name + ' connecté (' + h + ').');
+        }
+      }));
+      list.forEach((h, i) => {
+        watchAll.push(p.name + ' · ' + h);
+        acctItems.push(Object.assign({}, acctBase, {
+          isRow: true, handle: h, dot: accent, removeLabel: 'Retirer ' + h,
+          remove: () => {
+            const cur = this.state.accs || {};
+            const l = (cur[p.id] || []).filter((_, j) => j !== i);
+            set({ accs: Object.assign({}, cur, { [p.id]: l }) });
+            flash(p.name + ' : ' + h + ' retiré.');
+          }
+        }));
+      });
+      if (!list.length) acctItems.push(Object.assign({}, acctBase, { isEmpty: true, name: p.name }));
+    });
+    const accTotal = accN === 0 ? 'Aucun compte connecté' : accN + (accN > 1 ? ' comptes connectés' : ' compte connecté');
+    const watchChips = (watchAll.length > 4 ? watchAll.slice(0, 4).concat(['+ ' + (watchAll.length - 4) + (watchAll.length - 4 > 1 ? ' autres' : ' autre')]) : watchAll).map((t) => ({ label: t }));
+    const trackSources = accN === 0 ? "Aucun compte connecté. Tes vues apparaîtront dès qu'un compte l'est." : PLATS.filter((p) => (accs[p.id] || []).length).map((p) => p.name + ' (' + accs[p.id].length + ')').join(' · ');
+    const musicOpts = [{ v: 0, l: 'Coupée' }, { v: 1, l: 'Douce' }, { v: 2, l: 'Plus présente' }].map((o) => ({
+      label: o.l, on: s.mlv === o.v,
+      go: () => { set({ mlv: o.v }); if (window.__nsfx) window.__nsfx.setMusic(o.v); else { try { localStorage.setItem('musique', String(o.v)); } catch (e) {} } },
+      style: s.mlv === o.v ? 'background: ' + accent + '; color: ' + (isSpe ? GOLD_TXT : TEAL_TXT) + '; border: 0;' : 'background: transparent; color: ' + TXT + '; border: 1px solid #1F4666;'
+    }));
+
+    // Regles a valider
+    const gateRules = RULES.map((t, i) => {
+      const on = s.checks[i];
+      return {
+        text: t, on: on, mark: on ? '✓' : '', border: on ? TEAL : '#1F4666',
+        box: on ? 'background: ' + TEAL + '; color: ' + TEAL_TXT + '; font-weight: 700; border: 0;' : 'background: transparent; border: 2px solid #1F4666;',
+        toggle: () => { const c = this.state.checks.slice(); c[i] = !c[i]; set({ checks: c }); }
+      };
+    });
+    const allOk = s.checks.every(Boolean);
+
+    const profileOptions = Object.keys(PROFILES).map((k) => ({
+      label: PROFILES[k].label,
+      style: s.profile === k ? 'background: #0F2C46;' : 'background: transparent;',
+      dot: s.profile === k ? 'background: ' + TEAL + '; border: 0;' : 'border: 1.5px solid ' + MUTED + ';',
+      pick: () => {
+        this._tok++; this._force = true; this._achTok = (this._achTok || 0) + 1;
+        set({ ach: '', profile: k, tab: 'profil', cIdx: 0, coins: 1240, wd: false, menu: '', streak: PROFILES[k].streak, done: PROFILES[k].done, busy: false, accs: this.mkAccs(PROFILES[k]) });
+        setTimeout(() => this.syncStage(), 60);
+        setTimeout(() => this.showAch(PROFILES[k].fresh), 1000);
+      }
+    }));
+
+    const n = prof.clients.length;
+    const hasMoneyPage = s.tab === 'argent';
+
+    const collTabs = [
+      { id: 'succes', label: 'Succès', count: unlockedCount + '/' + totalCount },
+      { id: 'roles', label: 'Rôles', count: rolesReached + '/6' }
+    ].map((c) => ({
+      label: c.label, count: c.count, on: s.coll === c.id,
+      go: () => set({ coll: c.id }),
+      style: s.coll === c.id ? 'background: ' + accent + '; color: ' + (isSpe ? GOLD_TXT : TEAL_TXT) + '; border: 0;' : 'background: transparent; color: ' + TXT + '; border: 1px solid #1F4666;'
+    }));
+
+    return {
+      flagGate: !s.rulesOk, flagApp: s.rulesOk,
+      gateRules: gateRules, gateLocked: !allOk,
+      gateBtn: allOk ? 'background: ' + TEAL + '; color: ' + TEAL_TXT + '; border: 0;' : 'background: #163650; color: ' + MUTED + '; border: 0;',
+      gateGo: () => { if (this.state.checks.every(Boolean)) { this.sfx('success'); set({ rulesOk: true }); setTimeout(() => this.showAch(PROFILES[this.state.profile].fresh), 1100); } },
+
+      lineColor: isSpe ? 'rgba(227,184,79,0.30)' : '#163650',
+      accent: accent, btnStyle: btnStyle,
+      tabs: tabs,
+      userEmail: userEmail,
+      toggleMenu: () => set({ menu: s.menu ? '' : 'open' }),
+      closeMenu: () => set({ menu: '' }),
+      menuOpen: !!s.menu, menuAsk: s.menu === 'open', menuConfirm: s.menu === 'confirm',
+      askLogout: () => set({ menu: 'confirm' }),
+      cancelLogout: () => set({ menu: 'open' }),
+      logout: () => {
+        if (this.props.onExit) this.props.onExit();
+        else set({ menu: '', rulesOk: false, checks: [false, false, false, false], tab: 'profil' });
+      },
+      profileOptions: profileOptions,
+
+      overText: overText, titleText: titleText, subText: subText,
+      hasSwitch: n > 1 && (s.tab === 'argent' || s.tab === 'tracker'),
+      clientName: cl.name, clientPos: (idx + 1) + ' / ' + n,
+      prevClient: () => set({ cIdx: (idx - 1 + n) % n, wd: false }),
+      nextClient: () => set({ cIdx: (idx + 1) % n, wd: false }),
+
+      pgProfil: s.tab === 'profil',
+      pgActivite: s.tab === 'activite',
+      pgCollection: s.tab === 'collection',
+      pgBoutique: hasMoneyPage && mode === 'boutique',
+      pgCagnotte: hasMoneyPage && mode === 'cagnotte',
+      pgRpm: hasMoneyPage && mode === 'rpm',
+      pgTracker: s.tab === 'tracker',
+      pgTuto: s.tab === 'tuto',
+      pgParams: s.tab === 'parametres',
+      psSons: (s.ps || 'sons') === 'sons', psComptes: s.ps === 'comptes', psDiscord: s.ps === 'discord',
+      paramTabs: [['sons', 'Sons'], ['comptes', 'Comptes'], ['discord', 'Discord']].map((x) => {
+        const on = (s.ps || 'sons') === x[0];
+        return { label: x[1], on: on, go: () => set({ ps: x[0] }), style: on ? 'background: #163A5A; color: ' + TXT + ';' : 'background: transparent; color: ' + MUTED + ';' };
+      }),
+
+      // profil
+      initial: prof.pseudo.charAt(0).toUpperCase(), pseudo: prof.pseudo,
+      role: { name: roleCur.name, rarity: RAR[roleCur.rar].n, ring: RAR[roleCur.rar].c, progressText: 'Tes vues au total : ' + fr(views) + '. ' + roleProgress, bar: roleBar },
+      streak: days, streakLabel: days > 1 ? 'jours de série' : 'jour de série',
+      streakHint: lit ? 'Ta flamme est allumée.' : "Poste un clip aujourd'hui pour allumer ta flamme.",
+      sumColor: lit ? fcol : '#6F7C92',
+      goActivite: goTab('activite'), goCollection: goTab('collection'),
+      unlockedCount: unlockedCount, totalCount: totalCount, collBar: Math.max(2, (unlockedCount / totalCount) * 100) + '%',
+
+      // activite
+      rootId: this._uid,
+      setRoot: (el) => { if (el) this._rootEl = el; },
+      streakDone: lit && !s.busy, streakBusy: s.busy, streakOpen: !lit && !s.busy,
+      replay: () => {
+        this._tok++; this._force = true;
+        set({ streak: Math.max(0, this.state.streak - 1), done: false, busy: false });
+        setTimeout(() => this.syncStage(), 60);
+      },
+      hasAccs: accN > 0, noAccs: accN === 0, watchChips: watchChips,
+      simClip: () => this.playStreak(),
+      goParams: () => { set({ tab: 'parametres', ps: 'comptes', menu: '', wd: false }); setTimeout(() => this.syncStage(), 60); },
+      trackSources: trackSources,
+
+      // parametres
+      sound: s.sound,
+      swStyle: s.sound ? 'background: ' + accent + '; border-color: transparent;' : 'background: #06182A;',
+      knobStyle: s.sound ? 'left: 28px; background: #06182A;' : 'left: 4px; background: #8FB0BF;',
+      toggleSound: () => { const v = !this.state.sound; set({ sound: v }); if (window.__nsfx) window.__nsfx.setOn(v, false); else { try { localStorage.setItem('son', v ? '1' : '0'); } catch (e) {} } },
+      vol: s.vol, volText: s.vol === 0 ? 'Muet' : s.vol + ' %', volDim: s.sound ? '' : 'opacity: 0.5;',
+      onVol: (e) => {
+        const v = Math.max(0, Math.min(100, Math.round(+(e && e.target ? e.target.value : 0) || 0)));
+        set({ vol: v });
+        if (window.__nsfx) {
+          window.__nsfx.setSfxVol(v, false);
+          const now = Date.now();
+          if (!this._pvT || now - this._pvT > 260) { this._pvT = now; setTimeout(() => { try { window.__nsfx.play('tap'); } catch (x) {} }, 70); }
+        } else { try { localStorage.setItem('sfxvol', String(v)); } catch (x) {} }
+      },
+      musicOpts: musicOpts,
+      acctItems: acctItems, accTotal: accTotal,
+      dcStatus: s.dc ? 'Connecté : ' + prof.pseudo + ' (photo de profil importée)' : 'Non connecté', dcColor: s.dc ? accent : MUTED,
+      dcBtnLabel: s.dc ? 'Déconnecter' : 'Se connecter avec Discord',
+      dcBtnStyle: s.dc ? 'background: transparent; color: ' + TXT + '; border: 1px solid #1F4666;' : btnStyle,
+      toggleDc: () => { const v = !this.state.dc; set({ dc: v }); flash(v ? 'Maquette : Discord connecté.' : 'Discord déconnecté.'); },
+      nextText: nextText, nextBar: nextBar, nextColor: fcol,
+
+      // collection
+      hasAch: !!(s.ach && byName[s.ach]),
+      achList: s.ach && byName[s.ach] ? [Object.assign({}, byName[s.ach], { uid: 'ach', svgStyle: '' })] : [],
+      achName: s.ach && byName[s.ach] ? (s.ach === '?????' ? "L'élu" : s.ach) : '',
+      achRar: s.ach && byName[s.ach] ? byName[s.ach].pill : '',
+      achReq: s.ach && byName[s.ach] ? byName[s.ach].req : '',
+      achColor: s.ach && byName[s.ach] ? byName[s.ach].pillBg : TEAL,
+      achGlow: s.ach && byName[s.ach] ? byName[s.ach].pillBg + '55' : 'transparent',
+      replayAch: () => { set({ menu: '' }); this.showAch(PROFILES[this.state.profile].fresh); },
+      collTabs: collTabs, collSucces: s.coll === 'succes', collRoles: s.coll === 'roles',
+      badgeItems: badgeItems, badgeCount: unlockedCount + ' sur ' + totalCount + ' débloqués',
+      roles: roles,
+
+      shop: { name: cl.name + ' Rewards', coins: fr(s.coins), rewards: rewards },
+
+      cagKpis: cagKpis,
+      cag: { mine: fr(tr.month), total: fr(cg.total), bar: Math.max(2, Math.min(100, share * 100)) + '%' },
+      hasReserved: reserved,
+      reservedNote: 'Cette cagnotte est réservée aux clippers spécialisés : la communauté de ' + cl.name + ' est récompensée avec sa boutique.',
+
+      rpmKpis: rpmKpis,
+      rpmLine: 'Chaque tranche de 1 000 vues te rapporte ' + fr(rp.rate, 2) + ' €.',
+      rpmPay: rp.pay + '.',
+
+      hasBalance: hasMoneyPage && (mode === 'cagnotte' || mode === 'rpm'),
+      balance: fr(prof.balance, 2) + ' €',
+      wdOpen: s.wd,
+      toggleWd: () => set({ wd: !s.wd }),
+
+      kpis: kpis, bars: bars, clips: clips,
+      tutos: [{ title: "Comment marche l'appli" }, { title: 'Comment marche le site' }, { title: 'Tuto montage et clipping' }],
+      ruleList: RULES.map((t, i) => ({ n: i + 1, text: t })),
+
+      toast: s.toast, hasToast: !!s.toast
+    };
+  }
+}
+</script>
+</body>
+</html>
