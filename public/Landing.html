@@ -160,4 +160,12 @@ setInterval(function(){if(body.classList.contains("editing"))return;var c=docume
 root.addEventListener("submit",function(e){if(e.target.id!=="bookForm")return;e.preventDefault();var f=e.target,m=["chan","comm","vol"].filter(function(k){return !f.elements[k].value.trim()});var er=document.getElementById("err");if(m.length){er.textContent="Complète tous les champs.";return}er.textContent="";var w=document.getElementById("calWrap");w.innerHTML="";if(CALENDAR_URL){var a=document.createElement("a");a.className="btn";a.href=CALENDAR_URL;a.target="_blank";a.rel="noopener";a.textContent="Choisir un créneau";w.appendChild(a)}else{w.innerHTML='<p class="stub">Lien d\'agenda à brancher avant la mise en ligne.</p>'}f.hidden=true;document.getElementById("done").hidden=false});
 (function(){var R=[].slice.call(document.querySelectorAll(".ms-row")),q=0;function u(){q=0;var m=innerHeight*.5,best=null,bd=1e9;R.forEach(function(r){var b=r.getBoundingClientRect(),d=Math.abs(b.top+b.height/2-m);if(d<bd){bd=d;best=r}});R.forEach(function(r){r.classList.toggle("on",r===best)})}
 function t(){if(!q){q=1;requestAnimationFrame(u)}}addEventListener("scroll",t,{passive:true});addEventListener("resize",t);u()})();
+(function(){var c=document.getElementById("car");if(!c)return;var o=[].slice.call(c.children),n=o.length;if(n<3)return;
+function cl(k){var x=k.cloneNode(true);x.removeAttribute("data-i");x.setAttribute("aria-hidden","true");x.setAttribute("data-clone","1");[].forEach.call(x.querySelectorAll("[data-e],[data-f]"),function(e){e.removeAttribute("data-e");e.removeAttribute("data-f")});[].forEach.call(x.querySelectorAll("[data-ui]"),function(e){e.remove()});return x}
+var first=c.firstChild;o.forEach(function(k){c.insertBefore(cl(k),first)});o.forEach(function(k){c.appendChild(cl(k))});
+var W=0;function setW(){W=c.children[n].offsetLeft-c.children[0].offsetLeft}
+function center(){var k=c.children[n];c.style.scrollSnapType="none";c.scrollLeft=k.offsetLeft-(c.clientWidth-k.offsetWidth)/2;requestAnimationFrame(function(){c.style.scrollSnapType=""})}
+function init(){setW();center()}init();addEventListener("load",init);addEventListener("resize",init);
+var busy=0;c.addEventListener("scroll",function(){if(busy||!W)return;var p=c.scrollLeft,mid=c.children[n].offsetLeft-(c.clientWidth-c.children[n].offsetWidth)/2;
+var d=0;if(p<mid-W*.5)d=W;else if(p>mid+W*.5)d=-W;if(d){busy=1;c.style.scrollSnapType="none";c.scrollLeft=p+d;requestAnimationFrame(function(){c.style.scrollSnapType="";busy=0})}},{passive:true});})();
 </script>
